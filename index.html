@@ -1,0 +1,37 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>SmmCourseViewer - Visual Demonstration</title>
+</head>
+
+<body>
+	<input type="file" id="fileInput" name="fileInput" accept=".cdt">
+	<p>File path: <span id="filePath">None</span></p>
+	<p id="display"></p>
+</body>
+
+<script src="lib/SmmCourseViewer.js"></script> 
+<script>
+
+function handleFileSelect(eventFile) {
+	/* get file object */
+    let file = eventFile.target.files[0];
+	
+	/* instance the course viewer */
+	const courseViewer = new _SmmCourseViewer(file);
+}
+
+
+window.onload = function() {
+	/* check if browser support File Reader */
+	if (window.File && window.FileReader && window.FileList && window.Blob) {
+  		console.log('File APIs is fully supported!');
+  		document.getElementById('fileInput').addEventListener('change', handleFileSelect, false);
+	} else {
+		console.log('File APIs are not fully supported in this browser.');
+	}
+}
+
+</script>
+</html> 
