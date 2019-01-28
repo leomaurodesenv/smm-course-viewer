@@ -1,9 +1,20 @@
 # SMM Course Viewer
 
-**under construction**
+**Under construction**
 
-https://github.com/Treeki/MarioUnmaker/blob/master/FormatNotes.md
-
+Based on [MarioUnmaker](https://github.com/Treeki/MarioUnmaker/blob/master/FormatNotes.md).   
+   
+TODO:
+- Read course file (\*.cdt)
+    - Course info (_Doing_)
+    - Course configurations
+- Interpret objects
+    - Inanimate objects
+    - Monsters and player
+- Take printscreen of the map
+- _Extract characteristics from the course_ (Data Mining)
+   
+---
 ## Also look ~
 
 - [License GPLv3](https://github.com/leomaurodesenv/smm-course-viewer/blob/master/LICENSE)

@@ -11,15 +11,18 @@
 	<p id="display"></p>
 </body>
 
+<script src="lib/Course.js"></script>
 <script src="lib/SmmCourseViewer.js"></script> 
 <script>
+
+var courseViewer; // GLOBAL
 
 function handleFileSelect(eventFile) {
 	/* get file object */
     let file = eventFile.target.files[0];
 	
 	/* instance the course viewer */
-	const courseViewer = new _SmmCourseViewer(file);
+	courseViewer = new _SmmCourseViewer(file);
 }
 
 
