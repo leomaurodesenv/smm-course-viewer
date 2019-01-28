@@ -3,26 +3,31 @@
 <head>
 <meta charset="UTF-8">
 	<title>SmmCourseViewer - Visual Demonstration</title>
+    <!--[if IE]><link rel="shortcut icon" href="img/favicon.ico"><![endif]-->
+    <link rel="icon" href="css/favicon.png" />
 </head>
 
 <body>
 	<input type="file" id="fileInput" name="fileInput" accept=".cdt">
-	<p>File path: <span id="filePath">None</span></p>
-	<p id="display"></p>
+	<p id="courseDisplay">File Data</p>
 </body>
 
 <script src="lib/Course.js"></script>
 <script src="lib/SmmCourseViewer.js"></script> 
 <script>
 
-var courseViewer; // GLOBAL
-
 function handleFileSelect(eventFile) {
 	/* get file object */
     let file = eventFile.target.files[0];
 	
 	/* instance the course viewer */
-	courseViewer = new _SmmCourseViewer(file);
+	let courseViewer = new _SmmCourseViewer();
+    courseViewer.read(file, function(eventRead) {
+        if(eventRead) {
+            console.debug(courseViewer.course);
+            document.getElementById('courseDisplay').innerHTML = courseViewer.course.getHtml();
+        }
+    });
 }
 
 
