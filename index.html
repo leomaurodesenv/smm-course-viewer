@@ -1,31 +1,115 @@
- <!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-	<title>SmmCourseViewer - Visual Demonstration</title>
-    <!--[if IE]><link rel="shortcut icon" href="img/favicon.ico"><![endif]-->
-    <link rel="icon" href="css/favicon.png" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="SmmCourseViewer">
+    <meta name="author" content="Leonardo Mauro <leo.mauro.desenv@gmail.com>">
+	<title>SmmCourseViewer - Demonstration</title>
+
+    <!--[if IE]><link rel="shortcut icon" href="layout/favicon.ico"><![endif]-->
+    <link rel="icon" href="layout/favicon.png">
+    <!-- Bootstrap: https://getbootstrap.com/docs/4.2/ -->
+    <link rel="stylesheet" href="layout/css/bootstrap.min.css">
 </head>
 
 <body>
-	<input type="file" id="fileInput" name="fileInput" accept=".cdt">
-	<p id="courseDisplay">File Data</p>
-</body>
+<!-- Head -->
+<header>
+    <div class="collapse bg-dark" id="navbarHeader">
+    <div class="container">
+        <div class="row">
+        <div class="col-sm-8 col-md-7 py-4">
+            <h4 class="text-white">About</h4>
+          <p class="text-muted">A package to reading courses (*.cdt) from Super Mario Maker game.</p>
+        </div>
+        <div class="col-sm-4 offset-md-1 py-4">
+            <h4 class="text-white">Contact</h4>
+            <ul class="list-unstyled">
+                <li><a href="https://github.com/leomaurodesenv/smm-course-viewer" target="_blank" class="text-white">GitHub</a></li>
+                <li><a href="mailto:leo.mauro.desenv@gmail.com" class="text-white">Email me</a></li>
+            </ul>
+        </div>
+        </div>
+    </div>
+    </div>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container d-flex justify-content-between">
+        <a href="#" class="navbar-brand d-flex align-items-center">
+            <strong>SmmCourseViewer</strong>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+    </div>
+</header>
 
+<!-- Main -->
+<main>
+<section id="selectFile" class="bg-info text-white" style="padding:15px 0 5px 0;">
+    <div class="container">
+        <p>Select the Super Mario Maker course file (*.cdt).</p>
+        <p>Select file: <input type="file" id="inputFile" name="inputFile" accept=".cdt"></p>
+    </div>
+</section>
+
+<section id="display" class="jumbotron">
+    <div class="container">
+        <h4>Course Display</h4>
+        <span id="courseInfoDisplay"></span>
+        <span id="courseDraw"></span>
+        <hr>
+
+        
+    </div>
+    <hr>
+    <div class="container">
+        <h4>General Code</h4>
+        <p class="text-muted">In this example, you can access the course data by <b>Browser Console</b> after uploading the file.</p>
+        <p><code>courseViewer</code> <samp># global variable</samp></p>
+        <p><code>courseViewer.course</code> <samp># course data</samp></p>
+        <p><code>courseViewer.objects</code> <samp># course objects</samp></p>
+    </div>
+</section>
+</main>
+
+<!-- Footer -->
+<footer class="text-muted">
+    <div class="container">
+        <p>Copyright © <a href="https://github.com/leomaurodesenv/smm-course-viewer" target="_blank">smm-course-viewer</a> - <a href="https://github.com/leomaurodesenv/" target="_blank">Leonardo Mauro</a></p>
+    </div>
+</footer>
+
+<!-- Bootstrap 4 -->
+<script src="layout/js/jquery.slim.min.js"></script>
+<script src="layout/js/bootstrap.min.js"></script>
+
+<!-- SmmCourseViewer -->
+<script src="lib/CourseObject.js"></script>
 <script src="lib/Course.js"></script>
-<script src="lib/SmmCourseViewer.js"></script> 
+<script src="lib/SmmCourseViewer.js"></script>
 <script>
+
+function alertShow(selector, type, msg) {
+    $(selector).append('<div class="alert alert-'+type+' alert-dismissible fade show" role="alert">'+msg+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+}
 
 function handleFileSelect(eventFile) {
 	/* get file object */
     let file = eventFile.target.files[0];
+    alertShow('#selectFile > div:eq(0)', 'success', 'Success: uploaded file!');
 	
 	/* instance the course viewer */
-	let courseViewer = new _SmmCourseViewer();
+	courseViewer = new _SmmCourseViewer();
     courseViewer.read(file, function(eventRead) {
         if(eventRead) {
-            console.debug(courseViewer.course);
-            document.getElementById('courseDisplay').innerHTML = courseViewer.course.getHtml();
+            //console.debug(courseViewer.course);
+            alertShow('#display > div:eq(0)', 'info', 'Success.');
+            document.getElementById('courseInfoDisplay').innerHTML = courseViewer.course.getHtml();
+        }
+        else {
+            alertShow('#display > div:eq(0)', 'danger', 'Error: corrupted file!');
         }
     });
 }
@@ -35,11 +119,12 @@ window.onload = function() {
 	/* check if browser support File Reader */
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
   		console.log('File APIs is fully supported!');
-  		document.getElementById('fileInput').addEventListener('change', handleFileSelect, false);
+  		document.getElementById('inputFile').addEventListener('change', handleFileSelect, false);
 	} else {
 		console.log('File APIs are not fully supported in this browser.');
 	}
 }
 
 </script>
+</body>
 </html> 
