@@ -8,7 +8,14 @@ TODO:
 - Read course file (\*.cdt)
     - Course info (_OK_)
     - Course configurations (_OK_)
-    - Objects info (_Doing_)
+    - Objects info (_OK_)
+- Layout
+    - Index the visualizer (_OK_)
+    - Read course info (_OK_)
+    - Updates (_Doing_)
+- Draw
+    - Draw blocks
+    - Draw objects
 - Interpret objects
     - Inanimate objects
     - Monsters and player

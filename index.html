@@ -50,7 +50,7 @@
 <section id="selectFile" class="bg-info text-white" style="padding:15px 0 5px 0;">
     <div class="container">
         <p>Select the Super Mario Maker course file (*.cdt).</p>
-        <p>Select file: <input type="file" id="inputFile" name="inputFile" accept=".cdt"></p>
+        <p>Select: <input type="file" id="inputFile" name="inputFile" accept=".cdt"></p>
     </div>
 </section>
 
@@ -60,16 +60,26 @@
         <span id="courseInfoDisplay"></span>
         <span id="courseDraw"></span>
         <hr>
-
+        <div class="courseDrawMain rounded" style="width:100%;height:320px;overflow:auto;background:none;border:3px solid #17a2b8;">
+            <div class="courseDraw" style="width:1200px;margin:0;padding:0;background:none;">
+                <div style="display:inline-block;margin:0;width:32px;height:32px;background:url('layout/draw/support/bg-square.png');"></div><div style="display:inline-block;margin:0;width:32px;height:32px;background:url('layout/draw/support/bg-square.png');"></div><div style="display:inline-block;margin:0;width:32px;height:32px;background:url('layout/draw/support/bg-square.png');"></div>
+            </div>
+        </div>
         
     </div>
     <hr>
     <div class="container">
         <h4>General Code</h4>
-        <p class="text-muted">In this example, you can access the course data by <b>Browser Console</b> after uploading the file.</p>
-        <p><code>courseViewer</code> <samp># global variable</samp></p>
-        <p><code>courseViewer.course</code> <samp># course data</samp></p>
-        <p><code>courseViewer.objects</code> <samp># course objects</samp></p>
+        <p class="text-muted">
+            In this example, you can access the course data by <b>Browser Console</b> after uploading the file.<br>
+            Open <b>Browser Console</b>: Mozilla (Ctrl+Shift+J, or F12), Chrome (Ctrl+Shift+J).<br>
+            Type:
+        </p>
+        <p>
+            <code>courseViewer</code> <samp># global variable</samp><br>
+            <code>courseViewer.course</code> <samp># course data</samp><br>
+            <code>courseViewer.objects</code> <samp># course objects</samp>
+        </p>
     </div>
 </section>
 </main>

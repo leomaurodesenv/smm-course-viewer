@@ -25,6 +25,13 @@ enter chmod +x some-app.run
 
 enter ./some-app.run
 
+----- Titlesets (Wii U files)
+SZS: https://www.youtube.com/watch?v=9KTjtN5mrws
+Toolset: https://szs.wiimm.de/ (to Open the file)
+    Install: sudo ./install.sh
+wszst --version
+wszst extract --all WU_Field_airship.szs --dest wu
+
 
 ----- Desbloquear (Homebrew)
 https://www.youtube.com/watch?v=Obfp2lkb-18
