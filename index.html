@@ -11,6 +11,7 @@
     <link rel="icon" href="layout/favicon.png">
     <!-- Bootstrap: https://getbootstrap.com/docs/4.2/ -->
     <link rel="stylesheet" href="layout/css/bootstrap.min.css">
+    <link rel="stylesheet" href="layout/css/mystyle.css">
 </head>
 
 <body>
@@ -58,14 +59,8 @@
     <div class="container">
         <h4>Course Display</h4>
         <span id="courseInfoDisplay"></span>
-        <span id="courseDraw"></span>
         <hr>
-        <div class="courseDrawMain rounded" style="width:100%;height:320px;overflow:auto;background:none;border:3px solid #17a2b8;">
-            <div class="courseDraw" style="width:1200px;margin:0;padding:0;background:none;">
-                <div style="display:inline-block;margin:0;width:32px;height:32px;background:url('layout/draw/support/bg-square.png');"></div><div style="display:inline-block;margin:0;width:32px;height:32px;background:url('layout/draw/support/bg-square.png');"></div><div style="display:inline-block;margin:0;width:32px;height:32px;background:url('layout/draw/support/bg-square.png');"></div>
-            </div>
-        </div>
-        
+        <span id="courseDraw"></span>
     </div>
     <hr>
     <div class="container">
@@ -99,6 +94,7 @@
 <script src="lib/CourseObject.js"></script>
 <script src="lib/Course.js"></script>
 <script src="lib/SmmCourseViewer.js"></script>
+<script src="lib/Draw.js"></script>
 <script>
 
 function alertShow(selector, type, msg) {
@@ -114,9 +110,9 @@ function handleFileSelect(eventFile) {
 	courseViewer = new _SmmCourseViewer();
     courseViewer.read(file, function(eventRead) {
         if(eventRead) {
-            //console.debug(courseViewer.course);
-            alertShow('#display > div:eq(0)', 'info', 'Success.');
             document.getElementById('courseInfoDisplay').innerHTML = courseViewer.course.getHtml();
+            new Draw('courseDraw', courseViewer.course, courseViewer.objects);
+            alertShow('#display > div:eq(0)', 'info', 'Success.');
         }
         else {
             alertShow('#display > div:eq(0)', 'danger', 'Error: corrupted file!');
