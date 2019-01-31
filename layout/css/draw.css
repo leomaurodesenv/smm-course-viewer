@@ -12,7 +12,7 @@ body{margin:0;padding:0;}
     width:auto;
     height:864px; /* 27 blocks */
     margin:0;padding:0;
-    background:url('../draw/support/bg-square.png') repeat;
+    background:none;
     font-size:0;
 }
 
@@ -24,8 +24,12 @@ body{margin:0;padding:0;}
     margin:0;padding:0;
     text-align:center;
     line-height:32px; /* vertical align */
-    /*font-size:46px; /*46*/
-    font-size:46px;
+    background-image:url('../draw/support/bg-square.png');
+    /*
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><circle cx='15' cy='15' r='10' /></svg>") no-repeat;
+    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='32px' width='32px'><text x='25%' y='65%' fill='gray' font-size='12'>33</text></svg>");
+    */
+    
 }
 
 .objectDraw:hover {
