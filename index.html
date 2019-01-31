@@ -60,7 +60,7 @@
         <h4>Course Display</h4>
         <span id="courseInfoDisplay"></span>
         <hr>
-        <span id="courseDraw"></span>
+        <span id="courseDisplay"></span>
     </div>
     <hr>
     <div class="container">
@@ -111,8 +111,8 @@ function handleFileSelect(eventFile) {
     courseViewer.read(file, function(eventRead) {
         if(eventRead) {
             document.getElementById('courseInfoDisplay').innerHTML = courseViewer.course.getHtml();
-            new Draw('courseDraw', courseViewer.course, courseViewer.objects);
-            alertShow('#display > div:eq(0)', 'info', 'Success.');
+            new Draw('courseDisplay', courseViewer.course, courseViewer.objects);
+            //alertShow('#display > div:eq(0)', 'info', 'Success.');
         }
         else {
             alertShow('#display > div:eq(0)', 'danger', 'Error: corrupted file!');
