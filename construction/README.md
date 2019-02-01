@@ -31,7 +31,8 @@ Toolset: https://szs.wiimm.de/ (to Open the file)
     Install: sudo ./install.sh
 wszst --version
 wszst extract --all WU_Field_airship.szs --dest wu
-
+Process: https://github.com/GRAnimated/SMMGuide/wiki/(Wii-U)-Decrypting-the-Files
+Converter (DDS->PNG): https://image.online-convert.com/convert-to-png
 
 ----- Desbloquear (Homebrew)
 https://www.youtube.com/watch?v=Obfp2lkb-18
