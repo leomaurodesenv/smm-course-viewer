@@ -51,14 +51,19 @@
 <section id="selectFile" class="bg-info text-white" style="padding:15px 0 5px 0;">
     <div class="container">
         <p>Select the Super Mario Maker course file (*.cdt).</p>
-        <p>Select: <input type="file" id="inputFile" name="inputFile" accept=".cdt"></p>
+        <div class="btn-group" role="group">
+            <label class="btn btn-secondary">Load Example</label>
+            <label class="btn btn-light">
+                Browse&hellip; <input type="file" id="inputFile" name="inputFile" accept=".cdt" style="display:none;">
+            </label>
+        </div>
     </div>
 </section>
 
 <section id="display" class="jumbotron">
     <div class="container">
         <h4>Course Display</h4>
-        <span id="courseInfoDisplay"></span>
+        <span id="courseInfoDisplay" class="courseInfoDisplay"></span>
         <hr>
         <span id="courseDisplay"></span>
     </div>

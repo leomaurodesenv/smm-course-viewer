@@ -1,47 +1,21 @@
-body{margin:0;padding:0;}
+body{margin: 0;padding: 0;}
+
+.courseInfoDisplay {
+    text-transform: capitalize;
+}
 
 .courseDrawMain {
-    width:100%;
-    height:326px; /* +3+3 border */
-    overflow:auto;
-    background:none;
-    border:3px solid #17a2b8;
+    width: 100%;
+    height: 326px; /* +3+3 border */
+    overflow: auto;
+    background: none;
+    border: 3px solid #17a2b8;
 }
 
 .courseDraw {
-    width:auto;
-    height:864px; /* 27 blocks */
-    margin:0;padding:0;
-    background:none;
-    font-size:0;
-}
-
-.objectDraw {
-    position:relative;
-    display:inline-block;
-    *display:inline;
-    width:32px;height:32px;
-    margin:0;padding:0;
-    text-align:center;
-    line-height:32px; /* vertical align */
-    background-image:url('../draw/support/bg-square.png');
-    /*
-    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><circle cx='15' cy='15' r='10' /></svg>") no-repeat;
-    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='32px' width='32px'><text x='25%' y='65%' fill='gray' font-size='12'>33</text></svg>");
-    */
-    
-}
-
-.objectDraw:hover {
-    background-color:rgba(198, 213, 249, 0.8);
-    cursor:pointer;
-}
-
-.objectDraw > span {
-    margin:0;padding:0;
-    font-size:12px;
-}
-
-.objectDraw:hover > span{
-    font-weight:bold;
+    width: auto;
+    height: 864px; /* 27 blocks */
+    margin: 0;padding: 0;
+    background: none;
+    font-size: 0;
 }
