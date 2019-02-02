@@ -52,7 +52,7 @@
     <div class="container">
         <p>Select the Super Mario Maker course file (*.cdt).</p>
         <div class="btn-group" role="group">
-            <label class="btn btn-secondary">Load Example</label>
+            <label class="btn btn-secondary" onclick="loadCourseExample()">Load Example</label>
             <label class="btn btn-light">
                 Browse&hellip; <input type="file" id="inputFile" name="inputFile" accept=".cdt" style="display:none;">
             </label>
@@ -106,13 +106,28 @@ function alertShow(selector, type, msg) {
     $(selector).append('<div class="alert alert-'+type+' alert-dismissible fade show" role="alert">'+msg+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 }
 
+function loadCourseExample() {
+    /* get file object */
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+        interpretCourse(xhr.response); /* xhr.response is now a blob object ~ File */
+    }
+    /* force the HTTP response, response-type header to be blob */
+    xhr.open('GET', 'http://projects.leonardomauro.com/smm-course-viewer/courseExample/course_data.cdt');
+    xhr.responseType = "blob";
+    xhr.send();
+}
+
 function handleFileSelect(eventFile) {
 	/* get file object */
     let file = eventFile.target.files[0];
     alertShow('#selectFile > div:eq(0)', 'success', 'Success: uploaded file!');
-	
-	/* instance the course viewer */
-	courseViewer = new _SmmCourseViewer();
+    interpretCourse(file);
+}
+
+function interpretCourse(file) {
+    /* instance the course viewer */
+    courseViewer = new _SmmCourseViewer();
     courseViewer.read(file, function(eventRead) {
         if(eventRead) {
             document.getElementById('courseInfoDisplay').innerHTML = courseViewer.course.getHtml();
@@ -124,7 +139,6 @@ function handleFileSelect(eventFile) {
         }
     });
 }
-
 
 window.onload = function() {
 	/* check if browser support File Reader */
