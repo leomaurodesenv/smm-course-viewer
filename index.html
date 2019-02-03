@@ -121,7 +121,7 @@ function loadCourseExample() {
 function handleFileSelect(eventFile) {
 	/* get file object */
     let file = eventFile.target.files[0];
-    alertShow('#selectFile > div:eq(0)', 'success', 'Success: uploaded file!');
+    alertShow('#selectFile > div:eq(0)', 'success', 'Success: file uploaded!');
     interpretCourse(file);
 }
 
@@ -132,7 +132,6 @@ function interpretCourse(file) {
         if(eventRead) {
             document.getElementById('courseInfoDisplay').innerHTML = courseViewer.course.getHtml();
             new Draw('courseDisplay', courseViewer.course, courseViewer.objects);
-            //alertShow('#display > div:eq(0)', 'info', 'Success.');
         }
         else {
             alertShow('#display > div:eq(0)', 'danger', 'Error: corrupted file!');
@@ -146,7 +145,7 @@ window.onload = function() {
   		console.log('File APIs is fully supported!');
   		document.getElementById('inputFile').addEventListener('change', handleFileSelect, false);
 	} else {
-		console.log('File APIs are not fully supported in this browser.');
+		console.error('File APIs are not fully supported in this browser.');
 	}
 }
 
