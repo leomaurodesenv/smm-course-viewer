@@ -34,6 +34,9 @@ wszst extract --all WU_Field_airship.szs --dest wu
 Process: https://github.com/GRAnimated/SMMGuide/wiki/(Wii-U)-Decrypting-the-Files
 Converter (DDS->PNG): https://image.online-convert.com/convert-to-png
 
+https://mariomods.net/forum/4-super-mario-maker-hacking-info
+https://mariomods.net/thread/652-how-to-edit-tilesets-sprites-or-backgrounds
+
 ----- Desbloquear (Homebrew)
 https://www.youtube.com/watch?v=Obfp2lkb-18
 https://www.youtube.com/watch?v=8VZ4qRvU680

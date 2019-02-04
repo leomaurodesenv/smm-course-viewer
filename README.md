@@ -5,16 +5,8 @@
 Based on [MarioUnmaker](https://github.com/Treeki/MarioUnmaker/blob/master/FormatNotes.md).   
    
 TODO:
-- Read course file (\*.cdt)
-    - Course info (_OK_)
-    - Course configurations (_OK_)
-    - Objects info (_OK_)
-- Layout
-    - Index the visualizer (_OK_)
-    - Read course info (_OK_)
-    - Updates (_Doing_)
 - Draw
-    - Draw blocks
+    - Draw blocks (_Doing_)
     - Draw objects
 - Interpret objects
     - Inanimate objects
