@@ -2,16 +2,17 @@
 
 **Under construction**
 
-Based on [MarioUnmaker](https://github.com/Treeki/MarioUnmaker/blob/master/FormatNotes.md).   
+Based on [MarioUnmaker](https://github.com/Treeki/MarioUnmaker/blob/master/FormatNotes.md) and [PointlessMaker
+](https://github.com/aboood40091/PointlessMaker).   
    
 TODO:
 - Draw
     - Draw blocks (_Doing_)
-    - Draw objects
+    - Draw monsters (_Doing_)
 - Interpret objects
     - Inanimate objects
     - Monsters and player
-- Take printscreen of the map
+- Take a printscreen of the map
 - _Extract characteristics from the course_ (Data Mining)
    
 ---
