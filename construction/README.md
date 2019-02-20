@@ -1,32 +1,29 @@
-````javascript
------ Unmaker
-- https://github.com/Treeki/MarioUnmaker/blob/master/FormatNotes.md
+````shell
+## ------------
+## --- Unmaker
+# files
+# https://github.com/Treeki/MarioUnmaker/blob/master/FormatNotes.md
+# https://github.com/Tarnadas/cemu-smm/blob/master/documentation/course_file.md
 
-- https://github.com/aboood40091/PointlessMaker
-- https://mariomods.net/thread/358-pointlessmaker?post=2520#post2520
+# projects
+# https://github.com/aboood40091/PointlessMaker
+# https://mariomods.net/thread/358-pointlessmaker?post=2520#post2520
+# https://github.com/RoadrunnerWMC/Metamaker
 
-- https://github.com/Tarnadas/cemu-smm/blob/master/documentation/course_file.md
+## ------------
+## --- Qt Creator (MarioUnmaker)
+$ sudo apt-get install libgl-dev
+$ sudo apt-get install mesa-common-dev
+$ sudo apt-get install libglu1-mesa-dev freeglut3-dev mesa-common-dev libgl1-mesa-dev
+$ sudo apt-get install libxi-dev build-essential libdbus-1-dev libfontconfig1-dev libfreetype6-dev libx11-dev
+$ sudo apt-get install libqt4-dev zlib1g-dev libqt4-opengl-dev
 
-sudo apt-get install libgl1-mesa-dev
-sudo apt-get install build-essential libgl1-mesa-dev
-sudo apt-get install mesa-common-dev
+# download: https://www.qt.io/download
+$ chmod +x qt-unified-linux-x64-3.0.6-online.run
+$ ./qt-unified-linux-x64-3.0.6-online.run
 
-sudo apt-get install libgl-dev
-sudo apt-get install mesa-common-dev
-sudo apt-get install libglu1-mesa-dev freeglut3-dev mesa-common-dev libgl1-mesa-dev
-sudo apt-get install libxi-dev build-essential libdbus-1-dev libfontconfig1-dev libfreetype6-dev libx11-dev
-sudo apt-get install libqt4-dev zlib1g-dev libqt4-opengl-dev
-
------ Qt Creator (MarioUnmaker)
-https://www.qt.io/download
-/home/leonardo/Downloads/qt-unified-linux-x64-3.0.6-online.run
-
-enter cd /home/user/Downloads
-enter chmod +x some-app.run
-
-enter ./some-app.run
-
------ Titlesets (Wii U files)
+## ------------
+## --- Titlesets (Wii U files)
 SZS: https://www.youtube.com/watch?v=9KTjtN5mrws
 Toolset: https://szs.wiimm.de/ (to Open the file)
     Install: sudo ./install.sh
@@ -38,7 +35,8 @@ Converter (DDS->PNG): https://image.online-convert.com/convert-to-png
 https://mariomods.net/forum/4-super-mario-maker-hacking-info
 https://mariomods.net/thread/652-how-to-edit-tilesets-sprites-or-backgrounds
 
------ Desbloquear (Homebrew)
+## ------------
+## --- Hack (Homebrew)
 https://www.youtube.com/watch?v=Obfp2lkb-18
 https://www.youtube.com/watch?v=8VZ4qRvU680
 
