@@ -97,8 +97,11 @@
 
 <!-- SmmCourseViewer -->
 <script src="lib/CourseObject.js"></script>
+<script src="lib/BlockObject.js"></script>
 <script src="lib/Course.js"></script>
 <script src="lib/SmmCourseViewer.js"></script>
+<!-- SmmCourseViewer::Draw -->
+<script src="lib/BlockDraw.js"></script>
 <script src="lib/Draw.js"></script>
 <script>
 
@@ -128,10 +131,10 @@ function handleFileSelect(eventFile) {
 function interpretCourse(file) {
     /* instance the course viewer */
     courseViewer = new _SmmCourseViewer();
-    courseViewer.read(file, function(eventRead) {
+    courseViewer.read(file, function(eventRead, course, objects) {
         if(eventRead) {
             document.getElementById('courseInfoDisplay').innerHTML = courseViewer.course.getHtml();
-            new Draw('courseDisplay', courseViewer.course, courseViewer.objects);
+            new Draw('courseDisplay', course, objects);
         }
         else {
             alertShow('#display > div:eq(0)', 'danger', 'Error: corrupted file!');
