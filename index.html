@@ -50,11 +50,21 @@
 <section id="selectFile" class="bg-info text-white" style="padding:15px 0 5px 0;">
     <div class="container">
         <p>Select the Super Mario Maker course file (*.cdt).</p>
-        <div class="btn-group" role="group">
+        <div class="row">
+            <div class="col-sm-5 btn-group" role="group">
             <label class="btn btn-secondary" onclick="loadCourseExample()">Load Example</label>
             <label class="btn btn-light">
                 Browse&hellip; <input type="file" id="inputFile" name="inputFile" accept=".cdt" style="display:none;">
             </label>
+            </div>
+            <div class="col-sm-7">
+            <select class="form-control" id="selectSize" onchange="handleSelectSize()">
+                <option value="20" selected>Object size: default</option>
+                <option value="30">Object size: 30x30</option>
+                <option value="45">Object size: 45x45</option>
+                <option value="60">Object size: 60x60</option>
+            </select>
+            </div>
         </div>
     </div>
 </section>
@@ -105,10 +115,28 @@
 <script src="lib/Draw.js"></script>
 <script>
 
+/* -------------------------------------- */
+/* Bootstrap::plot alert */
 function alertShow(selector, type, msg) {
     $(selector).append('<div class="alert alert-'+type+' alert-dismissible fade show" role="alert">'+msg+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 }
 
+/* -------------------------------------- */
+/* select::get selected value */
+function getSelectedSize() {
+    var selectElement = document.getElementById('selectSize');
+    var selected = selectElement.options[selectElement.selectedIndex].value;
+    return selected;
+}
+
+/* select::get selected value */
+function handleSelectSize() {
+    if(courseViewer)
+        new Draw('courseDisplay', courseViewer.course, courseViewer.objects, getSelectedSize());
+}
+
+/* -------------------------------------- */
+/* interpreter::get defaul example */
 function loadCourseExample() {
     /* get file object */
     var xhr = new XMLHttpRequest();
@@ -121,6 +149,7 @@ function loadCourseExample() {
     xhr.send();
 }
 
+/* interpreter::load browse file */
 function handleFileSelect(eventFile) {
 	/* get file object */
     let file = eventFile.target.files[0];
@@ -128,13 +157,15 @@ function handleFileSelect(eventFile) {
     interpretCourse(file);
 }
 
+/* interpreter::read the file */
 function interpretCourse(file) {
     /* instance the course viewer */
     courseViewer = new _SmmCourseViewer();
     courseViewer.read(file, function(eventRead, course, objects) {
         if(eventRead) {
             document.getElementById('courseInfoDisplay').innerHTML = courseViewer.course.getHtml();
-            new Draw('courseDisplay', course, objects);
+            let sizeBase = getSelectedSize();
+            new Draw('courseDisplay', course, objects, sizeBase);
         }
         else {
             alertShow('#display > div:eq(0)', 'danger', 'Error: corrupted file!');
@@ -142,6 +173,8 @@ function interpretCourse(file) {
     });
 }
 
+/* -------------------------------------- */
+/* window::check functionalities */
 window.onload = function() {
 	/* check if browser support File Reader */
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
