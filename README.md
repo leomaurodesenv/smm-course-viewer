@@ -35,7 +35,7 @@ See the [release](https://github.com/leomaurodesenv/smm-course-viewer/releases) 
 After _Load Example_ or _Browse_ for a file, the `courseViewer` object is created.   
 To access the course data, open the web console, usually `Ctrl+Shift+k` or `F12`.
 
-```json
+```
 course: 
   \_ ​name: string
   \_ ​mode: ['M1', 'M3', 'MW', 'WU']
@@ -62,7 +62,7 @@ objects:
   \_ Array[CourseObject]
 ```
    
-```json
+```
 CourseObject:
   \_ name: string
   \_ x: X-axis
@@ -85,7 +85,7 @@ CourseObject:
 ```
    
 ---
-###TODO:
+### TODO
 
 - Interpret objects
     - Inanimate objects ~Blocks (ok)
