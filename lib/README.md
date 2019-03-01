@@ -1,4 +1,4 @@
-# smm-course-viewer
+# smm-course-viewer: Documentation
 
 _Developing_
 
@@ -24,18 +24,6 @@ _Developing_
 - `index.html`: display the smm-course-viewer.
 - `SmmCourseViewer.js`: extract course data from .cdt file.
 - `Draw.js`: draw the course in HTML Canvas element.
-
----
-## Objects Formatation
-
-| ID | Sub ID | Name | Description |
-| :--- | :--- | :--- | :--- |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-
 
 ---
 ### Also look ~

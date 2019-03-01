@@ -26,7 +26,7 @@ See the [release](https://github.com/leomaurodesenv/smm-course-viewer/releases) 
 1. Download or git clone.
     - `git clone https://github.com/leomaurodesenv/smm-course-viewer.git`
 2. Open the `/index.html` in web browser.
-3. _Load Example_ or _Browse..._ to your .cdt file.
+3. _Load Example_ or _Browse..._ to a \*.cdt file.
 
 ---
 
@@ -87,12 +87,11 @@ CourseObject:
 ---
 ### TODO
 
-- Interpret objects
-    - Inanimate objects ~Blocks (ok)
-    - Monsters and player (_doing_)
-- Draw
-    - Draw blocks (ok)
-    - Draw monsters (_doing_)
+- Interpret objects/monsters
+    - Rotation
+    - Wings
+    - unknown IDs: 32 (tsuta?), 65 (?)
+    - unfinish IDs: 44 (funny kinoko), 50 (chara kinonko), 27 (goal pole)
 - Take a printscreen of the course map
 - _Extract characteristics from the course_ (Data Mining)
 
