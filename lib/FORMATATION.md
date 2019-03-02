@@ -137,7 +137,7 @@ _Copy from BlockObjects and MonsterObjects_
     </tr>
     <tr>
         <td>4</td><td>RengaBlock</td><td>Brick Block</td>
-        <td><img src="../layout/draw/support/blank.png" height="16px"></td>
+        <td><img src="../layout/draw/formatation/4.png"></td>
         <td><a href="https://www.mariowiki.com/Brick_Block" target="_blank">Link</a></td>
     </tr>
     <tr>
@@ -152,7 +152,7 @@ _Copy from BlockObjects and MonsterObjects_
     </tr>
     <tr>
         <td>7</td><td>Ground</td><td>Ground</td>
-        <td><img src="../layout/draw/support/blank.png" height="16px"></td>
+        <td><img src="../layout/draw/formatation/7.png"></td>
         <td>None</td>
     </tr>
     <tr>
@@ -162,17 +162,21 @@ _Copy from BlockObjects and MonsterObjects_
     </tr>
     <tr>
         <td>8</td><td>Coin</td><td>Red Coin</td>
-        <td><img src="../layout/draw/support/blank.png" height="16px"></td>
+        <td><img src="../layout/draw/formatation/8b.png"></td>
         <td><a href="https://www.mariowiki.com/Red_Coin" target="_blank">Link</a></td>
     </tr>
     <tr>
         <td>9</td><td>Dokan</td><td>Warp Pipe</td>
-        <td><img src="../layout/draw/support/blank.png" height="16px"></td>
+        <td><img src="../layout/draw/formatation/9.png"></td>
         <td><a href="https://www.mariowiki.com/Warp_Pipe" target="_blank">Link</a></td>
     </tr>
     <tr>
         <td>14</td><td>GroundMushroom</td><td>Terrain Mushroom</td>
-        <td><img src="../layout/draw/support/blank.png" height="16px"></td>
+        <td>
+            <img src="../layout/draw/formatation/14.png">
+            <img src="../layout/draw/formatation/14b.png">
+            <img src="../layout/draw/formatation/14c.png">
+        </td>
         <td>None</td>
     </tr>
     <tr>
