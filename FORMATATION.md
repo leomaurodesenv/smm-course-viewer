@@ -89,7 +89,7 @@ _Copy from BlockObjects and MonsterObjects_.
     <tr>
         <td>12</td><td>1</td><td>?</td>
         <td>Dossun</td><td>Skewer</td>
-        <td><img src="layout/draw/support/blank.png"></td>
+        <td><img src="layout/draw/formatation/12-1.png"></td>
         <td><a href="https://www.mariowiki.com/Skewer" target="_blank">Link</a></td>
     </tr>
     <tr>
@@ -125,7 +125,7 @@ _Copy from BlockObjects and MonsterObjects_.
     <tr>
         <td>18</td><td>?</td><td>None</td>
         <td>PSwitch</td><td>Key</td>
-        <td><img src="layout/draw/support/blank.png"></td>
+        <td><img src="layout/draw/formatation/18-1.png"></td>
         <td><a href="https://www.mariowiki.com/Key" target="_blank">Link</a></td>
     </tr>
     <tr>
@@ -135,13 +135,13 @@ _Copy from BlockObjects and MonsterObjects_.
         <td><a href="https://www.mariowiki.com/POW_Block" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td>20</td><td>?</td><td>None</td>
+        <td>20</td><td>None</td><td>None</td>
         <td>SuperKinoko</td><td>Mushroom</td>
         <td><img src="layout/draw/formatation/20-0.png"></td>
         <td><a href="https://www.mariowiki.com/Mushroom" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td>24</td><td>?</td><td>None</td>
+        <td>24</td><td>None</td><td>None</td>
         <td>FireBar</td><td>Fire Bar</td>
         <td>
             <img src="layout/draw/formatation/24-0.png">
@@ -150,7 +150,7 @@ _Copy from BlockObjects and MonsterObjects_.
         <td><a href="https://www.mariowiki.com/Fire_Bar" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td>25</td><td>?</td><td>1,2</td>
+        <td>25</td><td>0</td><td>1,2</td>
         <td>Togezo</td><td>Spiny</td>
         <td><img src="layout/draw/formatation/25-0.png"></td>
         <td><a href="https://www.mariowiki.com/Spiny" target="_blank">Link</a></td>
@@ -162,19 +162,19 @@ _Copy from BlockObjects and MonsterObjects_.
         <td><a href="https://www.mariowiki.com/Goal_Pole" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td>28</td><td>?</td><td>1,2</td>
+        <td>28</td><td>0</td><td>1,2</td>
         <td>Met</td><td>Buzzy Beetle</td>
         <td><img src="layout/draw/formatation/28-0.png"></td>
         <td><a href="https://www.mariowiki.com/Buzzy_Beetle" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td>30</td><td>?</td><td>1,2</td>
+        <td>30</td><td>0</td><td>1,2</td>
         <td>Jugem</td><td>Lakitu</td>
         <td><img src="layout/draw/formatation/30-0.png"></td>
         <td><a href="https://www.mariowiki.com/Lakitu" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td>31</td><td>?</td><td>1,2</td>
+        <td>31</td><td>0</td><td>1,2</td>
         <td>JugemCloud</td><td>Lakitu's Cloud</td>
         <td><img src="layout/draw/formatation/31-0.png"></td>
         <td><a href="https://www.mariowiki.com/Lakitu%27s_Cloud" target="_blank">Link</a></td>
@@ -222,7 +222,7 @@ _Copy from BlockObjects and MonsterObjects_.
         <td>None</td>
     </tr>
     <tr>
-        <td>39</td><td>?</td><td>1,2</td>
+        <td>39</td><td>0</td><td>1,2</td>
         <td>Kameck</td><td>Kamek</td>
         <td><img src="layout/draw/formatation/39-0.png"></td>
         <td><a href="https://www.mariowiki.com/Kamek" target="_blank">Link</a></td>
@@ -253,9 +253,9 @@ _Copy from BlockObjects and MonsterObjects_.
     </tr>
     <tr>
         <td>41</td><td>?</td><td>?</td>
-        <td>Teresa</td><td>Boo</td>
+        <td>Teresa</td><td>Stretch</td>
         <td><img src="layout/draw/formatation/41-x.png"></td>
-        <td>None</td>
+        <td><a href="https://www.mariowiki.com/Stretch_(Boo)" target="_blank">Link</a></td>
     </tr>
     <tr>
         <td>42</td><td>?</td><td>?</td>
@@ -270,24 +270,231 @@ _Copy from BlockObjects and MonsterObjects_.
         <td><a href="https://www.mariowiki.com/Fire_Koopa_Clown_Car" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td></td><td>1</td><td>1,2</td>
-        <td></td><td></td>
-        <td><img src="layout/draw/formatation/.png"></td>
-        <td><a href="" target="_blank">Link</a></td>
+        <td>44</td><td>None</td><td>None</td>
+        <td>CharaKinoko</td><td>Mystery Mushroom (M1), Super Leaf (M3), Cape Feather (MW), Propeller Mushroom (WU)</td>
+        <td>
+            <img src="layout/draw/formatation/44-0.png">,
+            <img src="layout/draw/formatation/44-0b.png">,
+            <img src="layout/draw/formatation/44-0c.png">,
+            <img src="layout/draw/formatation/44-0d.png">
+        </td>
+        <td>
+            <a href="https://www.mariowiki.com/Mystery_Mushroom" target="_blank">M1</a>,
+            <a href="https://www.mariowiki.com/Super_Leaf" target="_blank">M3</a>,
+            <a href="https://www.mariowiki.com/Cape_Feather" target="_blank">MW</a>,
+            <a href="https://www.mariowiki.com/Propeller_Mushroom" target="_blank">WU</a>
+        </td>
     </tr>
     <tr>
-        <td></td><td>1</td><td>1,2</td>
-        <td></td><td></td>
-        <td><img src="layout/draw/formatation/.png"></td>
-        <td><a href="" target="_blank">Link</a></td>
+        <td>45</td><td>None</td><td>None</td>
+        <td>KutsuKuribo</td><td>Goomba's Shoe, Yoshi Egg</td>
+        <td>
+            <img src="layout/draw/formatation/45-0b.png">
+            <img src="layout/draw/formatation/45-0.png">
+        </td>
+        <td>
+            <a href="https://www.mariowiki.com/Goomba%27s_Shoe" target="_blank">Shoe</a>,
+            <a href="https://www.mariowiki.com/Yoshi_Egg" target="_blank">Egg</a>
+        </td>
     </tr>
     <tr>
-        <td></td><td>1</td><td>1,2</td>
-        <td></td><td></td>
-        <td><img src="layout/draw/formatation/.png"></td>
-        <td><a href="" target="_blank">Link</a></td>
+        <td>46</td><td>0</td><td>1,2</td>
+        <td>Karon</td><td>Dry Bones</td>
+        <td><img src="layout/draw/formatation/46-0.png"></td>
+        <td><a href="https://www.mariowiki.com/Dry_Bones" target="_blank">Link</a></td>
     </tr>
-
+    <tr>
+        <td>46</td><td>0</td><td>1,2</td>
+        <td>Karon</td><td>Fish Bones</td>
+        <td><img src="layout/draw/formatation/46-1.png"></td>
+        <td><a href="https://www.mariowiki.com/Fish_Bone" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>47</td><td>0</td><td>None</td>
+        <td>SenkanHoudai</td><td>Cannon</td>
+        <td>
+            <img src="layout/draw/formatation/47-0.png">
+            <img src="layout/draw/formatation/47-0b.png">
+        </td>
+        <td><a href="https://www.mariowiki.com/Cannon" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>47</td><td>1</td><td>None</td>
+        <td>SenkanHoudai</td><td>Red Cannon</td>
+        <td>
+            <img src="layout/draw/formatation/47-1.png">
+            <img src="layout/draw/formatation/47-1b.png">
+        </td>
+        <td><a href="https://www.mariowiki.com/Cannon" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>48</td><td>0</td><td>1,2</td>
+        <td>Gesso</td><td>Blooper</td>
+        <td><img src="layout/draw/formatation/48-0.png"></td>
+        <td><a href="https://www.mariowiki.com/Blooper" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>48</td><td>1</td><td>1,2</td>
+        <td>Gesso</td><td>Blooper Nanny</td>
+        <td>
+            <img src="layout/draw/formatation/48-0.png">
+            <img src="layout/draw/formatation/48-1b.png">
+        </td>
+        <td><a href="https://www.mariowiki.com/Blooper_Nanny" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>50</td><td>None</td><td>None</td>
+        <td>FunnyKinoko</td><td>Weird Mushroom</td>
+        <td><img src="layout/draw/formatation/50-0.png"></td>
+        <td><a href="https://www.mariowiki.com/Weird_Mushroom_(item)" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>51</td><td>None</td><td>None</td>
+        <td>DekaKinoko</td><td>Mega Mushroom</td>
+        <td><img src="layout/draw/formatation/51-0.png"></td>
+        <td><a href="https://www.mariowiki.com/Mega_Mushroom" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>52</td><td>0</td><td>1,2</td>
+        <td>Hanachan</td><td>Wiggler</td>
+        <td>
+            <img src="layout/draw/formatation/52-0.png">
+            <img src="layout/draw/formatation/52-0b.png">
+        </td>
+        <td><a href="https://www.mariowiki.com/Wiggler" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>52</td><td>1</td><td>1,2</td>
+        <td>Hanachan</td><td>Angry Wiggler</td>
+        <td>
+            <img src="layout/draw/formatation/52-1.png">
+            <img src="layout/draw/formatation/52-1b.png">
+        </td>
+        <td><a href="https://www.mariowiki.com/Wiggler" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>54</td><td>0</td><td>None</td>
+        <td>Burner</td><td>Burner</td>
+        <td><img src="layout/draw/formatation/54-0.png"></td>
+        <td><a href="https://www.mariowiki.com/Burner" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>55</td><td>?</td><td>None</td>
+        <td>Door</td><td>Warp Door</td>
+        <td><img src="layout/draw/formatation/55-0.png"></td>
+        <td><a href="https://www.mariowiki.com/Warp_Door" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>55</td><td>?</td><td>None</td>
+        <td>Door</td><td>Key Door</td>
+        <td><img src="layout/draw/formatation/55-1.png"></td>
+        <td><a href="https://www.mariowiki.com/Key_Door" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>55</td><td>?</td><td>None</td>
+        <td>Door</td><td>P Door</td>
+        <td><img src="layout/draw/formatation/55-2.png"></td>
+        <td><a href="https://www.mariowiki.com/P_Door" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>56</td><td>0</td><td>1,2</td>
+        <td>Pukupuku</td><td>Cheep Cheep</td>
+        <td><img src="layout/draw/formatation/56-0.png"></td>
+        <td><a href="https://www.mariowiki.com/Cheep_Cheep" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>56</td><td>1</td><td>1,2</td>
+        <td>Pukupuku</td><td>Deep Cheep</td>
+        <td><img src="layout/draw/formatation/56-1.png"></td>
+        <td><a href="https://www.mariowiki.com/Deep_Cheep" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>57</td><td>0</td><td>1,2</td>
+        <td>BlackPakkun</td><td>Muncher</td>
+        <td><img src="layout/draw/formatation/57-0.png"></td>
+        <td><a href="https://www.mariowiki.com/Muncher" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>58</td><td>0</td><td>1,2</td>
+        <td>Poo</td><td>Rocky Wrench</td>
+        <td><img src="layout/draw/formatation/58-0.png"></td>
+        <td><a href="https://www.mariowiki.com/Rocky_Wrench" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>58</td><td>1</td><td>1,2</td>
+        <td>Poo</td><td>Monty Mole</td>
+        <td><img src="layout/draw/formatation/58-1.png"></td>
+        <td><a href="https://www.mariowiki.com/Monty_Mole" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>60</td><td>0</td><td>1,2</td>
+        <td>Bubble</td><td>Lava Bubble</td>
+        <td><img src="layout/draw/formatation/60-0.png"></td>
+        <td><a href="https://www.mariowiki.com/Lava_Bubble" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>61</td><td>0</td><td>1,2</td>
+        <td>Wanwan</td><td>Chain Chomp</td>
+        <td><img src="layout/draw/formatation/61-0.png"></td>
+        <td><a href="https://www.mariowiki.com/Chain_Chomp" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>61</td><td>1</td><td>1,2</td>
+        <td>Wanwan</td><td>Chain Chomp</td>
+        <td>
+            <img src="layout/draw/formatation/61-0.png">
+            <img src="layout/draw/formatation/61-0b.png">
+        </td>
+        <td><a href="https://www.mariowiki.com/Chain_Chomp" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>62</td><td>0</td><td>1,2</td>
+        <td>Koopa</td><td>Bowser</td>
+        <td><img src="layout/draw/formatation/62-0.png"></td>
+        <td><a href="https://www.mariowiki.com/Bowser" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>62</td><td>1</td><td>1,2</td>
+        <td>Koopa</td><td>Bowser Jr.</td>
+        <td><img src="layout/draw/formatation/62-1.png"></td>
+        <td><a href="https://www.mariowiki.com/Bowser_Jr." target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>66</td><td>0</td><td>None</td>
+        <td>AirSignBoard</td><td>Air Sign</td>
+        <td><img src="layout/draw/formatation/66-0.png"></td>
+        <td>None</td>
+    </tr>
+    <tr>
+        <td>66</td><td>1</td><td>None</td>
+        <td>AirSignBoard</td><td>Checkpoint Flag</td>
+        <td><img src="layout/draw/formatation/66-1.png"></td>
+        <td><a href="https://www.mariowiki.com/Checkpoint_Flag" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>67</td><td>None</td><td>None</td>
+        <td>HalfHitWall</td><td>One-Way Wall</td>
+        <td><img src="layout/draw/formatation/67-0.png"></td>
+        <td><a href="https://www.mariowiki.com/One-Way_Wall" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>68</td><td>0</td><td>None</td>
+        <td>Saw</td><td>Grinder</td>
+        <td><img src="layout/draw/formatation/68-0.png"></td>
+        <td><a href="https://www.mariowiki.com/Grinder" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>68</td><td>1</td><td>None</td>
+        <td>Saw</td><td>Bumper</td>
+        <td><img src="layout/draw/formatation/68-1.png"></td>
+        <td><a href="https://www.mariowiki.com/Bumper_(Super_Mario_Maker)" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>69</td><td>?</td><td>None</td>
+        <td>Player</td><td>Mario</td>
+        <td><img src="layout/draw/formatation/69-0.png"></td>
+        <td><a href="https://www.mariowiki.com/Mario" target="_blank">Link</a></td>
+    </tr>
 </table>
 
 <table>
@@ -321,9 +528,9 @@ _Copy from BlockObjects and MonsterObjects_.
         <td><a href="https://www.mariowiki.com/Coin" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td>8</td><td>Coin</td><td>Red Coin</td>
+        <td>8</td><td>Coin</td><td>Pink Coin</td>
         <td><img src="layout/draw/formatation/8b.png"></td>
-        <td><a href="https://www.mariowiki.com/Red_Coin" target="_blank">Link</a></td>
+        <td><a href="https://www.mariowiki.com/Pink_Coin_(Super_Mario_Maker)" target="_blank">Link</a></td>
     </tr>
     <tr>
         <td>9</td><td>Dokan</td><td>Warp Pipe</td>
