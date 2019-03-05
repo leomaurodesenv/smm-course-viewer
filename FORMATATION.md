@@ -1,16 +1,41 @@
 # smm-course-viewer: Data Formatation
 
-_Developing, Under discovering_
+These are the formats of the Super Mario Maker '.cdt' level, collected through reverse-engineering of the last version (Version 1.47) game executable and careful examined. These formats is a upgrade of the [MarioUnmaker](https://github.com/Treeki/MarioUnmaker/blob/master/FormatNotes.md).
+
+This file describes all [monsters](#monster) and [objects](#object) identified, their type, name, description and a wiki link.
+
+TODO: _Under discovering_
+- 08 Coin ~ Pink Coin (Identify)
+- 12 Dossun ~ Skewer (Identify)
+- 15 Bombhei ~ Active (Identify)
+- 18 PSwitch ~ Key (Identify)
+- 27 GoalPole (Draw)
+- 32 Tsuta ~ Vine Head (Identify)
+- 41 Teresa ~ Stretch (Identify)
+- 42 KoopaClown ~ Fire Koopa Clown (Identify)
+- 46 Karon ~ Fish Bones (Identify)
+- 55 Door ~ Key Door (Identify)
+- 55 Door ~ P Door (Identify)
+- 59 Rail (Draw)
+- 66 AirSignBoard ~ Checkpoint Flag (Identify)
 
 ---
-## Object Type
+## Monster
 
-_Copy from BlockObjects and MonsterObjects_.   
-- '?' Parameter: Not Checked.
+Collumns:
+- **Type**: is the main ID code of the monster.
+- **SubType**: is a transformation of the monster.
+- **Size**: normal size (`1`) or big (`2`) with a Mushroom, `None` is always normal size.
+- **Name**: internal name (Japanese) of the monster.
+- **Description**: detail of the monster.
+- **Image**: an image of the monster.
+- **Wiki**: an external link for a Wiki of the monster.
+
+_Note: `?` Parameter: Unknown_.
 
 <table>
     <tr>
-        <th>ID</th><th>SubID</th><th>Size</th>
+        <th>Type</th><th>SubType</th><th>Size</th>
         <th>Name</th><th>Description</th>
         <th>Image</th><th>Wiki</th>
     </tr>
@@ -490,16 +515,28 @@ _Copy from BlockObjects and MonsterObjects_.
         <td><a href="https://www.mariowiki.com/Bumper_(Super_Mario_Maker)" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td>69</td><td>?</td><td>None</td>
+        <td>69</td><td>None</td><td>None</td>
         <td>Player</td><td>Mario</td>
         <td><img src="layout/draw/formatation/69-0.png"></td>
         <td><a href="https://www.mariowiki.com/Mario" target="_blank">Link</a></td>
     </tr>
 </table>
 
+---
+## Object
+
+Collumns:
+- **Type**: is the main ID code of the object.
+- **Name**: internal name (Japanese) of the object.
+- **Description**: detail of the object.
+- **Image**: an image of the object.
+- **Wiki**: an external link for a Wiki of the object.
+
+_Note: `?` Parameter: Unknown_.
+
 <table>
     <tr>
-        <th>ID</th><th>Name</th><th>Description</th>
+        <th>Type</th><th>Name</th><th>Description</th>
         <th>Image</th><th>Wiki</th>
     </tr>
     <tr>
