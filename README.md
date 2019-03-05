@@ -1,17 +1,18 @@
 # smm-course-viewer
 
-Simple viewer for level files from Super Mario Maker.   
+Simple viewer for level files from Super Mario Maker. Based on [MarioUnmaker](https://github.com/Treeki/MarioUnmaker/) and [PointlessMaker](https://github.com/aboood40091/PointlessMaker).   
 This package has two main features: 
-1. `SmmCourseViewer`: Interpret/extract course data from .cdt files (of Wii U/CEMU).
+1. `SmmCourseViewer`: Interpret/extract course data from .cdt files (Wii U or CEMU).
 2. `Draw`: Draw the course in a HTML Canvas element.
 
-The code is developed in Vanilla JS, but with extension to NodeJs (_under development_). ([Documentation](/lib))   
-Based on [MarioUnmaker](https://github.com/Treeki/MarioUnmaker/blob/master/FormatNotes.md) and [PointlessMaker](https://github.com/aboood40091/PointlessMaker).   
+The code is developed in Vanilla JS, but with extension to NodeJs (_developing_). ([Documentation](/lib))   
+Explore the monsters and objects of your Super Mario Maker courses, see ([Data Format](FORMAT.md)) for more details.   
    
 ---
+### Summary
 
-**Summary**:
 - [Documentation](/lib)
+- [Data Format](FORMAT.md)
 - [Installation](#installation)
     - Releases
     - Developing
@@ -29,7 +30,6 @@ See the [release](https://github.com/leomaurodesenv/smm-course-viewer/releases) 
 3. _Load Example_ or _Browse..._ to a \*.cdt file.
 
 ---
-
 ## Object Structure
 
 After _Load Example_ or _Browse_ for a file, the `courseViewer` object is created.   
@@ -88,12 +88,13 @@ CourseObject:
 ### TODO
 
 - Interpret objects/monsters
-    - Rotation
-    - Wings
-    - unknown IDs: 32 (tsuta?), 65 (?)
-    - unfinish IDs: 44 (funny kinoko), 50 (chara kinonko), 27 (goal pole)
+    - [Data Format: TODO](FORMAT.md)
+- Draw
+    - Background Theme
+    - Unknown monsters/objects
 - Take a printscreen of the course map
 - _Extract characteristics from the course_ (Data Mining)
+    - _Thinking about_
 
 Any suggestions or doubts, please open an "issue".   
 If you want to contribute, make a "pull request".   
