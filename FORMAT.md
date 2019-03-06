@@ -1,6 +1,6 @@
 # smm-course-viewer: Data Format
 
-These tables present the formats of the Super Mario Maker '.cdt' level, collected through reverse-engineering of the last version (Version 1.47) game executable and careful examined. These formats are an upgrade of the [MarioUnmaker](https://github.com/Treeki/MarioUnmaker/blob/master/FormatNotes.md).
+These tables present the formats of the Super Mario Maker '.cdt' level, collected through reverse-engineering of the last version (1.47) game executable and careful examined. These formats are an upgrade of the [MarioUnmaker](https://github.com/Treeki/MarioUnmaker/blob/master/FormatNotes.md).
 
 This file describes all [monsters](#monster) and [objects](#object) identified, their type, name, description and a wiki link.
 

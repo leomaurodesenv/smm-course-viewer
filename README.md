@@ -92,6 +92,7 @@ CourseObject:
 - Draw
     - Background Theme
     - Unknown monsters/objects
+    - Objects rotation
 - Take a printscreen of the course map
 - _Extract characteristics from the course_ (Data Mining)
     - _Thinking about_
