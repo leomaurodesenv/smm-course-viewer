@@ -2,7 +2,7 @@
 
 Simple viewer for level files from Super Mario Maker. Based on [MarioUnmaker](https://github.com/Treeki/MarioUnmaker/) and [PointlessMaker](https://github.com/aboood40091/PointlessMaker).   
 This package has two main features: 
-1. `SmmCourseViewer`: Interpret/extract course data from .cdt files.
+1. `smmCourseViewer`: Interpret/extract course data from .cdt files.
 2. `Draw`: Draw the course in a HTML Canvas element.
 
 The code is developed in Vanilla JS, but with extension to Node.js. ([Code Documentation](/lib))   
@@ -57,9 +57,9 @@ smmCourseViewer.read('path/course_data.cdt', function(err, course, objects) {
 ---
 ## Object Structure
 
-To access in Web Browser:   
-After _Load Example_ or _Browse_ for a file, the `smmCourseViewer` object is created.   
-To access the course data, open the web console, usually `Ctrl+Shift+k` or `F12`, and type `smmCourseViewer`.
+Accessing by a web browser:   
+1. After _Load Example_ or _Browse_ for a file, the object is created.   
+2. Open the web console, usually `Ctrl+Shift+k` or `F12`, and type `smmCourseViewer`.
 
 ```
 course: 
