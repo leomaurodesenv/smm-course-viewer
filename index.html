@@ -143,7 +143,7 @@ function loadCourseExample() {
         interpretCourse(xhr.response); /* xhr.response is now a blob object ~ File */
     }
     /* force the HTTP response, response-type header to be blob */
-    xhr.open('GET', 'http://projects.leonardomauro.com/smm-course-viewer/courseExample/course_data.cdt');
+    xhr.open('GET', 'http://projects.leonardomauro.com/smm-course-viewer/course-example/course_data.cdt');
     xhr.responseType = "blob";
     xhr.send();
 }
