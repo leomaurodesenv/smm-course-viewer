@@ -1,6 +1,6 @@
 {
   "name": "smm-course-viewer",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "A package to reading courses (*.cdt) - Super Mario Maker",
   "main": "lib/main.js",
   "directories": {
@@ -27,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/leomaurodesenv/smm-course-viewer/issues"
   },
-  "homepage": "https://github.com/leomaurodesenv/smm-course-viewer"
+  "homepage": "https://github.com/leomaurodesenv/smm-course-viewer",
+  "dependencies": {
+    "fs": "0.0.1-security"
+  }
 }
