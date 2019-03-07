@@ -9,9 +9,9 @@ Related Projects:
 - [PointlessMaker](https://github.com/aboood40091/PointlessMaker)
 - [Metamaker](https://github.com/RoadrunnerWMC/Metamaker)
 
-Titlesets (Wii U):
+Titlesets:
 - [Decrypting-the-Files](https://github.com/GRAnimated/SMMGuide/wiki/(Wii-U)-Decrypting-the-Files)
-- [MarioMods](https://mariomods.net/thread/652-how-to-edit-tilesets-sprites-or-backgrounds)
+- [The Spriters Resource](https://www.spriters-resource.com/wii_u/supermariomaker/)
 - [DDS to PNG](https://image.online-convert.com/convert-to-png)
 
 ---

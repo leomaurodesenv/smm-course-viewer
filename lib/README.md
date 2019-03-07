@@ -1,4 +1,4 @@
-# smm-course-viewer: Documentation
+# smm-course-viewer: Code Documentation
 
 _Developing_
 
@@ -21,9 +21,6 @@ _Developing_
   |__ CourseObject.js
   |__ BlockObject.js
   |__ MonsterObject.js
-  |__ Draw.js
-  |__ BlockDraw.js
-  |__ MonsterDraw.js
 /test/
   |__ test.js
 ```
@@ -36,10 +33,7 @@ _Developing_
 - /lib/CourseObject.js: course object structure.
 - /lib/BlockObject.js: block object structure.
 - /lib/MonsterObject.js: monster object structure.
-- /lib/Draw.js: draw the course into an HTML Canvas element.
-- /lib/BlockDraw.js: draw the block objects.
-- /lib/MonsterDraw.js: draw the monster objects.
-- /test/test.js: test the Node.js script. (_developing_)
+- /test/test.js: a test script (Node.js).
 
 ---
 ## Documentation

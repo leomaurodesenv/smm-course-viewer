@@ -2,16 +2,17 @@
 
 Simple viewer for level files from Super Mario Maker. Based on [MarioUnmaker](https://github.com/Treeki/MarioUnmaker/) and [PointlessMaker](https://github.com/aboood40091/PointlessMaker).   
 This package has two main features: 
-1. `SmmCourseViewer`: Interpret/extract course data from .cdt files (Wii U or CEMU).
+1. `SmmCourseViewer`: Interpret/extract course data from .cdt files.
 2. `Draw`: Draw the course in a HTML Canvas element.
 
-The code is developed in Vanilla JS, but with extension to NodeJs (_developing_). ([Documentation](/lib))   
+The code is developed in Vanilla JS, but with extension to Node.js. ([Code Documentation](/lib))   
 Explore the monsters and objects of your Super Mario Maker courses, see ([Data Format](FORMAT.md)) for more details.   
    
 ---
 ### Summary
 
-- [Documentation](/lib)
+- [Code Documentation](/lib)
+- [Drawing Documentation](/draw)
 - [Data Format](FORMAT.md)
 - [Installation](#installation)
     - Releases
@@ -22,18 +23,43 @@ Explore the monsters and objects of your Super Mario Maker courses, see ([Data F
 ---
 ## Installation
 
-See the [release](https://github.com/leomaurodesenv/smm-course-viewer/releases) for a stable version.
+See the [release](https://github.com/leomaurodesenv/smm-course-viewer/releases) for a stable HTML version.
 
 1. Download or git clone.
     - `git clone https://github.com/leomaurodesenv/smm-course-viewer.git`
 2. Open the `/index.html` in web browser.
 3. _Load Example_ or _Browse..._ to a \*.cdt file.
 
+
+To use the Node.js version:
+```shell
+npm install --save smm-course-viewer
+```
+
+---
+## Node.js Example
+
+Example: How to read courses files.   
+Run this example `nodejs test/test.js`.
+```js
+/* Include */
+const smmCourseViewer = require('smm-course-viewer');
+
+// ## Try interpret a course file
+smmCourseViewer.read('path/course_data.cdt', function(err, course, objects) {
+    if(!err) {
+        console.log(course)
+        console.log(objects);
+    }
+});
+```
+
 ---
 ## Object Structure
 
-After _Load Example_ or _Browse_ for a file, the `courseViewer` object is created.   
-To access the course data, open the web console, usually `Ctrl+Shift+k` or `F12`.
+To access in Web Browser:   
+After _Load Example_ or _Browse_ for a file, the `smmCourseViewer` object is created.   
+To access the course data, open the web console, usually `Ctrl+Shift+k` or `F12`, and type `smmCourseViewer`.
 
 ```
 course: 
@@ -95,13 +121,13 @@ CourseObject:
     - Objects rotation
 - Take a printscreen of the course map
 - _Extract characteristics from the course_ (Data Mining)
-    - _Thinking about_
-
-Any suggestions or doubts, please open an "issue".   
-If you want to contribute, make a "pull request".   
+    - _Thinking about_ 
    
 ---
 ### Also look ~
+
+Any suggestions or doubts, please open an "issue".   
+If you want to contribute, make a "pull request".   
 
 - [License GPLv3](LICENSE)
 - Create by Leonardo Mauro (leo.mauro.desenv@gmail.com)

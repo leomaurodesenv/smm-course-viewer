@@ -83,9 +83,9 @@
             Type:
         </p>
         <p>
-            <code>courseViewer</code> <samp># global variable</samp><br>
-            <code>courseViewer.course</code> <samp># course data</samp><br>
-            <code>courseViewer.objects</code> <samp># course objects</samp>
+            <code>smmCourseViewer</code> <samp># global variable</samp><br>
+            <code>smmCourseViewer.course</code> <samp># course data</samp><br>
+            <code>smmCourseViewer.objects</code> <samp># course objects</samp>
         </p>
     </div>
 </section>
@@ -109,9 +109,9 @@
 <script src="lib/Course.js"></script>
 <script src="lib/SmmCourseViewer.js"></script>
 <!-- SmmCourseViewer::Draw -->
-<script src="lib/BlockDraw.js"></script>
-<script src="lib/MonsterDraw.js"></script>
-<script src="lib/Draw.js"></script>
+<script src="draw/BlockDraw.js"></script>
+<script src="draw/MonsterDraw.js"></script>
+<script src="draw/Draw.js"></script>
 <script>
 
 /* -------------------------------------- */
@@ -130,8 +130,8 @@ function getSelectedSize() {
 
 /* select::get selected value */
 function handleSelectSize() {
-    if(courseViewer)
-        new Draw('courseDisplay', courseViewer.course, courseViewer.objects, getSelectedSize());
+    if(smmCourseViewer)
+        new Draw('courseDisplay', smmCourseViewer.course, smmCourseViewer.objects, getSelectedSize());
 }
 
 /* -------------------------------------- */
@@ -159,15 +159,14 @@ function handleFileSelect(eventFile) {
 /* interpreter::read the file */
 function interpretCourse(file) {
     /* instance the course viewer */
-    courseViewer = new _SmmCourseViewer();
-    courseViewer.read(file, function(eventRead, course, objects) {
-        if(eventRead) {
-            document.getElementById('courseInfoDisplay').innerHTML = courseViewer.course.getHtml();
+    smmCourseViewer = new _SmmCourseViewer();
+    smmCourseViewer.read(file, function(err, course, objects) {
+        if(err) alertShow('#display > div:eq(0)', 'danger', 'Error: corrupted file!');
+        else {
+            console.log('smmCourseViewer: ready!');
+            document.getElementById('courseInfoDisplay').innerHTML = smmCourseViewer.course.getHtml();
             let sizeBase = getSelectedSize();
             new Draw('courseDisplay', course, objects, sizeBase);
-        }
-        else {
-            alertShow('#display > div:eq(0)', 'danger', 'Error: corrupted file!');
         }
     });
 }

@@ -27,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/leomaurodesenv/smm-course-viewer/issues"
   },
-  "homepage": "https://github.com/leomaurodesenv/smm-course-viewer"
+  "homepage": "https://github.com/leomaurodesenv/smm-course-viewer",
+  "dependencies": {
+    "fs": "0.0.1-security"
+  }
 }
