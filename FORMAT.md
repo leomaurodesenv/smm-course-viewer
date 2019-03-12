@@ -4,7 +4,7 @@ These tables present the formats of the Super Mario Maker '.cdt' level, collecte
 
 This file describes all [monsters](#monster) and [objects](#object) identified, their type, name, description and a wiki link.
 
-TODO: _Under discovering_
+TODO: _Discovering_
 - 08 Coin ~ Pink Coin (Identify)
 - 12 Dossun ~ Skewer (Identify)
 - 15 Bombhei ~ Active (Identify)

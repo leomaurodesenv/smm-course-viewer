@@ -1,6 +1,6 @@
  /**
  * @module BlockDraw
- * This class draw the blocks from draw/titleset/.
+ * This class draw the blocks from layout/draw/titleset/.
  * 
  * @author Leonardo Mauro <leo.mauro.desenv@gmail.com> (http://leonardomauro.com/)
  * @link https://github.com/leomaurodesenv/smm-course-viewer GitHub
@@ -38,7 +38,7 @@ class BlockDraw {
      * @method module:BlockDraw::getTheme
      * Return the theme image
      * @access public
-     * @return {html}
+     * @return {HTML Element}
      */
     getTheme() {
         return this._theme;
@@ -57,18 +57,20 @@ class BlockDraw {
     /**
      * @method module:BlockDraw::getDef
      * Return the block definitions
+     * @arg {Integer} _type        Object type
      * @access public
-     * @return {Dictionay}
+     * @return {Object}
      */
     getDef(_type) {
         return BlockDraw._defitions[_type];
     }
 
     /**
-     * @method module:BlockDraw::getDef
+     * @method module:BlockDraw::hasDraw
      * Check if this type has a draw
+     * @arg {Integer} _type        Object type
      * @access public
-     * @return {Dictionay}
+     * @return {Object}
      */
     hasDraw(_type) {
         return (this.getDef(_type)) ? true :false;
@@ -76,10 +78,12 @@ class BlockDraw {
 
     /**
      * @method module:BlockDraw::_autoComplete3x4
-     * Autocomplete tt for extend objects
+     * Complete tt for extend objects
+     * @arg {Object}  tt       Templates position
+     * @arg {Integer} limit    How many positions?
      * @static
      * @access private
-     * @return {Dictionay}
+     * @return {Object}
      */
     static _autoComplete3x4(tt, limit=12) {
         for(let i=0; i<limit; i++) { if(!tt[i]) tt[i] = {'xT':0, 'yT':0}; }
@@ -90,8 +94,13 @@ class BlockDraw {
      * @method module:BlockDraw::_extend3x4objects
      * Auxiliar function to extend objects
      * @static
+     * @arg {Integer} x            X-axis position
+     * @arg {Integer} y            Y-axis position
+     * @arg {Integer} width        Object width
+     * @arg {Integer} height       Object height
+     * @arg {Object}  ttInit       Templates position
      * @access private
-     * @return {Array[Dictionay]}
+     * @return {Array[Object]}
      */
     static _extend3x4objects(x, y, width, height, ttInit) {
         var extend = [], tt = BlockDraw._autoComplete3x4(ttInit);

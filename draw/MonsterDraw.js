@@ -1,6 +1,6 @@
  /**
  * @module MonsterDraw
- * This class draw the monsters from draw/monster/.
+ * This class draw the monsters from layout/draw/monster/.
  * 
  * @author Leonardo Mauro <leo.mauro.desenv@gmail.com> (http://leonardomauro.com/)
  * @link https://github.com/leomaurodesenv/smm-course-viewer GitHub
@@ -38,7 +38,7 @@ class MonsterDraw {
      * @method module:MonsterDraw::getTheme
      * Return the theme image
      * @access public
-     * @return {html}
+     * @return {HTML Element}
      */
     getTheme() {
         return this._theme;
@@ -56,32 +56,41 @@ class MonsterDraw {
 
     /**
      * @method module:MonsterDraw::getDef
-     * Return the block definitions
+     * Return the monster definitions
+     * @arg {Integer} _type        Object type
      * @access public
-     * @return {Dictionay}
+     * @return {Object}
      */
     getDef(_type) {
         return MonsterDraw._defitions[_type];
     }
 
     /**
-     * @method module:MonsterDraw::getDef
+     * @method module:MonsterDraw::hasDraw
      * Check if this type has a draw
+     * @arg {Integer} _type        Object type
      * @access public
-     * @return {Dictionay}
+     * @return {Object}
      */
     hasDraw(_type) {
         return (this.getDef(_type)) ? true :false;
     }
 
     /**
-     * @method module:MonsterDraw::_extendForobjects
+     * @method module:MonsterDraw::_extendForObjects
      * Auxiliar function to extend objects
+     * @arg {Object}  extend       Object extend
+     * @arg {Integer} width        Object width
+     * @arg {Integer} height       Object height
+     * @arg {Integer} xT           Theme x-axis position
+     * @arg {Integer} yT           Theme y-axis position
+     * @arg {Integer} x            X-axis position addition
+     * @arg {Integer} y            Y-axis position addition
      * @static
      * @access private
-     * @return {Array[Dictionay]}
+     * @return {Array[Object]}
      */
-    static _extendForobjects(extend, weight, height, xT, yT, x=0, y=0) {
+    static _extendForObjects(extend, weight, height, xT, yT, x=0, y=0) {
         for(let w=0; w<weight; w++) {
             for(let h=0; h<height; h++) {
                 extend.push({'x':-w+x, 'y':h+y, 'xT':xT-w, 'yT':yT-h});
@@ -99,33 +108,33 @@ class MonsterDraw {
 MonsterDraw._defitions = {
     0:{'extend':function(courseObject) {
         var extend = courseObject.extend;
-        return MonsterDraw._extendForobjects(extend, 1, 2, 1, 1);
+        return MonsterDraw._extendForObjects(extend, 1, 2, 1, 1);
     }},
     1:{'extend':function(courseObject) {
         var extend = courseObject.extend;
         let subType = courseObject.subType;
         /* red */
-        extend = (subType) ? MonsterDraw._extendForobjects(extend, 1, 2, 2, 3) :
+        extend = (subType) ? MonsterDraw._extendForObjects(extend, 1, 2, 2, 3) :
         /* green */
-            MonsterDraw._extendForobjects(extend, 1, 2, 2, 1);
+            MonsterDraw._extendForObjects(extend, 1, 2, 2, 1);
         return extend;
     }},
     2:{'extend':function(courseObject) {
         var extend = courseObject.extend;
         let subType = courseObject.subType;
         /* fire */
-        extend = (subType) ? MonsterDraw._extendForobjects(extend, 1, 2, 3, 3) :
+        extend = (subType) ? MonsterDraw._extendForObjects(extend, 1, 2, 3, 3) :
         /* pakkun */
-            MonsterDraw._extendForobjects(extend, 1, 2, 3, 1);
+            MonsterDraw._extendForObjects(extend, 1, 2, 3, 1);
         return extend;
     }},
     3:{'extend':function(courseObject) {
         var extend = courseObject.extend;
         let width = courseObject.width;
         /* big HammerBro */
-        extend = (width-1) ? MonsterDraw._extendForobjects(extend, 2, 2, 5, 3) :
+        extend = (width-1) ? MonsterDraw._extendForObjects(extend, 2, 2, 5, 3) :
         /* HammerBro */
-            MonsterDraw._extendForobjects(extend, 1, 2, 4, 1);
+            MonsterDraw._extendForObjects(extend, 1, 2, 4, 1);
         return extend;
     }},
     10:{'extend':function(courseObject) {
@@ -141,13 +150,13 @@ MonsterDraw._defitions = {
         let subType = courseObject.subType;
         var extend;
         /* blue */
-        if(subType) return MonsterDraw._extendForobjects([], 4, 1, 9, 1, 1);
+        if(subType) return MonsterDraw._extendForObjects([], 4, 1, 9, 1, 1);
         /* white */
-        return MonsterDraw._extendForobjects([], 4, 1, 9, 0, 1);
+        return MonsterDraw._extendForObjects([], 4, 1, 9, 0, 1);
     }},
     12:{'extend':function(courseObject) {
         var extend = courseObject.extend;
-        return MonsterDraw._extendForobjects(extend, 2, 2, 11, 1);
+        return MonsterDraw._extendForObjects(extend, 2, 2, 11, 1);
     }},
     13: {'extend': function(courseObject) {
         let subType = courseObject.subType,
@@ -244,11 +253,11 @@ MonsterDraw._defitions = {
     38:{'extend':function(courseObject) {
         var extend = [];
         extend.push({'x':0, 'y':0, 'xT':13, 'yT':5});
-        return MonsterDraw._extendForobjects(extend, 3, 2, 14, 4, 1, 1);
+        return MonsterDraw._extendForObjects(extend, 3, 2, 14, 4, 1, 1);
     }},
     39:{'extend':function(courseObject) {
         var extend = courseObject.extend;
-        return MonsterDraw._extendForobjects(extend, 1, 2, 0, 6);
+        return MonsterDraw._extendForObjects(extend, 1, 2, 0, 6);
     }},
     40:{'extend':function(courseObject) {
         var extend = courseObject.extend;
@@ -274,7 +283,7 @@ MonsterDraw._defitions = {
         return extend;
     }},
     42:{'extend':function(courseObject) {
-        return MonsterDraw._extendForobjects([], 2, 2, 2, 6);
+        return MonsterDraw._extendForObjects([], 2, 2, 2, 6);
     }},
     44:{'extend':function(courseObject) {
         var extend = courseObject.extend;
@@ -288,7 +297,7 @@ MonsterDraw._defitions = {
     }},
     46:{'extend':function(courseObject) {
         var extend = courseObject.extend;
-        return MonsterDraw._extendForobjects(extend, 1, 2, 4, 6);
+        return MonsterDraw._extendForObjects(extend, 1, 2, 4, 6);
     }},
     47:{'xT':0, 'yT':0, 'func':function(courseObject) {
         let subType = courseObject.subType;
@@ -301,9 +310,9 @@ MonsterDraw._defitions = {
         var extend = courseObject.extend;
         let subType = courseObject.subType;
         /* + mini */
-        extend = (subType) ? MonsterDraw._extendForobjects(extend, 1, 2, 7, 6) :
+        extend = (subType) ? MonsterDraw._extendForObjects(extend, 1, 2, 7, 6) :
         /* normal */
-            MonsterDraw._extendForobjects(extend, 1, 2, 6, 6);
+            MonsterDraw._extendForObjects(extend, 1, 2, 6, 6);
         return extend;
     }},
     50:{'extend':function(courseObject) {
@@ -330,7 +339,7 @@ MonsterDraw._defitions = {
     54:{'extend':function(courseObject) {
         var extend = [];
         extend.push({'x':0, 'y':0, 'xT':9, 'yT':6});
-        extend = MonsterDraw._extendForobjects(extend, 1, 3, 10, 7, 0, 1);
+        extend = MonsterDraw._extendForObjects(extend, 1, 3, 10, 7, 0, 1);
         return extend;
     }},
     55:{'extend':function(courseObject) {
@@ -361,9 +370,9 @@ MonsterDraw._defitions = {
         var extend = courseObject.extend;
         let subType = courseObject.subType;
         /* out */
-        extend = (subType) ? MonsterDraw._extendForobjects(extend, 1, 1, 2, 7) :
+        extend = (subType) ? MonsterDraw._extendForObjects(extend, 1, 1, 2, 7) :
         /* normal */
-            MonsterDraw._extendForobjects(extend, 1, 2, 3, 7);
+            MonsterDraw._extendForObjects(extend, 1, 2, 3, 7);
         return extend;
     }},
     60:{'extend':function(courseObject) {
@@ -388,17 +397,17 @@ MonsterDraw._defitions = {
         /* bowser */
         else { size = 3; xT = 2; yT = 10; }
         /* process the block */
-        return MonsterDraw._extendForobjects(extend, size, size, xT, yT);
+        return MonsterDraw._extendForObjects(extend, size, size, xT, yT);
     }},
     66:{'extend':function(courseObject) {
-        return MonsterDraw._extendForobjects([], 2, 2, 14, 7);
+        return MonsterDraw._extendForObjects([], 2, 2, 14, 7);
     }},
     67:{'extend':function(courseObject) {
-        return MonsterDraw._extendForobjects([], 2, 2, 6, 9);
+        return MonsterDraw._extendForObjects([], 2, 2, 6, 9);
     }},
     68:{'extend':function(courseObject) {
         let size = 3;
-        return MonsterDraw._extendForobjects([], size, size, 9, 10, 1, 0);
+        return MonsterDraw._extendForObjects([], size, size, 9, 10, 1, 0);
     }},
     69:{'xT':14, 'xY':5},
 };

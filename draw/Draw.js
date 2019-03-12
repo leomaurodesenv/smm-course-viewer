@@ -1,6 +1,6 @@
  /**
  * @module Draw
- * This class draw the course in html viewer.
+ * This class draw the course into an HTML Canvas element.
  * 
  * @author Leonardo Mauro <leo.mauro.desenv@gmail.com> (http://leonardomauro.com/)
  * @link https://github.com/leomaurodesenv/smm-course-viewer GitHub
@@ -14,7 +14,7 @@ class Draw {
     /**
      * @method module:Draw
      * Constructor of class
-     * @arg {String} _element       HTML element
+     * @arg {String}  _element      HTML element
      * @arg {Integer} _course       Course data
      * @arg {Integer} _objects      Course objects
      * @arg {Integer} _sizeBase     Objects size
@@ -210,7 +210,7 @@ class Draw {
     /**
      * @method module:Draw::_drawObjectFromTheme
      * Draw a object from a theme
-     * @arg {Dictonary} _objectPaint
+     * @arg {Object} _objectPaint
      * @access private
      * @return {null}
      */

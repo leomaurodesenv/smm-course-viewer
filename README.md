@@ -5,7 +5,7 @@ This package has two main features:
 1. `smmCourseViewer`: Interpret/extract course data from .cdt files.
 2. `Draw`: Draw the course in a HTML Canvas element.
 
-The code is developed in Vanilla JS, but with extension to Node.js. ([Code Documentation](/lib))   
+The code is developed in Vanilla JS, but with extension to NodeJS. ([Code Documentation](/lib))   
 Explore the monsters and objects of your Super Mario Maker courses, see ([Data Format](FORMAT.md)) for more details.   
    
 ---
@@ -31,13 +31,13 @@ See the [release](https://github.com/leomaurodesenv/smm-course-viewer/releases) 
 3. _Load Example_ or _Browse..._ to a \*.cdt file.
 
 
-To use the Node.js version:
+To use the NodeJS version:
 ```shell
 npm install --save smm-course-viewer
 ```
 
 ---
-## Node.js Example
+## NodeJS Example
 
 Example: How to read courses files.   
 Run this example `nodejs test/test.js`.
@@ -115,7 +115,7 @@ CourseObject:
 
 - Interpret objects/monsters
     - [Data Format: TODO](FORMAT.md)
-- Draw
+- Drawing
     - Background Theme
     - Unknown monsters/objects
     - Objects rotation
@@ -132,4 +132,3 @@ If you want to contribute, make a "pull request".
 - [License GPLv3](LICENSE)
 - Create by Leonardo Mauro (leo.mauro.desenv@gmail.com)
 - GitHub: [leomaurodesenv](https://github.com/leomaurodesenv/)
-- Site: [Portfolio](http://leonardomauro.com/portfolio/)
