@@ -172,7 +172,7 @@ BlockDraw._defitions = {
     8:{'func':function(courseObject) {
         let flags = courseObject.flags;
         /* red coin */
-        if(flags & 4 == 4) return {'xT':0, 'yT':16}; 
+        if((flags & 4) >> 2) return {'xT':0, 'yT':16}; 
         /* normal coin */
         else return {'xT':7, 'yT':0};
     }},
