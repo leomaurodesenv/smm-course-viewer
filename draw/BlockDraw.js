@@ -26,7 +26,7 @@ class BlockDraw {
         this._gameTheme = _gameTheme;
         /* theme definitions */
         this._themeLimit = {
-            'length':{'x':16, 'y':16}, // blocks counting
+            'length':{'x':16, 'y':20}, // blocks counting
             'size':{'M1':16, 'M3':16, 'MW':16, 'WU':64} }; // pixels
         this._themeSize = this._themeLimit['size'][_gameMode];
         this._theme = new Image(this._themeSize * this._themeLimit.length.x, 

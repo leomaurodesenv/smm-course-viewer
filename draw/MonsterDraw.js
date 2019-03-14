@@ -26,7 +26,7 @@ class MonsterDraw {
         this._gameTheme = _gameTheme;
         /* theme definitions */
         this._themeLimit = {
-            'length':{'x':16, 'y':16}, // blocks counting
+            'length':{'x':16, 'y':20}, // blocks counting
             'size':{'M1':16, 'M3':16, 'MW':16, 'WU':128} }; // pixels
         this._themeSize = this._themeLimit['size'][_gameMode];
         this._theme = new Image(this._themeSize * this._themeLimit.length.x, 
@@ -156,7 +156,11 @@ MonsterDraw._defitions = {
     }},
     12:{'extend':function(courseObject) {
         var extend = courseObject.extend;
-        return MonsterDraw._extendForObjects(extend, 2, 2, 11, 1);
+        let subType = courseObject.subType;
+        /* skewer */
+        if(subType) return MonsterDraw._extendForObjects(extend, 4, 4, 3, 19, 1);
+        /* thwomp */
+        else return MonsterDraw._extendForObjects(extend, 2, 2, 11, 1);
     }},
     13: {'extend': function(courseObject) {
         let subType = courseObject.subType,
@@ -178,7 +182,9 @@ MonsterDraw._defitions = {
     }},
     18:{'extend':function(courseObject) {
         var extend = courseObject.extend;
-        extend.push({'x':0, 'y':0, 'xT':14, 'yT':0});
+        let subType = courseObject.subType;
+        if(subType) extend.push({'x':0, 'y':0, 'xT':4, 'yT':16});
+        else extend.push({'x':0, 'y':0, 'xT':14, 'yT':0});
         return extend;
     }},
     19:{'extend':function(courseObject) {
@@ -268,8 +274,8 @@ MonsterDraw._defitions = {
     }},
     41:{'extend':function(courseObject) {
         var extend = courseObject.extend;
-        let subType = courseObject.subType;
-        extend.push({'x':0, 'y':0, 'xT':7, 'yT':4});
+        let subType = courseObject.subType,
+            stretch = (courseObject.flags & 256) >> 8;
         /* teresa: multiples */
         if(subType) {
             let other = [
@@ -280,10 +286,16 @@ MonsterDraw._defitions = {
                 extend.push({'x':element.x, 'y':element.y, 'xT':7, 'yT':4, 'opacity':0.3});
             });
         }
+        /* stretch */
+        if(stretch) extend.push({'x':0, 'y':0, 'xT':9, 'yT':7});
+        /* normal */
+        else extend.push({'x':0, 'y':0, 'xT':7, 'yT':4});
         return extend;
     }},
     42:{'extend':function(courseObject) {
-        return MonsterDraw._extendForObjects([], 2, 2, 2, 6);
+        let subType = courseObject.subType;
+        if(subType) return MonsterDraw._extendForObjects([], 2, 2, 5, 19);
+        else return MonsterDraw._extendForObjects([], 2, 2, 2, 6);
     }},
     44:{'extend':function(courseObject) {
         var extend = courseObject.extend;
@@ -343,10 +355,13 @@ MonsterDraw._defitions = {
         return extend;
     }},
     55:{'extend':function(courseObject) {
-        var extend = [];
-        extend.push({'x':0, 'y':0, 'xT':11, 'yT':6});
-        extend.push({'x':0, 'y':1, 'xT':11, 'yT':5});
-        return extend;
+        let doorType = ((courseObject.flags) >> 18) & 3;
+        /* P door */
+        if(doorType == 1) return MonsterDraw._extendForObjects([], 1, 2, 5, 17);
+        /* key door */
+        else if(doorType == 2) return MonsterDraw._extendForObjects([], 1, 2, 6, 17);
+        /* normal door */
+        else return MonsterDraw._extendForObjects([], 1, 2, 11, 6);
     }},
     56:{'extend':function(courseObject) {
         var extend = courseObject.extend;
@@ -400,7 +415,11 @@ MonsterDraw._defitions = {
         return MonsterDraw._extendForObjects(extend, size, size, xT, yT);
     }},
     66:{'extend':function(courseObject) {
-        return MonsterDraw._extendForObjects([], 2, 2, 14, 7);
+        let subType = courseObject.subType;
+        /* checkpoint */
+        if(subType) return MonsterDraw._extendForObjects([], 2, 2, 9, 19);
+        /* air sign */
+        else return MonsterDraw._extendForObjects([], 2, 2, 14, 7);
     }},
     67:{'extend':function(courseObject) {
         return MonsterDraw._extendForObjects([], 2, 2, 6, 9);

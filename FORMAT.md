@@ -5,20 +5,13 @@ These tables present the formats of the Super Mario Maker '.cdt' level, collecte
 This file describes all [monsters](#monster) and [objects](#object) identified, their type, name, description and a wiki link.
 
 TODO: _Discovering_
-- 08 Coin ~ Pink Coin (Identify)
-- 12 Dossun ~ Skewer (Identify)
-- 15 Bombhei ~ Active (Identify)
-- 18 PSwitch ~ Key (Identify)
-- 27 GoalPole (Draw)
-- 32 Tsuta ~ Vine Head (Identify)
-- 41 Teresa ~ Stretch (Identify)
-- 42 KoopaClown ~ Fire Koopa Clown (Identify)
-- 46 Karon ~ Fish Bones (Identify)
-- 55 Door ~ Key Door (Identify)
-- 55 Door ~ P Door (Identify)
-- 59 Rail (Draw)
-- 66 AirSignBoard ~ Checkpoint Flag (Identify)
-- 65, 69 Player ~ Mario (Identify)
+- 15 Bombhei ~ Active
+- 68 Saw ~ Bumper
+
+TODO: _Rotation_
+- 66 AirSignBoard
+- 59 Rail
+- 41 Stretch
 
 ---
 ## Monster
@@ -32,7 +25,7 @@ Collumns:
 - **Image**: an image of the monster.
 - **Wiki**: an external link for a Wiki of the monster.
 
-_Note: `?` unknown parameter_.
+_Note: `None` is useless_.
 
 <table>
     <tr>
@@ -113,7 +106,7 @@ _Note: `?` unknown parameter_.
         <td><a href="https://www.mariowiki.com/Thwomp" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td>12</td><td>1</td><td>?</td>
+        <td>12</td><td>1</td><td>None</td>
         <td>Dossun</td><td>Skewer</td>
         <td><img src="layout/draw/format/12-1.png"></td>
         <td><a href="https://www.mariowiki.com/Skewer" target="_blank">Link</a></td>
@@ -149,13 +142,13 @@ _Note: `?` unknown parameter_.
         <td><a href="https://www.mariowiki.com/P_Switch" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td>18</td><td>?</td><td>None</td>
+        <td>18</td><td>1</td><td>None</td>
         <td>PSwitch</td><td>Key</td>
         <td><img src="layout/draw/format/18-1.png"></td>
         <td><a href="https://www.mariowiki.com/Key" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td>19</td><td>?</td><td>None</td>
+        <td>19</td><td>None</td><td>None</td>
         <td>PowBlock</td><td>POW Block</td>
         <td><img src="layout/draw/format/19-0.png"></td>
         <td><a href="https://www.mariowiki.com/POW_Block" target="_blank">Link</a></td>
@@ -206,7 +199,7 @@ _Note: `?` unknown parameter_.
         <td><a href="https://www.mariowiki.com/Lakitu%27s_Cloud" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td>32</td><td>?</td><td>?</td>
+        <td>32</td><td>None</td><td>None</td>
         <td>Tsuta</td><td>Vine Head</td>
         <td><img src="layout/draw/format/32-0.png"></td>
         <td><a href="https://www.mariowiki.com/Beanstalk" target="_blank">Link</a></td>
@@ -278,19 +271,19 @@ _Note: `?` unknown parameter_.
         <td><a href="https://www.mariowiki.com/Circling_Boo_Buddies" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td>41</td><td>?</td><td>?</td>
+        <td>41</td><td>0</td><td>1</td>
         <td>Teresa</td><td>Stretch</td>
         <td><img src="layout/draw/format/41-x.png"></td>
         <td><a href="https://www.mariowiki.com/Stretch_(Boo)" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td>42</td><td>?</td><td>?</td>
+        <td>42</td><td>0</td><td>None</td>
         <td>KoopaClown</td><td>Koopa Clown</td>
         <td><img src="layout/draw/format/42-0.png"></td>
         <td><a href="https://www.mariowiki.com/Koopa_Clown_Car" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td>42</td><td>?</td><td>?</td>
+        <td>42</td><td>1</td><td>None</td>
         <td>KoopaClown</td><td>Fire Koopa Clown</td>
         <td><img src="layout/draw/format/42-1.png"></td>
         <td><a href="https://www.mariowiki.com/Fire_Koopa_Clown_Car" target="_blank">Link</a></td>
@@ -405,22 +398,22 @@ _Note: `?` unknown parameter_.
         <td><a href="https://www.mariowiki.com/Burner" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td>55</td><td>?</td><td>None</td>
+        <td>55</td><td>0</td><td>None</td>
         <td>Door</td><td>Warp Door</td>
         <td><img src="layout/draw/format/55-0.png"></td>
         <td><a href="https://www.mariowiki.com/Warp_Door" target="_blank">Link</a></td>
     </tr>
     <tr>
-        <td>55</td><td>?</td><td>None</td>
-        <td>Door</td><td>Key Door</td>
-        <td><img src="layout/draw/format/55-1.png"></td>
-        <td><a href="https://www.mariowiki.com/Key_Door" target="_blank">Link</a></td>
-    </tr>
-    <tr>
-        <td>55</td><td>?</td><td>None</td>
+        <td>55</td><td>1</td><td>None</td>
         <td>Door</td><td>P Door</td>
         <td><img src="layout/draw/format/55-2.png"></td>
         <td><a href="https://www.mariowiki.com/P_Door" target="_blank">Link</a></td>
+    </tr>
+    <tr>
+        <td>55</td><td>2</td><td>None</td>
+        <td>Door</td><td>Key Door</td>
+        <td><img src="layout/draw/format/55-1.png"></td>
+        <td><a href="https://www.mariowiki.com/Key_Door" target="_blank">Link</a></td>
     </tr>
     <tr>
         <td>56</td><td>0</td><td>1,2</td>
@@ -533,7 +526,7 @@ Collumns:
 - **Image**: an image of the object.
 - **Wiki**: an external link for a Wiki of the object.
 
-_Note: `?` unknown parameter_.
+_Note: `None` is useless_.
 
 <table>
     <tr>
