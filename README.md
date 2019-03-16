@@ -18,7 +18,6 @@ Explore the monsters and objects of your Super Mario Maker courses, see ([Data F
     - Releases
     - Developing
 - [Object Structure](#object-structure)
-- [TODO](#todo)
 
 ---
 ## Installation
@@ -113,15 +112,12 @@ CourseObject:
 ---
 ### TODO
 
-- Interpret objects/monsters
+- Interpret rotation of the objects and monsters
     - [Data Format: TODO](FORMAT.md)
 - Drawing
     - Background Theme
-    - Unknown monsters/objects
-    - Objects rotation
+    - Objects/monsters rotation
 - Take a printscreen of the course map
-- _Extract characteristics from the course_ (Data Mining)
-    - _Thinking about_ 
    
 ---
 ### Also look ~

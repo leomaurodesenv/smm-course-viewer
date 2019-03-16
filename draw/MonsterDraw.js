@@ -177,7 +177,11 @@ MonsterDraw._defitions = {
     }},
     15:{'extend':function(courseObject) {
         var extend = courseObject.extend;
-        extend.push({'x':0, 'y':0, 'xT':13, 'yT':0});
+        let subType = courseObject.subType;
+        /* active */
+        if(subType) extend.push({'x':0, 'y':0, 'xT':13, 'yT':1});
+        /* normal */
+        else extend.push({'x':0, 'y':0, 'xT':13, 'yT':0});
         return extend;
     }},
     18:{'extend':function(courseObject) {
@@ -425,8 +429,10 @@ MonsterDraw._defitions = {
         return MonsterDraw._extendForObjects([], 2, 2, 6, 9);
     }},
     68:{'extend':function(courseObject) {
-        let size = 3;
-        return MonsterDraw._extendForObjects([], size, size, 9, 10, 1, 0);
+        let subType = courseObject.subType;
+        /* checkpoint */
+        if(subType) return MonsterDraw._extendForObjects([], 3, 3, 12, 19, 1, 0);
+        else return MonsterDraw._extendForObjects([], 3, 3, 9, 10, 1, 0);
     }},
     69:{'xT':14, 'xY':5},
 };
