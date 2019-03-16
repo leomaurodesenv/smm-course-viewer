@@ -4,10 +4,6 @@ These tables present the formats of the Super Mario Maker '.cdt' level, collecte
 
 This file describes all [monsters](#monster) and [objects](#object) identified, their type, name, description and a wiki link.
 
-TODO: _Discovering_
-- 15 Bombhei ~ Active
-- 68 Saw ~ Bumper
-
 TODO: _Rotation_
 - 66 AirSignBoard
 - 59 Rail
@@ -132,7 +128,7 @@ _Note: `None` is useless_.
     <tr>
         <td>15</td><td>1</td><td>1,2</td>
         <td>Bombhei</td><td>Active Bob-omb</td>
-        <td><img src="layout/draw/support/blank.png"></td>
+        <td><img src="layout/draw/format/15-1.png"></td>
         <td><a href="https://www.mariowiki.com/Bob-omb" target="_blank">Link</a></td>
     </tr>
     <tr>
