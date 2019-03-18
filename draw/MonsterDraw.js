@@ -343,13 +343,13 @@ MonsterDraw._defitions = {
     }},
     52:{'extend':function(courseObject) {
         var extend = courseObject.extend;
-        let addX = 0.15,
+        let add = 0.2,
             subType = courseObject.subType;
-        extend.push({'x':addX, 'y':0, 'xT':9, 'yT':4});
+        extend.push({'x':add, 'y':-add, 'xT':9, 'yT':4});
         /* angry */
-        if(subType) extend.push({'x':-addX, 'y':addX, 'xT':9, 'yT':5});
+        if(subType) extend.push({'x':0, 'y':0, 'xT':9, 'yT':5});
         /* normal */
-        else extend.push({'x':-addX, 'y':addX, 'xT':8, 'yT':5});
+        else extend.push({'x':0, 'y':0, 'xT':8, 'yT':5});
         return extend;
     }},    
     54:{'extend':function(courseObject) {
