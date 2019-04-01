@@ -1,33 +1,39 @@
 # smm-course-viewer
 
-Simple viewer for level files from Super Mario Maker. Based on [MarioUnmaker](https://github.com/Treeki/MarioUnmaker/) and [PointlessMaker](https://github.com/aboood40091/PointlessMaker).   
+Simple viewer for level files from Super Mario Maker. Based on [MarioUnmaker](https://github.com/Treeki/MarioUnmaker/) and [PointlessMaker](https://github.com/aboood40091/PointlessMaker).  
 This package has two main features: 
-1. `smmCourseViewer`: Interpret/extract course data from .cdt files.
-2. `Draw`: Draw the course in a HTML Canvas element.
+1.   `smmCourseViewer`: Interpret/extract course data from .cdt files.
+2.   `Draw`: Draw the course in a HTML Canvas element.
 
-The code is developed in Vanilla JS, but with extension to NodeJS. ([Code Documentation](/lib))   
+The code is developed in Vanilla JS, but with extension to NodeJS ([Code Documentation](/lib)).  
 Explore the monsters and objects of your Super Mario Maker courses, see ([Data Format](FORMAT.md)) for more details.   
    
 ---
 ### Summary
 
-- [Code Documentation](/lib)
-- [Drawing Documentation](/draw)
-- [Data Format](FORMAT.md)
-- [Installation](#installation)
-    - Releases
-    - Developing
-- [Object Structure](#object-structure)
+-   [Code Documentation](/lib)
+
+-   [Drawing Documentation](/draw)
+
+-   [Data Format](FORMAT.md)
+
+-   [Installation](#installation)
+    -   Releases
+    -   Developing
+
+-   [Object Structure](#object-structure)
 
 ---
 ## Installation
 
 See the [release](https://github.com/leomaurodesenv/smm-course-viewer/releases) for a stable HTML version.
 
-1. Download or git clone.
-    - `git clone https://github.com/leomaurodesenv/smm-course-viewer.git`
-2. Open the `/index.html` in web browser.
-3. _Load Example_ or _Browse..._ to a \*.cdt file.
+1.  Download or git clone.
+    -   `git clone https://github.com/leomaurodesenv/smm-course-viewer.git`
+
+2.  Open the `/index.html` in web browser.
+
+3.  _Load Example_ or _Browse..._ to a \*.cdt file.
 
 
 To use the NodeJS version:
@@ -38,8 +44,9 @@ npm install --save smm-course-viewer
 ---
 ## NodeJS Example
 
-Example: How to read courses files.   
-Run this example `nodejs test/test.js`.
+Example: How to read courses files.  
+Run this example `nodejs test/test.js`.  
+
 ```js
 /* Include */
 const smmCourseViewer = require('smm-course-viewer');
@@ -56,9 +63,10 @@ smmCourseViewer.read('path/course_data.cdt', function(err, course, objects) {
 ---
 ## Object Structure
 
-Accessing by a web browser:   
-1. After _Load Example_ or _Browse_ for a file, the object is created.   
-2. Open the web console, usually `Ctrl+Shift+k` or `F12`, and type `smmCourseViewer`.
+Accessing by a web browser:  
+
+1.  After _Load Example_ or _Browse_ for a file, the object is created.   
+2.  Open the web console, usually `Ctrl+Shift+k` or `F12`, and type `smmCourseViewer`.
 
 ```
 course: 
@@ -112,19 +120,20 @@ CourseObject:
 ---
 ### TODO
 
-- Interpret rotation of the objects and monsters
-    - [Data Format: TODO](FORMAT.md)
-- Drawing
-    - Background Theme
-    - Objects/monsters rotation
-- Take a printscreen of the course map
+-   Interpret rotation of the objects and monsters
+    -   [Data Format: TODO](FORMAT.md)
+
+-   Drawing
+    -   Background Theme
+    -   Objects/monsters rotation
+
+-   Take a printscreen of the course map
    
 ---
-### Also look ~
+## Also look ~
 
-Any suggestions or doubts, please open an "issue".   
-If you want to contribute, make a "pull request".   
+Any suggestions or doubts, please open an "issue".  
+If you want to contribute, make a "pull request".  
 
-- [License GPLv3](LICENSE)
-- Create by Leonardo Mauro (leo.mauro.desenv@gmail.com)
-- GitHub: [leomaurodesenv](https://github.com/leomaurodesenv/)
+-   [License GPLv3](LICENSE)
+-   Create by Leonardo Mauro ~ [leomaurodesenv](https://github.com/leomaurodesenv/)

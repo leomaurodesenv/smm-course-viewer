@@ -1,12 +1,13 @@
 # smm-course-viewer: Code Documentation
 
-### Summary
+## Summary
 
-- [Files](#files)
-    - Files Description
-- [Documentation](#documentation)
-    - Classes
-    - Classes Documentation
+-   [Files](#files)
+    -   Files Description
+
+-   [Documentation](#documentation)
+    -   Classes
+    -   Classes Documentation
 
 --- 
 ## Files
@@ -27,26 +28,26 @@
 
 ### Files Description
 
-- [/index.html](/index.html): a display example of the `smm-course-viewer`.
-- [/lib/Course.js](/lib/Course.js): course structure.
-- [/lib/CourseObject.js](/lib/CourseObject.js): course object structure.
-- [/lib/BlockObject.js](/lib/BlockObject.js): block object structure.
-- [/lib/MonsterObject.js](/lib/MonsterObject.js): monster object structure.
-- [/lib/SmmCourseViewer.js](/lib/SmmCourseViewer.js): interpret the course data from a .cdt file. (JavaScript)
-- [/lib/main.js](/lib/main.js): interpret the course data from a .cdt file. (NodeJS)
-- [/test/test.js](/test/test.js): NodeJS script of testing.
+-   [/index.html](/index.html): a display example of the `smm-course-viewer`.
+-   [/lib/Course.js](/lib/Course.js): course structure.
+-   [/lib/CourseObject.js](/lib/CourseObject.js): course object structure.
+-   [/lib/BlockObject.js](/lib/BlockObject.js): block object structure.
+-   [/lib/MonsterObject.js](/lib/MonsterObject.js): monster object structure.
+-   [/lib/SmmCourseViewer.js](/lib/SmmCourseViewer.js): interpret the course data from a .cdt file. (JavaScript)
+-   [/lib/main.js](/lib/main.js): interpret the course data from a .cdt file. (NodeJS)
+-   [/test/test.js](/test/test.js): NodeJS script of testing.
 
 ---
 ## Documentation
 
 ### Classes
 
-- [Course](#course): course structure.
-- [CourseObject](#courseobject): course object structure.
-- [BlockObject](#blockobject): block object structure.
-- [MonsterObject](#monsterobject): monster object structure.
-- [\_SmmCourseViewer](#_smmcourseviewer): course interpreter. (JavaScript)
-- [SmmCourseViewer](#smmcourseviewer): course interpreter. (NodeJS)
+-   [Course](#course): course structure.
+-   [CourseObject](#courseobject): course object structure.
+-   [BlockObject](#blockobject): block object structure.
+-   [MonsterObject](#monsterobject): monster object structure.
+-   [\_SmmCourseViewer](#_smmcourseviewer): course interpreter. (JavaScript)
+-   [SmmCourseViewer](#smmcourseviewer): course interpreter. (NodeJS)
 
 ### Classes Description
 
@@ -302,7 +303,7 @@ This class can read and interpret a course (.cdt) of Super Mario Maker game. (No
 ```
 
 ---
-### Also look ~
+## Also look ~
 
-- Create by Leonardo Mauro (leo.mauro.desenv@gmail.com)
-- GitHub: [smm-course-viewer](https://github.com/leomaurodesenv/smm-course-viewer)
+-   Create by Leonardo Mauro ~ [leomaurodesenv](https://github.com/leomaurodesenv/)
+-   GitHub: [smm-course-viewer](https://github.com/leomaurodesenv/smm-course-viewer)

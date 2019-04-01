@@ -1,12 +1,13 @@
 # smm-course-viewer: Drawing Documentation
 
-### Summary
+## Summary
 
-- [Files](#files)
-    - Files Description
-- [Documentation](#documentation)
-    - Classes
-    - Classes Documentation
+-   [Files](#files)
+    -   Files Description
+
+-   [Documentation](#documentation)
+    -   Classes
+    -   Classes Documentation
 
 --- 
 ## Files
@@ -22,19 +23,19 @@
 
 ### Files Description
 
-- [/index.html](/index.html): a display example of the `smm-course-viewer`.
-- [/lib/Draw.js](/lib/Draw.js): draw the course into an HTML Canvas element.
-- [/lib/BlockDraw.js](/lib/BlockDraw.js): draw the block objects.
-- [/lib/MonsterDraw.js](/lib/MonsterDraw.js): draw the monster objects.
+-   [/index.html](/index.html): a display example of the `smm-course-viewer`.
+-   [/lib/Draw.js](/lib/Draw.js): draw the course into an HTML Canvas element.
+-   [/lib/BlockDraw.js](/lib/BlockDraw.js): draw the block objects.
+-   [/lib/MonsterDraw.js](/lib/MonsterDraw.js): draw the monster objects.
 
 ---
 ## Documentation
 
 ### Classes
 
-- [Draw](#draw): main class.
-- [BlockDraw](#blockdraw): draw the block objects.
-- [MonsterDraw](#monsterdraw): draw the monster objects.
+-   [Draw](#draw): main class.
+-   [BlockDraw](#blockdraw): draw the block objects.
+-   [MonsterDraw](#monsterdraw): draw the monster objects.
 
 ### Classes Description
 
@@ -224,7 +225,7 @@ This class draw the monsters from [/layout/draw/monster/](/layout/draw/monster).
 ```
 
 ---
-### Also look ~
+## Also look ~
 
-- Create by Leonardo Mauro (leo.mauro.desenv@gmail.com)
-- GitHub: [smm-course-viewer](https://github.com/leomaurodesenv/smm-course-viewer)
+-   Create by Leonardo Mauro ~ [leomaurodesenv](https://github.com/leomaurodesenv/)
+-   GitHub: [smm-course-viewer](https://github.com/leomaurodesenv/smm-course-viewer)

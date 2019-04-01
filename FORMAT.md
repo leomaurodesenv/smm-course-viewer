@@ -5,21 +5,21 @@ These tables present the formats of the Super Mario Maker '.cdt' level, collecte
 This file describes all [monsters](#monster) and [objects](#object) identified, their type, name, description and a wiki link.
 
 TODO: _Rotation_
-- 66 AirSignBoard
-- 59 Rail
-- 41 Stretch
+-   66 AirSignBoard
+-   59 Rail
+-   41 Stretch
 
 ---
 ## Monster
 
 Collumns:
-- **Type**: is the main ID code of the monster.
-- **SubType**: is a transformation of the monster.
-- **Size**: normal size (`1`) or big (`2`) with a Mushroom, `None` is always normal size.
-- **Name**: internal name (Japanese) of the monster.
-- **Description**: detail of the monster.
-- **Image**: an image of the monster.
-- **Wiki**: an external link for a Wiki of the monster.
+-   **Type**: is the main ID code of the monster.
+-   **SubType**: is a transformation of the monster.
+-   **Size**: normal size (`1`) or big (`2`) with a Mushroom, `None` is always normal size.
+-   **Name**: internal name (Japanese) of the monster.
+-   **Description**: detail of the monster.
+-   **Image**: an image of the monster.
+-   **Wiki**: an external link for a Wiki of the monster.
 
 _Note: `None` is useless_.
 
@@ -516,11 +516,11 @@ _Note: `None` is useless_.
 ## Object
 
 Collumns:
-- **Type**: is the main ID code of the object.
-- **Name**: internal name (Japanese) of the object.
-- **Description**: detail of the object.
-- **Image**: an image of the object.
-- **Wiki**: an external link for a Wiki of the object.
+-   **Type**: is the main ID code of the object.
+-   **Name**: internal name (Japanese) of the object.
+-   **Description**: detail of the object.
+-   **Image**: an image of the object.
+-   **Wiki**: an external link for a Wiki of the object.
 
 _Note: `None` is useless_.
 
@@ -655,7 +655,7 @@ _Note: `None` is useless_.
 </table>
 
 ---
-### Also look ~
+## Also look ~
 
-- Create by Leonardo Mauro (leo.mauro.desenv@gmail.com)
-- GitHub: [smm-course-viewer](https://github.com/leomaurodesenv/smm-course-viewer)
+-   Create by Leonardo Mauro ~ [leomaurodesenv](https://github.com/leomaurodesenv/)
+-   GitHub: [smm-course-viewer](https://github.com/leomaurodesenv/smm-course-viewer)

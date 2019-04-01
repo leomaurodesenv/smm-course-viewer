@@ -410,13 +410,13 @@ MonsterDraw._defitions = {
     62:{'extend':function(courseObject) {
         var extend = courseObject.extend;
         let subType = courseObject.subType,
-            xT = 0, yT = 0, size = 1;
+            xT = 0, yT = 0, size = 1, x = 0;
         /* koopa jr */
-        if(subType) { size = 2; xT = 4; yT = 9; }
+        if(subType) { size = 2; xT = 4; yT = 9; x = 1;}
         /* bowser */
         else { size = 3; xT = 2; yT = 10; }
         /* process the block */
-        return MonsterDraw._extendForObjects(extend, size, size, xT, yT);
+        return MonsterDraw._extendForObjects(extend, size, size, xT, yT, x);
     }},
     66:{'extend':function(courseObject) {
         let subType = courseObject.subType;
