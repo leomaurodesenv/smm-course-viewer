@@ -1,15 +1,18 @@
 # smm-course-viewer
 
+[![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE.md)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b7ef61d2da02479fa751d488d4d85fd6)](https://www.codacy.com/app/leomaurodesenv/smm-course-viewer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=leomaurodesenv/smm-course-viewer&amp;utm_campaign=Badge_Grade)
+
 Simple viewer for level files from Super Mario Maker. Based on [MarioUnmaker](https://github.com/Treeki/MarioUnmaker/) and [PointlessMaker](https://github.com/aboood40091/PointlessMaker).  
 This package has two main features: 
 1.   `smmCourseViewer`: Interpret/extract course data from .cdt files.
 2.   `Draw`: Draw the course in a HTML Canvas element.
 
-The code is developed in Vanilla JS, but with extension to NodeJS ([Code Documentation](/lib)).  
+The code is developed in Vanilla JS, but with extension to Node.js ([Code Documentation](/lib)).  
 Explore the monsters and objects of your Super Mario Maker courses, see ([Data Format](FORMAT.md)) for more details.   
    
 ---
-### Summary
+## Summary
 
 -   [Code Documentation](/lib)
 
@@ -36,16 +39,17 @@ See the [release](https://github.com/leomaurodesenv/smm-course-viewer/releases) 
 3.  _Load Example_ or _Browse..._ to a \*.cdt file.
 
 
-To use the NodeJS version:
+To use the Node.js:  
+
 ```shell
 npm install --save smm-course-viewer
 ```
 
 ---
-## NodeJS Example
+## Node.js Example
 
 Example: How to read courses files.  
-Run this example `nodejs test/test.js`.  
+Run this example `Node.js test/test.js`.  
 
 ```js
 /* Include */
@@ -68,7 +72,7 @@ Accessing by a web browser:
 1.  After _Load Example_ or _Browse_ for a file, the object is created.   
 2.  Open the web console, usually `Ctrl+Shift+k` or `F12`, and type `smmCourseViewer`.
 
-```
+```javascript
 course: 
   \_ ​name: string
   \_ ​mode: ['M1', 'M3', 'MW', 'WU']
@@ -95,7 +99,7 @@ objects:
   \_ Array[CourseObject]
 ```
    
-```
+```javascript
 CourseObject:
   \_ name: string
   \_ x: X-axis
