@@ -38,7 +38,6 @@ See the [release](https://github.com/leomaurodesenv/smm-course-viewer/releases) 
 
 3.  _Load Example_ or _Browse..._ to a \*.cdt file.
 
-
 To use the Node.js:  
 
 ```shell
@@ -120,18 +119,6 @@ CourseObject:
   \_ ​​​childType: number (coupled monster)
   \_ linkId: number (coupled monster ~father)
 ```
-   
----
-### TODO
-
--   Interpret rotation of the objects and monsters
-    -   [Data Format: TODO](FORMAT.md)
-
--   Drawing
-    -   Background Theme
-    -   Objects/monsters rotation
-
--   Take a printscreen of the course map
    
 ---
 ## Also look ~

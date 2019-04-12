@@ -146,10 +146,10 @@ BlockDraw._defitions = {
             xMax = 15;
         /* define function to get direction of Terrain */
         for(let i = 0; i < courseObject.extendedData; i++) {
-            if(xT == xMax) {xT = 0; yT++;}
-            else xT++;
+            if(xT === xMax) {xT = 0; yT++;}
+            else { xT++; }
         }
-        extend = [{"x":0, "y":0, "xT":xT, "yT":yT}];
+        var extend = [{"x":0, "y":0, "xT":xT, "yT":yT}];
         /* {1} - ghost:lamp */
         if(courseObject.childType === 1) {
             extend.push({"x":0, "y":2, "xT":1, "yT":1});
@@ -176,31 +176,32 @@ BlockDraw._defitions = {
     8:{"func":function(courseObject) {
         let flags = courseObject.flags;
         /* red coin */
-        if((flags & 4) >> 2) return {"xT":0, "yT":16}; 
+        if((flags & 4) >> 2) { return {"xT":0, "yT":16}; }
         /* normal coin */
-        else return {"xT":7, "yT":0};
+        return {"xT":7, "yT":0};
     }},
     9:{"extend":function(courseObject) {
         let width = courseObject.width;
         let height = courseObject.height;
         let direction = (courseObject.flags & 0x60) / 0x20;
+        var tt;
         /* {0} right */
         if(direction === 0) {
-            var tt = {
+            tt = {
                 0:{"xT":12, "yT":1}, 1:{"xT":12, "yT":1}, 2:{"xT":13, "yT":1},
                 9:{"xT":12, "yT":0}, 10:{"xT":12, "yT":0}, 11:{"xT":13, "yT":0} };
             return BlockDraw._extend3x4objects(0, -1, height, 2, tt);
         }
         /* {1} left */
         else if(direction === 1) {
-            var tt = {
+            tt = {
                 0:{"xT":11, "yT":1}, 1:{"xT":12, "yT":1}, 2:{"xT":12, "yT":1},
                 9:{"xT":11, "yT":0}, 10:{"xT":12, "yT":0}, 11:{"xT":12, "yT":0} };
             return BlockDraw._extend3x4objects(-(height-1), 0, height, 2, tt);
         }
         /* {2} top */
         else if(direction === 2) {
-            var tt = {
+            tt = {
                 0:{"xT":14, "yT":1}, 2:{"xT":15, "yT":1},
                 3:{"xT":14, "yT":1}, 5:{"xT":15, "yT":1},
                 6:{"xT":14, "yT":1}, 8:{"xT":15, "yT":1},
@@ -209,7 +210,7 @@ BlockDraw._defitions = {
         }
         /* {3} bottom */
         else {
-            var tt = {
+            tt = {
                 0:{"xT":14, "yT":2}, 2:{"xT":15, "yT":2},
                 3:{"xT":14, "yT":1}, 5:{"xT":15, "yT":1},
                 6:{"xT":14, "yT":1}, 8:{"xT":15, "yT":1},
@@ -293,9 +294,9 @@ BlockDraw._defitions = {
     23:{"func":function(courseObject) {
         let type = (courseObject.flags >> 2) & 1;
          /* {1} high jump */
-        if(type === 1) return {"xT":6, "yT":5}; 
+        if(type === 1) { return {"xT":6, "yT":5}; }
         /* type:{0} jump */
-        else return {"xT":4, "yT":0};
+        return {"xT":4, "yT":0};
     }},
     26:{"extend":function(courseObject) {
         let width = courseObject.width - 3;
@@ -322,10 +323,11 @@ BlockDraw._defitions = {
     49:{"extend":function(courseObject) {
         let width = courseObject.width;
         var extend = [];
-        if(this._gameTheme != "castle") return [];
+        if(this._gameTheme !== "castle") { return []; }
         /* only in "castle" theme */
-        for(let x=0; x<width; x++) 
+        for(let x=0; x<width; x++) {
             extend.push({"x":x, "y":0, "xT":15, "yT":15});
+        }
         return extend;
     }},
     53:{"extend":function(courseObject) {
@@ -341,9 +343,9 @@ BlockDraw._defitions = {
         let height = courseObject.height;
         var extend = [];
         for(let h=0; h<height; h++) {
-            if(h==0) extend.push({"x":0, "y":h, "xT":13, "yT":7});
-            else if(h==(height-1)) extend.push({"x":0, "y":h, "xT":15, "yT":7});
-            else extend.push({"x":0, "y":h, "xT":14, "yT":7});
+            if(h===0) { extend.push({"x":0, "y":h, "xT":13, "yT":7}); }
+            else if(h===(height-1)) { extend.push({"x":0, "y":h, "xT":15, "yT":7}); }
+            else { extend.push({"x":0, "y":h, "xT":14, "yT":7}); }
         }
         return extend;
     }},

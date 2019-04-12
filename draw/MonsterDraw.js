@@ -141,16 +141,16 @@ MonsterDraw._defitions = {
         var extend = courseObject.extend;
         let subType = courseObject.subType;
         /* horizontal */
-        if(subType) extend.push({"x":0, "y":0, "xT":5, "yT":1});
+        if(subType) { extend.push({"x":0, "y":0, "xT":5, "yT":1}); }
         /* vertical */
-        else extend.push({"x":0, "y":0, "xT":5, "yT":0});
+        else { extend.push({"x":0, "y":0, "xT":5, "yT":0}); }
         return extend;
     }},
     11:{"extend":function(courseObject) {
         let subType = courseObject.subType;
         var extend;
         /* blue */
-        if(subType) return MonsterDraw._extendForObjects([], 4, 1, 9, 1, 1);
+        if(subType) { return MonsterDraw._extendForObjects([], 4, 1, 9, 1, 1); }
         /* white */
         return MonsterDraw._extendForObjects([], 4, 1, 9, 0, 1);
     }},
@@ -158,9 +158,9 @@ MonsterDraw._defitions = {
         var extend = courseObject.extend;
         let subType = courseObject.subType;
         /* skewer */
-        if(subType) return MonsterDraw._extendForObjects(extend, 4, 4, 3, 19, 1);
+        if(subType) { return MonsterDraw._extendForObjects(extend, 4, 4, 3, 19, 1); }
         /* thwomp */
-        else return MonsterDraw._extendForObjects(extend, 2, 2, 11, 1);
+        return MonsterDraw._extendForObjects(extend, 2, 2, 11, 1);
     }},
     13: {"extend": function(courseObject) {
         let subType = courseObject.subType,
@@ -179,16 +179,16 @@ MonsterDraw._defitions = {
         var extend = courseObject.extend;
         let subType = courseObject.subType;
         /* active */
-        if(subType) extend.push({"x":0, "y":0, "xT":13, "yT":1});
+        if(subType) { extend.push({"x":0, "y":0, "xT":13, "yT":1}); }
         /* normal */
-        else extend.push({"x":0, "y":0, "xT":13, "yT":0});
+        else { extend.push({"x":0, "y":0, "xT":13, "yT":0}); }
         return extend;
     }},
     18:{"extend":function(courseObject) {
         var extend = courseObject.extend;
         let subType = courseObject.subType;
-        if(subType) extend.push({"x":0, "y":0, "xT":4, "yT":16});
-        else extend.push({"x":0, "y":0, "xT":14, "yT":0});
+        if(subType) { extend.push({"x":0, "y":0, "xT":4, "yT":16}); }
+        else { extend.push({"x":0, "y":0, "xT":14, "yT":0}); }
         return extend;
     }},
     19:{"extend":function(courseObject) {
@@ -272,8 +272,10 @@ MonsterDraw._defitions = {
     40:{"extend":function(courseObject) {
         var extend = courseObject.extend;
         let subType = courseObject.subType;
-        if(subType) extend.push({"x":0, "y":0, "xT":6, "yT":4}); /* blue */
-        else extend.push({"x":0, "y":0, "xT":5, "yT":4}); /* red */
+        /* blue */
+        if(subType) { extend.push({"x":0, "y":0, "xT":6, "yT":4}); }
+        /* red */
+        else { extend.push({"x":0, "y":0, "xT":5, "yT":4}); }
         return extend;
     }},
     41:{"extend":function(courseObject) {
@@ -291,15 +293,15 @@ MonsterDraw._defitions = {
             });
         }
         /* stretch */
-        if(stretch) extend.push({"x":0, "y":0, "xT":9, "yT":7});
+        if(stretch) { extend.push({"x":0, "y":0, "xT":9, "yT":7}); }
         /* normal */
-        else extend.push({"x":0, "y":0, "xT":7, "yT":4});
+        else { extend.push({"x":0, "y":0, "xT":7, "yT":4}); }
         return extend;
     }},
     42:{"extend":function(courseObject) {
         let subType = courseObject.subType;
-        if(subType) return MonsterDraw._extendForObjects([], 2, 2, 5, 19);
-        else return MonsterDraw._extendForObjects([], 2, 2, 2, 6);
+        if(subType) { return MonsterDraw._extendForObjects([], 2, 2, 5, 19); }
+        return MonsterDraw._extendForObjects([], 2, 2, 2, 6);
     }},
     44:{"extend":function(courseObject) {
         var extend = courseObject.extend;
@@ -318,9 +320,9 @@ MonsterDraw._defitions = {
     47:{"xT":0, "yT":0, "func":function(courseObject) {
         let subType = courseObject.subType;
         /* red */
-        if(subType) return {"xT":5, "yT":6};
+        if(subType) { return {"xT":5, "yT":6}; }
         /* black */
-        else return {"xT":5, "yT":5};
+        else { return {"xT":5, "yT":5}; }
     }},
     48:{"extend":function(courseObject) {
         var extend = courseObject.extend;
@@ -347,9 +349,9 @@ MonsterDraw._defitions = {
             subType = courseObject.subType;
         extend.push({"x":add, "y":-add, "xT":9, "yT":4});
         /* angry */
-        if(subType) extend.push({"x":0, "y":0, "xT":9, "yT":5});
+        if(subType) { extend.push({"x":0, "y":0, "xT":9, "yT":5}); }
         /* normal */
-        else extend.push({"x":0, "y":0, "xT":8, "yT":5});
+        else { extend.push({"x":0, "y":0, "xT":8, "yT":5}); }
         return extend;
     }},    
     54:{"extend":function(courseObject) {
@@ -361,28 +363,28 @@ MonsterDraw._defitions = {
     55:{"extend":function(courseObject) {
         let doorType = ((courseObject.flags) >> 18) & 3;
         /* P door */
-        if(doorType === 1) return MonsterDraw._extendForObjects([], 1, 2, 5, 17);
+        if(doorType === 1) { return MonsterDraw._extendForObjects([], 1, 2, 5, 17); }
         /* key door */
-        else if(doorType === 2) return MonsterDraw._extendForObjects([], 1, 2, 6, 17);
+        else if(doorType === 2) { return MonsterDraw._extendForObjects([], 1, 2, 6, 17); }
         /* normal door */
-        else return MonsterDraw._extendForObjects([], 1, 2, 11, 6);
+        return MonsterDraw._extendForObjects([], 1, 2, 11, 6);
     }},
     56:{"extend":function(courseObject) {
         var extend = courseObject.extend;
         let subType = courseObject.subType;
         /* red */
-        if(subType) extend.push({"x":0, "y":0, "xT":8, "yT":7});
+        if(subType) { extend.push({"x":0, "y":0, "xT":8, "yT":7}); }
         /* normal */
-        else extend.push({"x":0, "y":0, "xT":8, "yT":6});
+        else { extend.push({"x":0, "y":0, "xT":8, "yT":6}); }
         return extend;
     }},
     57:{"extend":function(courseObject) {
         var extend = courseObject.extend;
         let subType = courseObject.subType;
         /* red */
-        if(subType) extend.push({"x":0, "y":0, "xT":6, "yT":7});
+        if(subType) { extend.push({"x":0, "y":0, "xT":6, "yT":7}); }
         /* normal */
-        else extend.push({"x":0, "y":0, "xT":7, "yT":7});
+        else { extend.push({"x":0, "y":0, "xT":7, "yT":7}); }
         return extend;
     }},
     58:{"extend":function(courseObject) {
@@ -403,7 +405,7 @@ MonsterDraw._defitions = {
         var extend = courseObject.extend;
         let subType = courseObject.subType;
         /* + wood */
-        if(subType) extend.push({"x":0.3, "y":0.3, "xT":12, "yT":6});
+        if(subType) { extend.push({"x":0.3, "y":0.3, "xT":12, "yT":6}); }
         extend.push({"x":0, "y":0, "xT":11, "yT":7});
         return extend;
     }},
@@ -421,9 +423,9 @@ MonsterDraw._defitions = {
     66:{"extend":function(courseObject) {
         let subType = courseObject.subType;
         /* checkpoint */
-        if(subType) return MonsterDraw._extendForObjects([], 2, 2, 9, 19);
+        if(subType) { return MonsterDraw._extendForObjects([], 2, 2, 9, 19); }
         /* air sign */
-        else return MonsterDraw._extendForObjects([], 2, 2, 14, 7);
+        return MonsterDraw._extendForObjects([], 2, 2, 14, 7);
     }},
     67:{"extend":function(courseObject) {
         return MonsterDraw._extendForObjects([], 2, 2, 6, 9);
@@ -431,8 +433,8 @@ MonsterDraw._defitions = {
     68:{"extend":function(courseObject) {
         let subType = courseObject.subType;
         /* checkpoint */
-        if(subType) return MonsterDraw._extendForObjects([], 3, 3, 12, 19, 1, 0);
-        else return MonsterDraw._extendForObjects([], 3, 3, 9, 10, 1, 0);
+        if(subType) { return MonsterDraw._extendForObjects([], 3, 3, 12, 19, 1, 0); }
+        return MonsterDraw._extendForObjects([], 3, 3, 9, 10, 1, 0);
     }},
     69:{"xT":14, "xY":5},
 };

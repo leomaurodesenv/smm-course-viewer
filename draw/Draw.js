@@ -44,10 +44,10 @@ class Draw {
         this._images = [this._blocks.getTheme(), this._monsters.getTheme()];
         /* draw configurations */
         let compare = function(a,b) {
-            if (a.z < b.z) return -1;
-            if (a.z > b.z) return 1;
+            if (a.z < b.z) { return -1; }
+            if (a.z > b.z) { return 1; }
             return 0;
-        }
+        };
         this._objects = _objects.sort(compare); /* order by z-index */
         this._yFix = this._heightBlock*this._base; /* invert y to draw */
         
