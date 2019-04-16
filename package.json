@@ -1,6 +1,6 @@
 {
   "name": "smm-course-viewer",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "A package to reading courses (*.cdt) - Super Mario Maker",
   "main": "lib/main.js",
   "directories": {
