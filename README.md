@@ -1,6 +1,9 @@
 # smm-course-viewer
 
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE.md)
+[![npm](https://img.shields.io/badge/Code-npm-yellow.svg)](https://www.npmjs.com/package/smm-course-viewer)
+[![JsClasses](https://img.shields.io/badge/Code-JsClasses-yellow.svg)](https://www.jsclasses.org/smm-course-viewer)
+[![GitHub](https://img.shields.io/badge/Code-GitHub-yellow.svg)](https://github.com/leomaurodesenv/smm-course-viewer)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b7ef61d2da02479fa751d488d4d85fd6)](https://www.codacy.com/app/leomaurodesenv/smm-course-viewer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=leomaurodesenv/smm-course-viewer&amp;utm_campaign=Badge_Grade)
 
 Simple viewer for level files from Super Mario Maker ([Online](http://projects.leonardomauro.com/smm-course-viewer/)). Based on [MarioUnmaker](https://github.com/Treeki/MarioUnmaker/) and [PointlessMaker](https://github.com/aboood40091/PointlessMaker).  
