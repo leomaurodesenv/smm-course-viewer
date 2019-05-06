@@ -8,6 +8,6 @@ const smmCourseViewer = require("../lib/main.js");
 smmCourseViewer.read("course-example/course_data.cdt", function(err, course, objects) {
     if(!err) {
         console.log(course);
-        //console.log(objects);
+        console.log(['array size of objects:', objects.length]);
     }
 });
