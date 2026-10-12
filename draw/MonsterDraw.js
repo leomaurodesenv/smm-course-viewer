@@ -354,12 +354,18 @@ MonsterDraw._defitions = {
         else { extend.push({"x":0, "y":0, "xT":8, "yT":5}); }
         return extend;
     }},    
-    54:{"extend":function(courseObject) {
-        var extend = [];
-        extend.push({"x":0, "y":0, "xT":9, "yT":6});
-        extend = MonsterDraw._extendForObjects(extend, 1, 3, 10, 7, 0, 1);
-        return extend;
-    }},
+    54: {
+        "extend": function (courseObject) {
+            var extend = [];
+            /* Burner base */
+            extend.push({ "x": 0, "y": 0, "xT": 9, "yT": 6 });
+
+            /* Burner body: select the off or on artwork */
+            let tileRow = courseObject.subType ? 4 : 7;
+            extend = MonsterDraw._extendForObjects(extend, 1, 3, 10, tileRow, 0, 1);
+            return extend;
+        }
+    },
     55:{"extend":function(courseObject) {
         let doorType = ((courseObject.flags) >> 18) & 3;
         /* P door */
@@ -420,13 +426,15 @@ MonsterDraw._defitions = {
         /* process the block */
         return MonsterDraw._extendForObjects(extend, size, size, xT, yT, x);
     }},
-    66:{"extend":function(courseObject) {
-        let subType = courseObject.subType;
-        /* checkpoint */
-        if(subType) { return MonsterDraw._extendForObjects([], 2, 2, 9, 19); }
-        /* air sign */
-        return MonsterDraw._extendForObjects([], 2, 2, 14, 7);
-    }},
+        66: {
+        "extend": function (courseObject) {
+            let subType = courseObject.subType;
+            /* checkpoint */
+            if (subType) { return MonsterDraw._extendForObjects([], 2, 2, 9, 19); }
+            /* air sign */
+            return MonsterDraw._extendForObjects([], 2, 2, 14, 7);
+        }
+    },
     67:{"extend":function(courseObject) {
         return MonsterDraw._extendForObjects([], 2, 2, 6, 9);
     }},
