@@ -121,6 +121,44 @@ class Draw {
      * @access private
      * @return {null}
      */
+
+    /**
+     * Draw fixed scenery around the goal area.
+     * SMB1 and NSMBU share the same castle layout.
+     */
+    _drawGoalScenery() {
+        if (
+            (this._gameMode !== "M1" && this._gameMode !== "WU") ||
+            this._gameTheme === "castle"
+        ) {
+            return;
+        }
+
+        const tileset = this._monsters.getTheme();
+        const ts = this._monsters.getThemeSize();
+        const base = this._base;
+
+        // Castle scenery occupies a 5x5 region of the terrain sheet.
+        const sourceX = 11 * ts;
+        const sourceY = 11 * ts;
+        const sourceWidth = 5 * ts;
+        const sourceHeight = 5 * ts;
+
+        // Align the castle against the right edge of the course.
+        const drawX = (this._widthBlock - 5) * base;
+
+        // Shift the castle up two tiles to align with the flagpole base.
+        const drawY = this._yFix - 7 * base;
+
+        this._context.drawImage(
+            tileset,
+            sourceX, sourceY,
+            sourceWidth, sourceHeight,
+            drawX, drawY,
+            5 * base, 5 * base
+        );
+    }
+
     _drawObjects(_objects) {
         const $this = this;
         var imageCount = $this._images.length,
@@ -131,9 +169,13 @@ class Draw {
             console.error("Draw: Error: theme don\"t exists.\n Path: "+img.src);
         },
         /* allloaded images */
-        allloaded = function() {
-            if(loadedCount === imageCount) {
-                _objects.forEach(function(courseObject) {
+        allloaded = function () {
+            if (loadedCount === imageCount) {
+
+                // Draw the SMB1/NSMBU goal-area castle.
+                $this._drawGoalScenery();
+
+                _objects.forEach(function (courseObject) {
                     let type = courseObject.type;
                     if($this._blocks.hasDraw(type)) {
                         $this._drawObjectFromTheme($this._blocks, courseObject);
