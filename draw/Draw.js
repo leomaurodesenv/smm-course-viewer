@@ -213,6 +213,25 @@ class Draw {
             let angle = courseObject.direction * Math.PI / 2;
             let tiles = def.extend(courseObject);
 
+            // SMB1 and SMB3 do not have dedicated inactive burner artwork.
+            // Use transparent tiles for the inactive flame.
+            if (
+                ($this._gameMode === "M1" || $this._gameMode === "M3") &&
+                courseObject.subType
+            ) {
+                tiles = tiles.map(function (tile, index) {
+                    if (index === 0) {
+                        return tile; // Preserve the burner base.
+                    }
+
+                    return {
+                        ...tile,
+                        xT: 15,
+                        yT: 19 - (index - 1)
+                    };
+                });
+            }
+
             let baseX = x * _base;
             let baseY = $this._yFix - (y + 1) * _base;
 
