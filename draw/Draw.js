@@ -194,8 +194,66 @@ class Draw {
             _base = $this._base;
         let x = courseObject.x, y = courseObject.y;
 
+        /* Draw the Castle axe goal for all game styles. */
+        if (courseObject.type === 27 &&
+            $this._gameTheme === "castle") {
+
+            // The axe occupies columns 13-14 and rows 8-10.
+            const axeWidth = 2;
+            const axeHeight = 3;
+
+            // Align the axe with the left edge of the goal object.
+            const drawX = x * _base;
+
+            // Position the bottom of the axe at the goal object's base.
+            const bottomY = $this._yFix - (y + 1) * _base;
+            const drawY = bottomY - axeHeight * _base;
+
+            // Draw the 4x1 Castle goal base beneath the axe.
+            // The chain occupies the left 2 tiles; the base occupies the right 2.
+            // Position the base directly below the axe.
+            // Shift the chain and base two tiles left of the axe.
+            const baseX = drawX - 2 * _base;
+            const baseY = drawY + axeHeight * _base;
+
+            // Draw the chain (columns 1-2, row 14).
+            $this._context.drawImage(
+                _titleset,
+                1 * _ts, 14 * _ts,
+                2 * _ts, 1 * _ts,
+                baseX, baseY,
+                2 * _base, _base
+            );
+
+            // Draw the base (columns 1-2, row 15).
+            $this._context.drawImage(
+                _titleset,
+                1 * _ts, 15 * _ts,
+                2 * _ts, 1 * _ts,
+                baseX + 2 * _base, baseY,
+                2 * _base, _base
+            );
+
+            $this._context.drawImage(
+                _titleset,
+                13 * _ts,
+                8 * _ts,
+                axeWidth * _ts,
+                axeHeight * _ts,
+                drawX,
+                drawY,
+                axeWidth * _base,
+                axeHeight * _base
+            );
+
+            return;
+        }
+
         /* Draw the Super Mario World goal structure. */
-        if (courseObject.type === 27 && $this._gameMode === "MW") {
+        if (courseObject.type === 27 &&
+            $this._gameMode === "MW" &&
+            $this._gameTheme !== "castle") {
+
             const goalHeight = courseObject.height - 2;
 
             // The goal consists of two posts separated by one tile.
