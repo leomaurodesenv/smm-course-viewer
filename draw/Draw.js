@@ -41,7 +41,14 @@ class Draw {
         /*global MonsterDraw */
         /*eslint no-undef: "error"*/
         this._monsters = new MonsterDraw(this._gameMode, this._gameTheme);
-        this._images = [this._blocks.getTheme(), this._monsters.getTheme()];
+        this._goalTape = new Image();
+        this._goalTape.src = "./layout/draw/format/27-0.png";
+
+        this._images = [
+            this._blocks.getTheme(),
+            this._monsters.getTheme(),
+            this._goalTape
+        ];
         /* draw configurations */
         let compare = function(a,b) {
             if (a.z < b.z) { return -1; }
@@ -146,9 +153,13 @@ class Draw {
             loadedCount++; allloaded();
         };
         /* loading all images */
-        $this._images.forEach(function(img) {
-            img.onload = onload; 
-            img.onerror = onerror;
+        $this._images.forEach(function (img) {
+            if (img.complete && img.naturalWidth > 0) {
+                onload();
+            } else {
+                img.onload = onload;
+                img.onerror = onerror;
+            }
         });
     }
 
@@ -182,6 +193,77 @@ class Draw {
             _ts = _theme.getThemeSize(),
             _base = $this._base;
         let x = courseObject.x, y = courseObject.y;
+
+        /* Draw the Super Mario World goal structure. */
+        if (courseObject.type === 27 && $this._gameMode === "MW") {
+            const goalHeight = courseObject.height - 2;
+
+            // The goal consists of two posts separated by one tile.
+            const leftX = x * _base;
+            const rightX = leftX + 2 * _base;
+            const rightOffsetY = 0;
+
+            // Position the bottom of the posts at the goal's base.
+            const bottomY = $this._yFix - (y + 1) * _base;
+
+            // Calculate the top position of the goal structure.
+            const topY = bottomY - (goalHeight - 1) * _base;
+
+            // Draw the repeating vertical post sections.
+            for (let row = 0; row < goalHeight - 1; row++) {
+                const drawY = bottomY - row * _base;
+
+                // Leave the uppermost left section open for the goal tape.
+                if (row !== goalHeight - 2) {
+                    $this._context.drawImage(
+                        _titleset,
+                        6 * _ts, 3 * _ts, _ts, _ts,
+                        leftX, drawY, _base, _base
+                    );
+                }
+
+                // Draw the right post normally.
+                $this._context.drawImage(
+                    _titleset,
+                    7 * _ts, 3 * _ts, _ts, _ts,
+                    rightX, drawY + rightOffsetY, _base, _base
+                );
+            }
+
+            // Draw only the bottom half of the extra straight section.
+            $this._context.drawImage(
+                _titleset,
+                7 * _ts, 3 * _ts + _ts / 2,
+                _ts, _ts / 2,
+                rightX, topY + _base / 2,
+                _base, _base / 2
+            );
+
+            // Draw the curved top at its corrected position.
+            $this._context.drawImage(
+                _titleset,
+                7 * _ts, 2 * _ts, _ts, _ts,
+                rightX, topY - _base / 2,
+                _base, _base
+            );
+
+            // Draw the complete 2x2 goal tape sprite.
+            // This includes the left curved top and horizontal tape.
+            if ($this._goalTape &&
+                $this._goalTape.complete &&
+                $this._goalTape.naturalWidth > 0) {
+
+                $this._context.drawImage(
+                    $this._goalTape,
+                    leftX,
+                    topY,
+                    2 * _base,
+                    2 * _base
+                );
+            }
+
+            return;
+        }
 
         /* Draw skewers as one complete sprite so rotation works correctly. */
         if (courseObject.type === 12 && courseObject.subType === 1) {
