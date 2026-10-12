@@ -328,9 +328,9 @@ class Draw {
             return;
         }
 
-        /* Draw the SMB1 flagpole in all non-Castle themes. */
+        /* Draw the SMB1 and NSMBU flagpoles in all non-Castle themes. */
         if (courseObject.type === 27 &&
-            $this._gameMode === "M1" &&
+            ($this._gameMode === "M1" || $this._gameMode === "WU") &&
             $this._gameTheme !== "castle") {
 
             // Total height includes the top ball, shaft, and solid base.
