@@ -124,39 +124,75 @@ class Draw {
 
     /**
      * Draw fixed scenery around the goal area.
-     * SMB1 and NSMBU share the same castle layout.
+     * Castle themes share the same scenery layout across all game styles.
+     * SMB1 and NSMBU also share a non-Castle goal structure.
+     *
+     * @param {Object} goalObject - The course goal object (type 27).
      */
-    _drawGoalScenery() {
-        if (
-            (this._gameMode !== "M1" && this._gameMode !== "WU") ||
-            this._gameTheme === "castle"
-        ) {
-            return;
-        }
-
+    _drawGoalScenery(goalObject) {
+        const mode = this._gameMode;
+        const theme = this._gameTheme;
         const tileset = this._monsters.getTheme();
         const ts = this._monsters.getThemeSize();
         const base = this._base;
 
-        // Castle scenery occupies a 5x5 region of the terrain sheet.
-        const sourceX = 11 * ts;
-        const sourceY = 11 * ts;
-        const sourceWidth = 5 * ts;
-        const sourceHeight = 5 * ts;
+        // Castle theme: all four game styles.
+        if (theme === "castle") {
 
-        // Align the castle against the right edge of the course.
-        const drawX = (this._widthBlock - 5) * base;
+            // Do not draw the castle if no goal object exists.
+            if (!goalObject) {
+                return;
+            }
 
-        // Shift the castle up two tiles to align with the flagpole base.
-        const drawY = this._yFix - 7 * base;
+            // Castle artwork occupies a 5x5 tile region.
+            // Align its right edge with the course boundary.
+            const castleX = (this._widthBlock - 5) * base;
 
-        this._context.drawImage(
-            tileset,
-            sourceX, sourceY,
-            sourceWidth, sourceHeight,
-            drawX, drawY,
-            5 * base, 5 * base
-        );
+            // Follow the goal area's vertical position.
+            // At goalObject.y = 2, preserve the original placement.
+            const castleY = this._yFix - (goalObject.y + 5) * base;
+
+            // Draw the complete 5x5 castle.
+            this._context.drawImage(
+                tileset,
+                6 * ts, 11 * ts,
+                5 * ts, 5 * ts,
+                castleX, castleY,
+                5 * base, 5 * base
+            );
+
+            // Overlay the 3x3 door on the castle's lower-left.
+            const doorX = castleX;
+            const doorY = castleY + 2 * base;
+
+            this._context.drawImage(
+                tileset,
+                3 * ts, 13 * ts,
+                3 * ts, 3 * ts,
+                doorX, doorY,
+                3 * base, 3 * base
+            );
+
+            return;
+        }
+
+        // Non-Castle scenery: SMB1 and NSMBU only.
+        if (mode === "M1" || mode === "WU") {
+
+            // Align the castle against the far-right course boundary.
+            const drawX = (this._widthBlock - 5) * base;
+
+            // Preserve the existing non-Castle placement.
+            const drawY = this._yFix - 7 * base;
+
+            this._context.drawImage(
+                tileset,
+                11 * ts, 11 * ts,
+                5 * ts, 5 * ts,
+                drawX, drawY,
+                5 * base, 5 * base
+            );
+        }
     }
 
     _drawObjects(_objects) {
@@ -172,8 +208,13 @@ class Draw {
         allloaded = function () {
             if (loadedCount === imageCount) {
 
-                // Draw the SMB1/NSMBU goal-area castle.
-                $this._drawGoalScenery();
+                // Find the goal object that controls the goal area's position.
+                const goalObject = _objects.find(function (courseObject) {
+                    return courseObject.type === 27;
+                });
+
+                // Draw goal-area scenery relative to the goal object.
+                $this._drawGoalScenery(goalObject);
 
                 _objects.forEach(function (courseObject) {
                     let type = courseObject.type;
