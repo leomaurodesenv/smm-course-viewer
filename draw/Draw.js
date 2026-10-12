@@ -240,6 +240,30 @@ class Draw {
             return;
         }
 
+        /* Draw one-way gates as one complete sprite with four orientations. */
+        if (courseObject.type === 67) {
+            let spriteWidth = 2 * _base,
+                spriteHeight = 2 * _base,
+                xSprite = (x - 1) * _base,
+                ySprite = $this._yFix - (y + 2) * _base,
+                angle = courseObject.direction * Math.PI / 2;
+
+            $this._context.save();
+            $this._context.translate(
+                xSprite + spriteWidth / 2,
+                ySprite + spriteHeight / 2
+            );
+            $this._context.rotate(angle);
+            $this._context.drawImage(
+                _titleset,
+                5 * _ts, 8 * _ts, 2 * _ts, 2 * _ts,
+                -spriteWidth / 2, -spriteHeight / 2,
+                spriteWidth, spriteHeight
+            );
+            $this._context.restore();
+            return;
+        }
+
         /* Draw air signs as one complete sprite so rotation works correctly. */
         if (courseObject.type === 66 && courseObject.subType === 0) {
             let spriteWidth = 2 * _base,
