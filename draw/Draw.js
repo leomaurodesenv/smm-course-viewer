@@ -182,6 +182,87 @@ class Draw {
             _ts = _theme.getThemeSize(),
             _base = $this._base;
         let x = courseObject.x, y = courseObject.y;
+
+        /* Draw skewers as one complete sprite so rotation works correctly. */
+        if (courseObject.type === 12 && courseObject.subType === 1) {
+            let spriteWidth = 4 * _base,
+                spriteHeight = 4 * _base,
+                xSprite = (x - 2) * _base,
+                ySprite = $this._yFix - (y + 4) * _base,
+                angle = (courseObject.direction + 2) * Math.PI / 2;
+
+            $this._context.save();
+            $this._context.translate(
+                xSprite + spriteWidth / 2,
+                ySprite + spriteHeight / 2
+            );
+            $this._context.rotate(angle);
+            $this._context.scale(1, -1);
+            $this._context.drawImage(
+                _titleset,
+                0, 16 * _ts, 4 * _ts, 4 * _ts,
+                -spriteWidth / 2, -spriteHeight / 2,
+                spriteWidth, spriteHeight
+            );
+            $this._context.restore();
+            return;
+        }
+
+        /* Draw burners with their flame rotated around the base tile. */
+        if (courseObject.type === 54) {
+            let angle = courseObject.direction * Math.PI / 2;
+            let tiles = def.extend(courseObject);
+
+            let baseX = x * _base;
+            let baseY = $this._yFix - (y + 1) * _base;
+
+            $this._context.save();
+            $this._context.translate(
+                baseX + _base / 2,
+                baseY + _base / 2
+            );
+            $this._context.rotate(angle);
+
+            tiles.forEach(function (tile) {
+                let tileX = tile.x * _base;
+                let tileY = -tile.y * _base;
+
+                $this._context.drawImage(
+                    _titleset,
+                    tile.xT * _ts, tile.yT * _ts, _ts, _ts,
+                    tileX - _base / 2,
+                    tileY - _base / 2,
+                    _base, _base
+                );
+            });
+
+            $this._context.restore();
+            return;
+        }
+
+        /* Draw air signs as one complete sprite so rotation works correctly. */
+        if (courseObject.type === 66 && courseObject.subType === 0) {
+            let spriteWidth = 2 * _base,
+                spriteHeight = 2 * _base,
+                xSprite = (x - 1) * _base,
+                ySprite = $this._yFix - (y + 2) * _base,
+                angle = courseObject.direction * Math.PI / 4;
+
+            $this._context.save();
+            $this._context.translate(
+                xSprite + spriteWidth / 2,
+                ySprite + spriteHeight / 2
+            );
+            $this._context.rotate(angle);
+            $this._context.drawImage(
+                _titleset,
+                13 * _ts, 6 * _ts, 2 * _ts, 2 * _ts,
+                -spriteWidth / 2, -spriteHeight / 2,
+                spriteWidth, spriteHeight
+            );
+            $this._context.restore();
+            return;
+        }
         /* multiples cells */
         if(def.extend) {
             let ext = def.extend(courseObject);
