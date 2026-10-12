@@ -320,13 +320,10 @@ BlockDraw._defitions = {
         return BlockDraw._extend3x4objects(0, 0, width, height, tt);
     }},
     43:{"xT":2, "yT":4},
-    49:{"extend":function(courseObject) {
+    49: {"extend": function (courseObject) {
         let width = courseObject.width;
         var extend = [];
-        if(this._gameTheme !== "castle") { return []; }
-        /* only in "castle" theme */
-        for(let x=0; x<width; x++) {
-            extend.push({"x":x, "y":0, "xT":15, "yT":15});
+        for (let x = 0; x < width; x++) {extend.push({ "x": x, "y": 0, "xT": 15, "yT": 15 });
         }
         return extend;
     }},
