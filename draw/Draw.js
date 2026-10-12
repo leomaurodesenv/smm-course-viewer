@@ -399,7 +399,50 @@ class Draw {
             return;
         }
 
-        /* Draw skewers as one complete sprite so rotation works correctly. */
+        /* Draw the SMB3 goal in all non-Castle themes. */
+        if (courseObject.type === 27 &&
+            $this._gameMode === "M3" &&
+            $this._gameTheme !== "castle") {
+
+            // The SMB3 goal is a 2x2 tile square.
+            const goalWidth = 2 * _base;
+            const goalHeight = 2 * _base;
+
+            // Align the goal horizontally with the goal object.
+            const goalX = x * _base;
+
+            // Position the goal above the ground.
+            // The goal object is 11 tiles tall, but the SMB3
+            // goal graphic only occupies the upper 2 tiles.
+            const bottomY = $this._yFix - (y + 1) * _base;
+            const goalY = bottomY - 4.5 * _base;
+
+            // Draw the complete 2x2 goal frame.
+            $this._context.drawImage(
+                _titleset,
+                6 * _ts, 2 * _ts,
+                2 * _ts, 2 * _ts,
+                goalX, goalY,
+                goalWidth, goalHeight
+            );
+
+            // Draw the mushroom inside the goal frame.
+            // Position it in the center of the 2x2 square.
+            const mushroomX = goalX + _base / 2;
+            const mushroomY = goalY + _base / 2;
+
+            $this._context.drawImage(
+                _titleset,
+                15 * _ts, 6 * _ts,
+                _ts, _ts,
+                mushroomX, mushroomY,
+                _base, _base
+            );
+
+            return;
+        }
+
+                /* Draw skewers as one complete sprite so rotation works correctly. */
         if (courseObject.type === 12 && courseObject.subType === 1) {
             let spriteWidth = 4 * _base,
                 spriteHeight = 4 * _base,
