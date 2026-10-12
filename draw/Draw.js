@@ -194,6 +194,11 @@ class Draw {
             _base = $this._base;
         let x = courseObject.x, y = courseObject.y;
 
+        /* Castle bridges should only appear in Castle themes. */
+        if (courseObject.type === 49 && $this._gameTheme !== "castle") {
+            return;
+        }
+
         /* Draw the Castle axe goal for all game styles. */
         if (courseObject.type === 27 &&
             $this._gameTheme === "castle") {
@@ -319,6 +324,77 @@ class Draw {
                     2 * _base
                 );
             }
+
+            return;
+        }
+
+        /* Draw the SMB1 flagpole in all non-Castle themes. */
+        if (courseObject.type === 27 &&
+            $this._gameMode === "M1" &&
+            $this._gameTheme !== "castle") {
+
+            // Total height includes the top ball, shaft, and solid base.
+            const poleHeight = courseObject.height;
+
+            // Align the pole with the goal object's left edge.
+            const poleX = x * _base;
+
+            // Position the solid base above the ground.
+            const baseY = $this._yFix - (y + 1) * _base;
+
+            // Draw the solid base.
+            $this._context.drawImage(
+                _titleset,
+                6 * _ts, 3 * _ts,
+                _ts, _ts,
+                poleX, baseY,
+                _base, _base
+            );
+
+            // Draw the vertical shaft between the base and top ball.
+            for (let row = 1; row < poleHeight - 1; row++) {
+                const drawY = baseY - row * _base;
+
+                $this._context.drawImage(
+                    _titleset,
+                    7 * _ts, 2 * _ts,
+                    _ts, _ts,
+                    poleX, drawY,
+                    _base, _base
+                );
+            }
+
+            // Draw the green ball at the top.
+            const topY = baseY - (poleHeight - 1) * _base;
+
+            $this._context.drawImage(
+                _titleset,
+                6 * _ts, 2 * _ts,
+                _ts, _ts,
+                poleX, topY,
+                _base, _base
+            );
+
+            // Draw the flag one tile below the ball.
+            // Flip horizontally and shift left one additional tile.
+            $this._context.save();
+
+            $this._context.translate(
+                poleX + _base / 2,
+                topY + _base
+            );
+
+            $this._context.scale(-1, 1);
+
+            $this._context.drawImage(
+                _titleset,
+                7 * _ts, 3 * _ts,
+                _ts, _ts,
+                0, 0,
+                _base, _base
+            );
+
+            $this._context.restore();
 
             return;
         }
