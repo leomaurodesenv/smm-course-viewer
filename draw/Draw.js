@@ -532,16 +532,36 @@ class Draw {
                 // Draw goal-area scenery relative to the goal object.
                 $this._drawGoalScenery(goalObject);
 
+                // Pass 1: Draw air signs behind starting arrows.
+                _objects.forEach(function (courseObject) {
+                    if (courseObject.type === 66) {
+                        $this._drawObjectFromTheme($this._monsters, courseObject);
+                    }
+                });
+
+                // Pass 2: Draw starting arrows behind semisolids,
+                // but in front of air signs.
+                _objects.forEach(function (courseObject) {
+                    if (courseObject.type === 38) {
+                        $this._drawObjectFromTheme($this._monsters, courseObject);
+                    }
+                });
+
+                // Pass 3: Draw all remaining objects in their original order.
                 _objects.forEach(function (courseObject) {
                     let type = courseObject.type;
-                    if($this._blocks.hasDraw(type)) {
+
+                    // These objects were already drawn.
+                    if (type === 66 || type === 38) return;
+
+                    if ($this._blocks.hasDraw(type)) {
                         $this._drawObjectFromTheme($this._blocks, courseObject);
                     }
-                    else if($this._monsters.hasDraw(type)) {
+                    else if ($this._monsters.hasDraw(type)) {
                         $this._drawObjectFromTheme($this._monsters, courseObject);
                     }
                     else {
-                        console.log("fault: "+type);
+                        console.log("fault: " + type);
                         $this._drawText(courseObject.x, courseObject.y, type);
                     }
                 });
