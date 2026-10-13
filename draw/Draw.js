@@ -861,7 +861,7 @@ class Draw {
             return;
         }
 
-                /* Draw skewers as one complete sprite so rotation works correctly. */
+        /* Draw skewers as one complete sprite so rotation works correctly. */
         if (courseObject.type === 12 && courseObject.subType === 1) {
             let spriteWidth = 4 * _base,
                 spriteHeight = 4 * _base,
@@ -883,6 +883,72 @@ class Draw {
                 spriteWidth, spriteHeight
             );
             $this._context.restore();
+            return;
+        }
+
+
+        /* Draw fire bars with variable length and 64 rotation positions. */
+        if (courseObject.type === 24) {
+
+            // Eight possible lengths: 4, 6, 8, 10, 12, 14, 16, 18.
+            const lengthIndex = (courseObject.flags >>> 22) & 7;
+            const fireballCount = 4 + lengthIndex * 2;
+
+            // Decode rotation using the full 32-bit value.
+            // 0° points upward, increasing clockwise.
+            const rotationFraction = courseObject.extendedData / 4294967296;
+            const angle = ((90 - rotationFraction * 360 + 360) % 360)
+                * Math.PI / 180;
+
+            // Center of the stationary base tile.
+            const baseX = x * _base;
+            const baseY = $this._yFix - (y + 1) * _base;
+            const centerX = baseX + _base / 2;
+            const centerY = baseY + _base / 2;
+
+            const ctx = $this._context;
+
+            // Draw the stationary base from column 13, row 2.
+            ctx.drawImage(
+                _titleset,
+                13 * _ts, 2 * _ts,
+                _ts, _ts,
+                baseX, baseY,
+                _base, _base
+            );
+
+            // Fireball sprite: column 14, row 2.
+            // Full-tile sprite size with half-tile center spacing.
+            const fireballSize = _base;
+            const spacing = _base * 8 / 16;
+
+            // The first fireball is centered directly over the base.
+            // Subsequent fireballs extend outward along the angle.
+            for (let i = 0; i < fireballCount; i++) {
+
+                const distance = i * spacing;
+
+                const fireX = centerX + Math.sin(angle) * distance;
+                const fireY = centerY - Math.cos(angle) * distance;
+
+                // Rotate each fireball 90 degrees clockwise.
+                ctx.save();
+                ctx.translate(fireX, fireY);
+                ctx.rotate(angle);
+
+                ctx.drawImage(
+                    _titleset,
+                    14 * _ts, 2 * _ts,
+                    _ts, _ts,
+                    -fireballSize / 2,
+                    -fireballSize / 2,
+                    fireballSize,
+                    fireballSize
+                );
+
+                ctx.restore();
+            }
+
             return;
         }
 
