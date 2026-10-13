@@ -194,8 +194,8 @@ class Draw {
 
             // Start at the vertical sawtooth boundary.
             // Fill the entire area to the right.
-            const backgroundX = (this._widthBlock - 20) * base;
-            const backgroundWidth = 20 * base;
+            const backgroundX = (this._widthBlock - 19) * base;
+            const backgroundWidth = 19 * base;
             const backgroundHeight = this._heightBlock * base;
 
             // Repeat the black sprite tile without stretching it.
@@ -451,7 +451,7 @@ class Draw {
             const sawHeight = 1;
 
             // Position 20 tiles from the right edge.
-            const sawX = (this._widthBlock - 20) * base;
+            const sawX = (this._widthBlock - 19.5) * base;
 
             const stripHeight = sawWidth * base;
             const totalHeight = this._heightBlock * base;
@@ -462,7 +462,7 @@ class Draw {
             this._context.beginPath();
             this._context.rect(
                 sawX, 0,
-                sawHeight * base,
+                base,
                 totalHeight
             );
             this._context.clip();
