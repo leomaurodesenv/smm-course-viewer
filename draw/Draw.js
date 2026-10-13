@@ -495,11 +495,17 @@ class Draw {
             // Non-Castle scenery: SMB1 and NSMBU only.
         if (mode === "M1" || mode === "WU") {
 
-            // Align the castle against the far-right course boundary.
+            // Do not draw scenery if no goal object exists.
+            if (!goalObject) {
+                return;
+            }
+
+            // Keep the castle aligned with the right course boundary.
             const drawX = (this._widthBlock - 5) * base;
 
-            // Preserve the existing non-Castle placement.
-            const drawY = this._yFix - 7 * base;
+            // Follow the goal area's vertical position.
+            // At goalObject.y = 2, preserve the original placement.
+            const drawY = this._yFix - (goalObject.y + 5) * base;
 
             this._context.drawImage(
                 tileset,
