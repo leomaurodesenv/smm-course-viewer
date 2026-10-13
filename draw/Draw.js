@@ -176,7 +176,323 @@ class Draw {
             return;
         }
 
-        // Non-Castle scenery: SMB1 and NSMBU only.
+        // SMB3 non-Castle goal-area scenery.
+        if (mode === "M3") {
+
+            // Shared hill sprite dimensions.
+            // Source: columns 12-15, rows 12-15.
+            const hillWidth = 4;
+            const hillHeight = 4.5;
+
+            // Follow the goal area's vertical position.
+            const goalY = goalObject ? goalObject.y : 2;
+            const drawY = this._yFix - (goalY + 3.5) * base;
+
+            // ------------------------------------------
+            // Black background behind SMB3 goal scenery.
+            // ------------------------------------------
+
+            // Start at the vertical sawtooth boundary.
+            // Fill the entire area to the right.
+            const backgroundX = (this._widthBlock - 20) * base;
+            const backgroundWidth = 20 * base;
+            const backgroundHeight = this._heightBlock * base;
+
+            // Repeat the black sprite tile without stretching it.
+            for (let y = 0; y < backgroundHeight; y += base) {
+                for (let x = backgroundX; x < backgroundX + backgroundWidth; x += base) {
+                    this._context.drawImage(
+                        tileset,
+                        0, 0,
+                        ts, ts,
+                        x, y,
+                        base, base
+                    );
+                }
+            }
+
+            // Calculate both left-side hill positions before drawing.
+            const leftHillX = (this._widthBlock - 16) * base;
+            const leftHillY = drawY - 3 * base;
+
+            const lowerHillX = leftHillX + 1 * base;
+            const lowerHillY = leftHillY + 2 * base;
+
+            // ------------------------------------------
+            // Right-side hills (horizontally flipped).
+            // ------------------------------------------
+
+            // Position the flipped hills to the right of the goal.
+            const rightHillX = (this._widthBlock - 3 - hillWidth) * base;
+
+            this._context.save();
+            this._context.translate(
+                rightHillX + hillWidth * base,
+                drawY
+            );
+            this._context.scale(-1, 1);
+
+            this._context.drawImage(
+                tileset,
+                12 * ts, 12 * ts,
+                hillWidth * ts, hillHeight * ts,
+                0, 0,
+                hillWidth * base, hillHeight * base
+            );
+
+            this._context.restore();
+
+            // ------------------------------------------
+            // Additional left-side hills (lower-right).
+            // ------------------------------------------
+
+            // Draw the right three columns unchanged.
+            this._context.drawImage(
+                tileset,
+                13 * ts, 12 * ts,
+                3 * ts, hillHeight * ts,
+                lowerHillX + base, lowerHillY,
+                3 * base, hillHeight * base
+            );
+
+            // Keep only the upper 1.5 tiles.
+            this._context.drawImage(
+                tileset,
+                12 * ts, 12 * ts,
+                ts, 1.5 * ts,
+                lowerHillX, lowerHillY,
+                base, 1.5 * base
+            );
+
+            // Fill the lower 2.5 tiles with black.
+            // Source: column 0, row 0 of the SMB3 monster sheet.
+            this._context.drawImage(
+                tileset,
+                0, 0,
+                ts, ts,
+                lowerHillX, lowerHillY + 1.5 * base,
+                base, 2.5 * base
+            );
+
+            // Next two tiles move one tile left.
+            this._context.drawImage(
+                tileset,
+                12 * ts, 14 * ts,
+                ts, 2 * ts,
+                lowerHillX - base, lowerHillY + 2 * base,
+                base, 2 * base
+            );
+
+            // The bottom half-tile of the leftmost
+            // column is intentionally omitted.
+
+            // Extend the rightmost hill's vertical line down by half a tile.
+            this._context.drawImage(
+                tileset,
+                15 * ts, 15 * ts,
+                ts, 0.5 * ts,
+                lowerHillX + 3 * base,
+                lowerHillY + (hillHeight - 0.5) * base,
+                base, 0.5 * base
+            );
+
+            // ------------------------------------------
+            // Left-side hills (original orientation).
+            // ------------------------------------------
+
+            // Move the left hills 1 tile left and 3 tiles up.
+
+            this._context.drawImage(
+                tileset,
+                12 * ts, 12 * ts,
+                hillWidth * ts, hillHeight * ts,
+                leftHillX, leftHillY,
+                hillWidth * base, hillHeight * base
+            );
+
+            // ------------------------------------------
+            // Lower-left hill (isolated smaller hill).
+            // ------------------------------------------
+
+            // The smaller hill is in columns 13-14,
+            // rows 14-15 of the SMB3 monster sheet.
+            // ------------------------------------------
+            // Lower-left hill (cropped to remove upper line).
+            // ------------------------------------------
+
+            const smallHillWidth = 2;
+            const smallHillHeight = 1.5;
+
+            const smallHillX = leftHillX - 1 * base;
+            const smallHillY = leftHillY + 5 * base;
+
+            // Remove the top half-tile containing the unwanted line.
+            const smallHillCropTop = 0.5;
+
+            this._context.drawImage(
+                tileset,
+                13 * ts,
+                (14 + smallHillCropTop) * ts,
+                smallHillWidth * ts,
+                (smallHillHeight - smallHillCropTop) * ts,
+                smallHillX,
+                smallHillY + smallHillCropTop * base,
+                smallHillWidth * base,
+                (smallHillHeight - smallHillCropTop) * base
+            );
+
+            // ------------------------------------------
+            // SMB3 hill vertical extensions.
+            // ------------------------------------------
+
+            const ctx = this._context;
+
+            // Match the original white hill outlines.
+            ctx.fillStyle = "#FFFFFF";
+
+            // Scale one source pixel to the rendered tile size.
+            const pixel = base / ts;
+
+            // ------------------------------------------
+            // Connect the upper hill to the lower-left hill.
+            // ------------------------------------------
+
+            // Align with the left edge of the original upper hill.
+            const connectionX = leftHillX;
+
+            // Draw over the slightly misaligned line from the lower sprite.
+            const connectionTopY = leftHillY + 2 * base;
+            const connectionBottomY = smallHillY + 0.5 * base;
+
+            ctx.fillRect(
+                connectionX,
+                connectionTopY,
+                pixel,
+                connectionBottomY - connectionTopY
+            );
+
+            // ------------------------------------------
+            // SMB3 hill dotted vertical extensions.
+            // ------------------------------------------
+
+            // Draw a dotted trail that gradually fades
+            // from white into the black background.
+
+            // Extend the far-right hill's solid line by half a tile.
+            ctx.fillStyle = "#FFFFFF";
+
+            ctx.fillRect(
+                lowerHillX + 3 * base - pixel,
+                lowerHillY + (hillHeight - 0.5) * base,
+                pixel,
+                0.5 * base
+            );
+
+            const drawHillDots = (x, startY, length) => {
+                const dotSize = pixel;
+                const spacing = 2 * pixel;
+
+                ctx.save();
+                ctx.fillStyle = "#FFFFFF";
+
+                for (let offset = 0; offset < length; offset += spacing) {
+
+                    // Gradually fade the dots toward the bottom.
+                    const progress = offset / length;
+                    const opacity = 1 - progress * 0.85;
+
+                    ctx.globalAlpha = opacity;
+
+                    ctx.fillRect(
+                        Math.round(x),
+                        Math.round(startY + offset),
+                        dotSize,
+                        dotSize
+                    );
+                }
+
+                ctx.restore();
+            };
+
+            // ------------------------------------------
+            // Dotted trails directly beneath the hills.
+            // ------------------------------------------
+
+            // Left side of the lower-left hill.
+            // Shift 1 source pixel to the right.
+            drawHillDots(
+                smallHillX + pixel,
+                smallHillY + smallHillHeight * base,
+                2 * base
+            );
+
+            // Right side of the lower-left hill.
+            // Shift 1 source pixel to the left.
+            drawHillDots(
+                smallHillX + smallHillWidth * base - 2 * pixel,
+                smallHillY + smallHillHeight * base,
+                2 * base
+            );
+
+            // Right side of the lower-right hill.
+            // Start the dotted trail half a tile lower.
+            drawHillDots(
+                lowerHillX + 3 * base - pixel,
+                lowerHillY + hillHeight * base,
+                2 * base
+            );
+
+            // ------------------------------------------
+            // Full-height vertical sawtooth boundary.
+            // ------------------------------------------
+
+            // Source: columns 11-15, row 11.
+            const sawWidth = 5;
+            const sawHeight = 1;
+
+            // Position 20 tiles from the right edge.
+            const sawX = (this._widthBlock - 20) * base;
+
+            const stripHeight = sawWidth * base;
+            const totalHeight = this._heightBlock * base;
+
+            this._context.save();
+
+            // Clip the repeated sawtooth to the canvas height.
+            this._context.beginPath();
+            this._context.rect(
+                sawX, 0,
+                sawHeight * base,
+                totalHeight
+            );
+            this._context.clip();
+
+            // Repeat the rotated sprite vertically.
+            for (let sawY = 0; sawY < totalHeight; sawY += stripHeight) {
+
+                this._context.save();
+
+                // Rotate 90 degrees counterclockwise.
+                this._context.translate(sawX, sawY + stripHeight);
+                this._context.rotate(-Math.PI / 2);
+
+                this._context.drawImage(
+                    tileset,
+                    11 * ts, 11 * ts,
+                    sawWidth * ts, sawHeight * ts,
+                    0, 0,
+                    sawWidth * base, sawHeight * base
+                );
+
+                this._context.restore();
+            }
+
+            this._context.restore();
+
+            return;
+        }
+
+            // Non-Castle scenery: SMB1 and NSMBU only.
         if (mode === "M1" || mode === "WU") {
 
             // Align the castle against the far-right course boundary.
