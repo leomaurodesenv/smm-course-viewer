@@ -958,6 +958,79 @@ class Draw {
             return;
         }
 
+           /* Rotate Spinies, Buzzy Beetles, and Spike Tops
+           to match their attached surfaces. */
+        if (
+            courseObject.type === 25 ||
+            courseObject.type === 28 ||
+            courseObject.type === 40
+        ) {
+            // Surface orientation stored in bits 25-26.
+            const orientation = (courseObject.flags >>> 25) & 3;
+
+            // Sprite coordinates in the monster tileset.
+            let spriteX;
+            const spriteY = 4;
+
+            if (courseObject.type === 25) {
+                spriteX = 2; // Spiny
+            } else if (courseObject.type === 28) {
+                spriteX = 4; // Buzzy Beetle
+            } else {
+                // Spike Top: red or blue.
+                spriteX = courseObject.subType ? 6 : 5;
+            }
+
+            // Map surface orientation to sprite rotation and flipping.
+            let angle = 0;
+            let flipX = false;
+
+            switch (orientation) {
+                case 0:
+                    // First vertical wall: rotate 90° counterclockwise and flip horizontally.
+                    angle = -Math.PI / 2;
+                    flipX = true;
+                    break;
+
+                case 1:
+                    // Second vertical wall: rotate 180° from current orientation.
+                    angle = Math.PI / 2;
+                    break;
+
+                case 2:
+                    // Ceiling: upside down and horizontally flipped.
+                    angle = Math.PI;
+                    flipX = true;
+                    break;
+
+                case 3:
+                default:
+                    // Floor: normal orientation.
+                    angle = 0;
+                    break;
+            }
+
+            // Center of the enemy's tile.
+            const centerX = (x + 0.5) * _base;
+            const centerY = $this._yFix - (y + 0.5) * _base;
+
+            $this._context.save();
+            $this._context.translate(centerX, centerY);
+            $this._context.rotate(angle);
+            $this._context.scale(flipX ? -1 : 1, 1);
+
+            $this._context.drawImage(
+                _titleset,
+                spriteX * _ts, spriteY * _ts,
+                _ts, _ts,
+                -_base / 2, -_base / 2,
+                _base, _base
+            );
+
+            $this._context.restore();
+            return;
+        }
+
         /* Draw burners with their flame rotated around the base tile. */
         if (courseObject.type === 54) {
             let angle = courseObject.direction * Math.PI / 2;
