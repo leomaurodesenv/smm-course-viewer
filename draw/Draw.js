@@ -1046,250 +1046,63 @@ class Draw {
             return;
         }
 
-            /* Draw cannons with independent mounting base and rotating barrel. */
+        /* Draw cannons using the original sprite with correct aiming rotation. */
         if (courseObject.type === 47) {
 
             // Bits 25-26 identify the attached surface.
-            // Bits 22-24 identify the 45-degree rotation increment.
+            // Bits 22-24 identify the rotation index.
             const surfaceIndex = (courseObject.flags >>> 25) & 3;
             const rotationIndex = (courseObject.flags >>> 22) & 7;
 
-            // Starting aiming angle for each attachment surface.
-            const startingAngles = {
-                0: 225, // Left wall
-                1: 45,  // Right wall
-                2: 135, // Ceiling
-                3: 315  // Ground
+            // Absolute aiming angles, clockwise from upward.
+            // 0° = Up, 90° = Right, 180° = Down, 270° = Left.
+            //
+            // Surface indices:
+            // 0 = Left wall
+            // 1 = Right wall
+            // 2 = Ceiling
+            // 3 = Ground
+
+            const cannonAngles = {
+                0: [225, 270, 315, 0, 180],   // Left wall
+                1: [45, 90, 135, 180, 0],     // Right wall
+                2: [135, 180, 225, 270, 90], // Ceiling
+                3: [315, 0, 45, 90, 270]     // Ground
             };
 
-            const angleDegrees =
-                (startingAngles[surfaceIndex] + rotationIndex * 45) % 360;
-
+            const angleDegrees = cannonAngles[surfaceIndex][rotationIndex];
             const angle = angleDegrees * Math.PI / 180;
 
             // Original cannon sprite coordinates.
+            // Black cannon: row 5
+            // Red cannon: row 6
             const spriteX = 5;
             const spriteY = courseObject.subType ? 6 : 5;
 
-            // Original 16x16 tile position on the course canvas.
-            const tileX = x * _base;
-            const tileY = $this._yFix - (y + 1) * _base;
+            // Center of the cannon's course tile.
+            const centerX = (x + 0.5) * _base;
+            const centerY = $this._yFix - (y + 0.5) * _base;
 
-            // Rivet pivot within the original artwork.
-            const pivotX = 6.5;
-            const pivotY = 6.5;
+            // Rotate and draw the complete original cannon sprite.
+            $this._context.save();
 
-            // Convert sprite pixels into displayed coordinates.
-            const scale = _base / 16;
+            $this._context.translate(centerX, centerY);
+            $this._context.rotate(angle);
 
-            // Center the cannon on its course tile.
-            let centerX = tileX + _base / 2;
-            let centerY = tileY + _base / 2;
+            $this._context.drawImage(
+                _titleset,
+                spriteX * _ts,
+                spriteY * _ts,
+                _ts,
+                _ts,
+                -_base / 2,
+                -_base / 2,
+                _base,
+                _base
+            );
 
-            // Position adjustments in original 16x16 sprite pixels.
-            // Positive X = right, positive Y = down.
-            const surfaceOffsets = {
-                0: { x: -2, y: 2 },  // Left wall: move left and down
-                1: { x: 2, y: -2 }, // Right wall: move right and up
-                2: { x: 0, y: 1 },  // Ceiling: unchanged
-                3: { x: 0, y: -1 }  // Ground: unchanged
-            };
+            $this._context.restore();
 
-            const offset = surfaceOffsets[surfaceIndex];
-
-            centerX += offset.x * scale;
-            centerY += offset.y * scale;
-
-            // Mounting base orientation for each surface.
-            const baseAngles = {
-                0: -Math.PI / 2, // Left wall
-                1: Math.PI / 2,  // Right wall
-                2: Math.PI,      // Ceiling
-                3: 0             // Ground
-            };
-
-            // Draw the original cannon sprite.
-            // Used for other styles, red cannons, and image-loading fallback.
-            const drawOriginalCannon = function () {
-                $this._context.save();
-
-                $this._context.translate(
-                    (x + 0.5) * _base,
-                    $this._yFix - (y + 0.5) * _base
-                );
-
-                $this._context.rotate(angle);
-
-                $this._context.drawImage(
-                    _titleset,
-                    spriteX * _ts,
-                    spriteY * _ts,
-                    _ts,
-                    _ts,
-                    -_base / 2,
-                    -_base / 2,
-                    _base,
-                    _base
-                );
-
-                $this._context.restore();
-            };
-
-            // Use separated artwork only for SMW black cannons.
-            if ($this._gameMode === "MW" && !courseObject.subType) {
-
-            // Redraw once both cannon component images are ready.
-                const onCannonImageLoaded = function () {
-                    const baseImage = $this._smwBlackCannonBase;
-                    const barrelImage = $this._smwBlackCannonBarrel;
-
-                    if (
-                        baseImage &&
-                        barrelImage &&
-                        baseImage.complete &&
-                        baseImage.naturalWidth > 0 &&
-                        barrelImage.complete &&
-                        barrelImage.naturalWidth > 0 &&
-                        !$this._smwCannonRedrawn
-                    ) {
-                        $this._smwCannonRedrawn = true;
-
-                        console.log("Both cannon images loaded. Redrawing course.");
-
-                        $this._redrawCourse();
-                    }
-                };
-
-                // Create and cache the mounting base image.
-                if (!$this._smwBlackCannonBase) {
-                    $this._smwBlackCannonBase = new Image();
-
-                    $this._smwBlackCannonBase.onload =
-                        onCannonImageLoaded;
-
-                    $this._smwBlackCannonBase.onerror = function () {
-                        console.error("Failed to load SMW cannon base");
-                    };
-
-                    $this._smwBlackCannonBase.src =
-                        "./layout/draw/monster/cannon/MW_black_base.png";
-                }
-
-                // Create and cache the rotating barrel image.
-                if (!$this._smwBlackCannonBarrel) {
-                    $this._smwBlackCannonBarrel = new Image();
-
-                    $this._smwBlackCannonBarrel.onload =
-                        onCannonImageLoaded;
-
-                    $this._smwBlackCannonBarrel.onerror = function () {
-                        console.error("Failed to load SMW cannon barrel");
-                    };
-
-                    $this._smwBlackCannonBarrel.src =
-                        "./layout/draw/monster/cannon/MW_black_barrel.png";
-                }
-
-                const baseImage = $this._smwBlackCannonBase;
-                const barrelImage = $this._smwBlackCannonBarrel;
-
-                // Both components must be loaded before drawing.
-                const imagesReady =
-                    baseImage.complete &&
-                    baseImage.naturalWidth > 0 &&
-                    barrelImage.complete &&
-                    barrelImage.naturalWidth > 0;
-
-                // Keep cannons visible while images load.
-                if (!imagesReady) {
-                    drawOriginalCannon();
-                    return;
-                }
-
-                console.log("TWO-LAYER CANNON ACTIVE", {
-                    surfaceIndex,
-                    angleDegrees,
-                    baseAngleDegrees: baseAngles[surfaceIndex] * 180 / Math.PI,
-                    baseWidth: baseImage.naturalWidth,
-                    barrelWidth: barrelImage.naturalWidth
-                });
-
-                console.log("TWO-LAYER CANNON ACTIVE", {
-                    surfaceIndex: surfaceIndex,
-                    angleDegrees: angleDegrees,
-                    baseWidth: baseImage.naturalWidth,
-                    barrelWidth: barrelImage.naturalWidth
-                });
-
-                // Draw the rotating cannon barrel FIRST.
-                // It rotates independently around the rivet.
-                $this._context.save();
-
-                // Barrel pivot coordinates.
-                const barrelPivotX = 7;
-                const barrelPivotY = 8.5;
-
-                // Fine-tune barrel alignment by aiming angle.
-                // Offsets are in original 16x16 sprite pixels.
-                // Positive X = right; positive Y = down.
-                const barrelOffsets = {
-                    0: { x: 0, y: 0 },
-                    45: { x: 0, y: 1 },
-                    90: { x: 0, y: 0 },
-                    135: { x: 0, y: -1 },
-                    180: { x: 0, y: -1 },
-                    225: { x: 1, y: 0 },
-                    270: { x: 0, y: 0 },
-                    315: { x: 0, y: 1 }
-                };
-
-                const barrelOffset = barrelOffsets[angleDegrees];
-
-                // Draw the rotating barrel first.
-                $this._context.save();
-
-                $this._context.translate(
-                    centerX + barrelOffset.x * scale,
-                    centerY + barrelOffset.y * scale
-                );
-
-                $this._context.rotate(angle);
-
-                $this._context.drawImage(
-                    barrelImage,
-                    -barrelPivotX * scale,
-                    -barrelPivotY * scale,
-                    _base,
-                    _base
-                );
-
-                $this._context.restore();
-
-                // Draw the mounting base LAST so it appears
-                // on top of the rotating cannon barrel.
-                // Its orientation depends only on the attached surface.
-                $this._context.save();
-
-                $this._context.translate(centerX, centerY);
-                $this._context.rotate(baseAngles[surfaceIndex]);
-
-                $this._context.drawImage(
-                    baseImage,
-                    -pivotX * scale,
-                    -pivotY * scale,
-                    _base,
-                    _base
-                );
-
-                $this._context.restore();
-
-                return;
-
-            }
-
-            // Preserve original rendering for other game styles
-            // and red cannons.
-            drawOriginalCannon();
             return;
         }
 
