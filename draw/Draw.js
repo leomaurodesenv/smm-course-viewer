@@ -44,10 +44,15 @@ class Draw {
         this._goalTape = new Image();
         this._goalTape.src = "./layout/draw/format/27-0.png";
 
+        // Original Super Mario Maker track artwork.
+        this._railSprite = new Image();
+        this._railSprite.src = "./layout/draw/format/59.png";
+
         this._images = [
             this._blocks.getTheme(),
             this._monsters.getTheme(),
-            this._goalTape
+            this._goalTape,
+            this._railSprite
         ];
         /* draw configurations */
         let compare = function(a,b) {
@@ -649,6 +654,103 @@ class Draw {
     }
 
     /**
+     * Draw a horizontal rail sprite section between two canvas points.
+     * Uses the original track artwork from format/59.png.
+     */
+    _drawRailSpriteSegment(x1, y1, x2, y2) {
+        const ctx = this._context;
+        const sprite = this._railSprite;
+
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+        const length = Math.hypot(dx, dy);
+        const angle = Math.atan2(dy, dx);
+
+        if (!length || !sprite.complete || !sprite.naturalWidth) {
+            return;
+        }
+
+        const scale = this._base / 16;
+
+        ctx.save();
+        ctx.translate(x1, y1);
+        ctx.rotate(angle);
+        ctx.imageSmoothingEnabled = false;
+
+        // Repeat the rail portion of the original sprite.
+        // Source columns 3-14 contain a repeatable rail section.
+        const sourceX = 3;
+        const sourceY = 6;
+        const sourceWidth = 12;
+        const sourceHeight = 4;
+
+        const segmentLength = sourceWidth * scale;
+        const railHeight = sourceHeight * scale;
+
+        for (let offset = 0; offset < length; offset += segmentLength) {
+            const drawWidth = Math.min(segmentLength, length - offset);
+
+            ctx.drawImage(
+                sprite,
+                sourceX,
+                sourceY,
+                sourceWidth * (drawWidth / segmentLength),
+                sourceHeight,
+                offset,
+                -railHeight / 2,
+                drawWidth,
+                railHeight
+            );
+        }
+
+        ctx.restore();
+    }
+
+    /**
+     * Draw the original closed track endpoint from format/59.png.
+     */
+    _drawRailEndCap(x, y, angle) {
+        const ctx = this._context;
+        const sprite = this._railSprite;
+
+        if (!sprite.complete || !sprite.naturalWidth) {
+            return;
+        }
+
+        const scale = this._base / 16;
+
+        // Square endpoint artwork in the original 32x16 sprite.
+        const sourceX = 20;
+        const sourceY = 4;
+        const sourceWidth = 9;
+        const sourceHeight = 9;
+
+        const width = sourceWidth * scale;
+        const height = sourceHeight * scale;
+
+        ctx.save();
+
+        ctx.translate(x, y);
+        ctx.rotate(angle);
+        ctx.imageSmoothingEnabled = false;
+
+        // Center the square cap over the rail endpoint.
+        ctx.drawImage(
+            sprite,
+            sourceX,
+            sourceY,
+            sourceWidth,
+            sourceHeight,
+            -width / 2,
+            -height / 2,
+            width,
+            height
+        );
+
+        ctx.restore();
+    }
+
+    /**
     * Draw track geometry for object type 59.
     * Temporary diagnostic renderer for straight tracks.
     */
@@ -656,6 +758,24 @@ class Draw {
         const ctx = this._context;
         const base = this._base;
         const index = (courseObject.flags >>> 22) & 7;
+
+        // Decode the two endpoint values from extendedData.
+        const extended = courseObject.extendedData >>> 0;
+
+        const endpointA = (extended >>> 16) & 0xFFFF;
+        const endpointB = extended & 0xFFFF;
+
+        // Verified for diagonal tracks (orientation 2).
+        const topClosed = endpointA === 0x74;
+        const bottomClosed = endpointB === 0x75;
+
+        console.log("Track endpoint data:", {
+            orientation: index,
+            endpointA: "0x" + endpointA.toString(16),
+            endpointB: "0x" + endpointB.toString(16),
+            topClosed: topClosed,
+            bottomClosed: bottomClosed
+        });
 
         // Shift tracks one tile right and one tile up.
         const x = (courseObject.x + 1) * base;
@@ -672,18 +792,39 @@ class Draw {
 
         ctx.save();
 
-        ctx.strokeStyle = "#A855A8";
-        ctx.lineWidth = 5;
-        ctx.lineCap = "round";
+        // Draw the track's dark outer rail.
+        ctx.strokeStyle = "#101820";
+        ctx.lineWidth = 8;
+        ctx.lineCap = "butt";
 
         ctx.beginPath();
 
         if (index in endpoints) {
-            // Straight tracks: use the verified endpoints.
             const points = endpoints[index];
 
-            ctx.moveTo(x + points[0][0], y + points[0][1]);
-            ctx.lineTo(x + points[1][0], y + points[1][1]);
+            const x1 = x + points[0][0];
+            const y1 = y + points[0][1];
+
+            const x2 = x + points[1][0];
+            const y2 = y + points[1][1];
+
+            // Draw the existing rail artwork.
+            this._drawRailSpriteSegment(x1, y1, x2, y2);
+
+            // Test closed endpoint rendering for orientation 2 only.
+            if (index === 2) {
+                const angle = Math.atan2(y2 - y1, x2 - x1);
+
+                // First endpoint is the upper-left endpoint.
+                if (topClosed) {
+                    this._drawRailEndCap(x1, y1, angle + Math.PI);
+                }
+
+                // Second endpoint is the lower-right endpoint.
+                if (bottomClosed) {
+                    this._drawRailEndCap(x2, y2, angle);
+                }
+            }
         } else {
             // Curved tracks are quarter circles with a two-tile radius.
             // Their centers lie at corners of the 2x2 tile region.
@@ -720,6 +861,11 @@ class Draw {
             }
         }
 
+        ctx.stroke();
+
+        // Add a narrower gray interior over the dark rail.
+        ctx.strokeStyle = "#B8B8B8";
+        ctx.lineWidth = 5;
         ctx.stroke();
 
         // Red marker: corrected track anchor.
