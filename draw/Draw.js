@@ -863,10 +863,6 @@ class Draw {
         ctx.lineWidth = 5;
         ctx.stroke();
 
-        // Red marker: corrected track anchor.
-        ctx.fillStyle = "#FF0000";
-        ctx.fillRect(x - 3, y - 3, 6, 6);
-
         ctx.restore();
     }
 
