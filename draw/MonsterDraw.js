@@ -231,7 +231,6 @@ MonsterDraw._defitions = {
         return extend;
     }},
     32:{"xT":0, "yT":0, "func":function(courseObject) {
-        console.log(courseObject);
         return {"xT":0, "yT":0};
     }},
     33:{"extend":function(courseObject) {

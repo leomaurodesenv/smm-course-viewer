@@ -979,6 +979,34 @@ class Draw {
             _base = $this._base;
         let x = courseObject.x, y = courseObject.y;
 
+        // Position skull coasters attached to curved tracks.
+        if (courseObject.type === 36 && courseObject.linkId !== -1) {
+
+            // Find the track associated with this skull coaster.
+            const track = this._objects.find(obj =>
+                obj.type === 59 && obj.linkId === courseObject.linkId
+            );
+
+            if (track) {
+                const railIndex = (track.flags >>> 22) & 7;
+
+                // Offsets based on curved-track orientation.
+                const offsets = {
+                    4: { x: -0.5, y: 2.5 }, // Upper-left
+                    5: { x: -0.5, y: -3.5 }, // Lower-right
+                    6: { x: -0.5, y: -3.5 }, // Lower-left
+                    7: { x: -0.5, y: 2.5 }  // Upper-right
+                };
+
+                const offset = offsets[railIndex];
+
+                if (offset) {
+                    x += offset.x;
+                    y += offset.y;
+                }
+            }
+        }
+
         /* Castle bridges should only appear in Castle themes. */
         if (courseObject.type === 49 && $this._gameTheme !== "castle") {
             return;
