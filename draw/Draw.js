@@ -735,10 +735,6 @@ class Draw {
         const ctx = this._context;
         const sprite = this._railSprite;
 
-        if (!sprite.complete || !sprite.naturalWidth) {
-            return;
-        }
-
         const scale = this._base / 16;
 
         // Original square endpoint artwork.
@@ -772,6 +768,35 @@ class Draw {
     }
 
     /**
+ * Temporarily display curved-track endpoint positions.
+ * A = first calculated endpoint
+ * B = second calculated endpoint
+ */
+    _drawRailEndpointMarker(x, y, label) {
+        const ctx = this._context;
+
+        ctx.save();
+
+        ctx.fillStyle = label === "A" ? "#FF0000" : "#0080FF";
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.font = "bold 12px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "#FFFFFF";
+        ctx.strokeText(label, x, y - 13);
+
+        ctx.fillStyle = "#000000";
+        ctx.fillText(label, x, y - 13);
+
+        ctx.restore();
+    }
+
+    /**
     * Draw track geometry for object type 59.
     * Temporary diagnostic renderer for straight tracks.
     */
@@ -790,14 +815,6 @@ class Draw {
         // Endpoint codes 0x80-0x87 are open.
         const endpointAClosed = endpointA >= 0x70 && endpointA <= 0x77;
         const endpointBClosed = endpointB >= 0x70 && endpointB <= 0x77;
-
-        console.log("Track endpoint data:", {
-            orientation: index,
-            endpointA: "0x" + endpointA.toString(16),
-            endpointB: "0x" + endpointB.toString(16),
-            endpointAClosed: endpointAClosed,
-            endpointBClosed: endpointBClosed
-        });
 
         // Shift tracks one tile right and one tile up.
         const x = (courseObject.x + 1) * base;
@@ -848,32 +865,36 @@ class Draw {
             let cx, cy, startAngle, endAngle;
 
             switch (index) {
-                case 4: // Quadrant III: lower-left
-                    cx = x - base;
-                    cy = y - base;
-                    startAngle = 0;
-                    endAngle = Math.PI / 2;
-                    break;
-
-                case 5: // Quadrant IV: lower-right
+                case 4:
+                    // Left-hand curve: upper-left to lower-right.
                     cx = x + base;
                     cy = y - base;
                     startAngle = Math.PI / 2;
                     endAngle = Math.PI;
                     break;
 
-                case 6: // Quadrant II: upper-left
+                case 5:
+                    // Right-hand curve: upper-right to lower-left.
                     cx = x - base;
                     cy = y + base;
                     startAngle = -Math.PI / 2;
                     endAngle = 0;
                     break;
 
-                case 7: // Quadrant I: upper-right
+                case 6:
+                    // Preserve the verified third curve.
                     cx = x + base;
                     cy = y + base;
                     startAngle = Math.PI;
                     endAngle = Math.PI * 1.5;
+                    break;
+
+                case 7:
+                    // Fourth curve: lower-left to upper-right.
+                    cx = x - base;
+                    cy = y - base;
+                    startAngle = 0;
+                    endAngle = Math.PI / 2;
                     break;
             }
 
@@ -887,13 +908,33 @@ class Draw {
             const x2 = cx + Math.cos(endAngle) * r;
             const y2 = cy + Math.sin(endAngle) * r;
 
-            // Draw closed endpoint caps, keeping them upright.
-            if (endpointAClosed) {
-                this._drawRailEndCap(x1, y1);
+            // Each orientation has a verified start/end ordering.
+            // Map CDT endpoint A and B independently to those positions.
+            const endpointMapping = {
+                4: { a: 0, b: 1 },
+                5: { a: 1, b: 0 },
+                6: { a: 1, b: 0 },
+                7: { a: 0, b: 1 }
+            };
+
+            const mapping = endpointMapping[index];
+
+            const positions = [
+                { x: x1, y: y1 },
+                { x: x2, y: y2 }
+            ];
+
+            const positionA = positions[mapping.a];
+            const positionB = positions[mapping.b];
+
+            // The physical A/B endpoint assignment is reversed
+            // relative to the current curved-track mapping.
+            if (endpointBClosed && positionA) {
+                this._drawRailEndCap(positionA.x, positionA.y);
             }
 
-            if (endpointBClosed) {
-                this._drawRailEndCap(x2, y2);
+            if (endpointAClosed && positionB) {
+                this._drawRailEndCap(positionB.x, positionB.y);
             }
         }
 
