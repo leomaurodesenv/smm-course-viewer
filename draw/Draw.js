@@ -707,6 +707,27 @@ class Draw {
     }
 
     /**
+     * Draw a curved track using short sections of the original rail sprite.
+     */
+    _drawCurvedRail(cx, cy, radius, startAngle, endAngle) {
+        const segmentCount = 32;
+        const angleStep = (endAngle - startAngle) / segmentCount;
+
+        for (let i = 0; i < segmentCount; i++) {
+            const a1 = startAngle + i * angleStep;
+            const a2 = startAngle + (i + 1) * angleStep;
+
+            const x1 = cx + Math.cos(a1) * radius;
+            const y1 = cy + Math.sin(a1) * radius;
+
+            const x2 = cx + Math.cos(a2) * radius;
+            const y2 = cy + Math.sin(a2) * radius;
+
+            this._drawRailSpriteSegment(x1, y1, x2, y2);
+        }
+    }
+
+    /**
      * Draw the original closed track endpoint.
      * The square remains upright regardless of rail orientation.
      */
@@ -821,38 +842,58 @@ class Draw {
                 this._drawRailEndCap(x2, y2);
             }
         } else {
-            // Curved tracks are quarter circles with a two-tile radius.
-            // Their centers lie at corners of the 2x2 tile region.
+            // Curved tracks use the verified centers and radius.
             const r = 2 * base;
+
+            let cx, cy, startAngle, endAngle;
 
             switch (index) {
                 case 4: // Quadrant III: lower-left
-                    ctx.arc(
-                        x - base, y - base,
-                        r, 0, Math.PI / 2
-                    );
+                    cx = x - base;
+                    cy = y - base;
+                    startAngle = 0;
+                    endAngle = Math.PI / 2;
                     break;
 
                 case 5: // Quadrant IV: lower-right
-                    ctx.arc(
-                        x + base, y - base,
-                        r, Math.PI / 2, Math.PI
-                    );
+                    cx = x + base;
+                    cy = y - base;
+                    startAngle = Math.PI / 2;
+                    endAngle = Math.PI;
                     break;
 
                 case 6: // Quadrant II: upper-left
-                    ctx.arc(
-                        x - base, y + base,
-                        r, -Math.PI / 2, 0
-                    );
+                    cx = x - base;
+                    cy = y + base;
+                    startAngle = -Math.PI / 2;
+                    endAngle = 0;
                     break;
 
                 case 7: // Quadrant I: upper-right
-                    ctx.arc(
-                        x + base, y + base,
-                        r, Math.PI, Math.PI * 1.5
-                    );
+                    cx = x + base;
+                    cy = y + base;
+                    startAngle = Math.PI;
+                    endAngle = Math.PI * 1.5;
                     break;
+            }
+
+            // Draw the curved rail using the original track sprite.
+            this._drawCurvedRail(cx, cy, r, startAngle, endAngle);
+
+            // Calculate the two endpoints of the quarter-circle.
+            const x1 = cx + Math.cos(startAngle) * r;
+            const y1 = cy + Math.sin(startAngle) * r;
+
+            const x2 = cx + Math.cos(endAngle) * r;
+            const y2 = cy + Math.sin(endAngle) * r;
+
+            // Draw closed endpoint caps, keeping them upright.
+            if (endpointAClosed) {
+                this._drawRailEndCap(x1, y1);
+            }
+
+            if (endpointBClosed) {
+                this._drawRailEndCap(x2, y2);
             }
         }
 
