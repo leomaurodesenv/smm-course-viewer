@@ -613,7 +613,10 @@ class Draw {
                     // These objects were already drawn.
                     if (type === 66 || type === 38) return;
 
-                    if ($this._blocks.hasDraw(type)) {
+                    if (type === 59) {
+                        $this._drawRail(courseObject);
+                    }
+                    else if ($this._blocks.hasDraw(type)) {
                         $this._drawObjectFromTheme($this._blocks, courseObject);
                     }
                     else if ($this._monsters.hasDraw(type)) {
@@ -643,6 +646,87 @@ class Draw {
                 img.onerror = onerror;
             }
         });
+    }
+
+    /**
+    * Draw track geometry for object type 59.
+    * Temporary diagnostic renderer for straight tracks.
+    */
+    _drawRail(courseObject) {
+        const ctx = this._context;
+        const base = this._base;
+        const index = (courseObject.flags >>> 22) & 7;
+
+        // Shift tracks one tile right and one tile up.
+        const x = (courseObject.x + 1) * base;
+        const y = this._yFix - (courseObject.y + 1) * base;
+
+        // Endpoint offsets relative to the stored position.
+        // These are initial values to verify against the test course.
+        const endpoints = {
+            0: [[-base, 0], [base, 0]],             // Horizontal
+            1: [[0, -base], [0, base]],             // Vertical
+            2: [[-base, -base], [base, base]],      // Descending diagonal
+            3: [[-base, base], [base, -base]]       // Ascending diagonal
+        };
+
+        ctx.save();
+
+        ctx.strokeStyle = "#A855A8";
+        ctx.lineWidth = 5;
+        ctx.lineCap = "round";
+
+        ctx.beginPath();
+
+        if (index in endpoints) {
+            // Straight tracks: use the verified endpoints.
+            const points = endpoints[index];
+
+            ctx.moveTo(x + points[0][0], y + points[0][1]);
+            ctx.lineTo(x + points[1][0], y + points[1][1]);
+        } else {
+            // Curved tracks are quarter circles with a two-tile radius.
+            // Their centers lie at corners of the 2x2 tile region.
+            const r = 2 * base;
+
+            switch (index) {
+                case 4: // Quadrant III: lower-left
+                    ctx.arc(
+                        x - base, y - base,
+                        r, 0, Math.PI / 2
+                    );
+                    break;
+
+                case 5: // Quadrant IV: lower-right
+                    ctx.arc(
+                        x + base, y - base,
+                        r, Math.PI / 2, Math.PI
+                    );
+                    break;
+
+                case 6: // Quadrant II: upper-left
+                    ctx.arc(
+                        x - base, y + base,
+                        r, -Math.PI / 2, 0
+                    );
+                    break;
+
+                case 7: // Quadrant I: upper-right
+                    ctx.arc(
+                        x + base, y + base,
+                        r, Math.PI, Math.PI * 1.5
+                    );
+                    break;
+            }
+        }
+
+        ctx.stroke();
+
+        // Red marker: corrected track anchor.
+        ctx.fillStyle = "#FF0000";
+        ctx.fillRect(x - 3, y - 3, 6, 6);
+
+        ctx.restore();
     }
 
     /**
