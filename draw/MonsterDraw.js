@@ -249,15 +249,25 @@ MonsterDraw._defitions = {
         extend.push({"x":0, "y":0, "xT":15, "yT":3});
         return extend;
     }},
-    36:{"extend":function(courseObject) {
+    36: {"extend": function (courseObject) {
         let subType = courseObject.subType;
-        var extend = [],
-            /* blue : white */
-            tt = (subType) ? {"xT":11, "yT":8} : {"xT":10, "yT":8};
-        extend.push({"x":1, "y":0, "xT":tt.xT, "yT":tt.yT});
-        extend.push({"x":0, "y":0, "xT":tt.xT, "yT":tt.yT});
-        extend.push({"x":-1, "y":0, "xT":tt.xT, "yT":tt.yT});
-        extend.push({"x":-2, "y":0, "xT":tt.xT, "yT":tt.yT});
+        let extend = [];
+
+        // Blue or white skull coaster sprite.
+        let tt = (subType)
+            ? { "xT": 11, "yT": 8 }
+            : { "xT": 10, "yT": 8 };
+        // Track-attached skull coasters display only one skull.
+        if (courseObject.linkId !== -1) {
+            extend.push({ "x": 0, "y": 0, "xT": tt.xT, "yT": tt.yT });
+            return extend;
+        }
+        // Unattached skull coasters display the normal four skulls.
+        extend.push({ "x": 1, "y": 0, "xT": tt.xT, "yT": tt.yT });
+        extend.push({ "x": 0, "y": 0, "xT": tt.xT, "yT": tt.yT });
+        extend.push({ "x": -1, "y": 0, "xT": tt.xT, "yT": tt.yT });
+        extend.push({ "x": -2, "y": 0, "xT": tt.xT, "yT": tt.yT });
+
         return extend;
     }},
     38:{"extend":function(courseObject) {
