@@ -707,9 +707,10 @@ class Draw {
     }
 
     /**
-     * Draw the original closed track endpoint from format/59.png.
+     * Draw the original closed track endpoint.
+     * The square remains upright regardless of rail orientation.
      */
-    _drawRailEndCap(x, y, angle) {
+    _drawRailEndCap(x, y) {
         const ctx = this._context;
         const sprite = this._railSprite;
 
@@ -719,7 +720,7 @@ class Draw {
 
         const scale = this._base / 16;
 
-        // Square endpoint artwork in the original 32x16 sprite.
+        // Original square endpoint artwork.
         const sourceX = 20;
         const sourceY = 4;
         const sourceWidth = 9;
@@ -730,19 +731,18 @@ class Draw {
 
         ctx.save();
 
-        ctx.translate(x, y);
-        ctx.rotate(angle);
+        // Keep the sprite aligned with the level's horizontal
+        // and vertical axes, including its bottom-right shadow.
         ctx.imageSmoothingEnabled = false;
 
-        // Center the square cap over the rail endpoint.
         ctx.drawImage(
             sprite,
             sourceX,
             sourceY,
             sourceWidth,
             sourceHeight,
-            -width / 2,
-            -height / 2,
+            x - width / 2,
+            y - height / 2,
             width,
             height
         );
@@ -765,16 +765,17 @@ class Draw {
         const endpointA = (extended >>> 16) & 0xFFFF;
         const endpointB = extended & 0xFFFF;
 
-        // Verified for diagonal tracks (orientation 2).
-        const topClosed = endpointA === 0x74;
-        const bottomClosed = endpointB === 0x75;
+        // Endpoint codes 0x70-0x77 are closed.
+        // Endpoint codes 0x80-0x87 are open.
+        const endpointAClosed = endpointA >= 0x70 && endpointA <= 0x77;
+        const endpointBClosed = endpointB >= 0x70 && endpointB <= 0x77;
 
         console.log("Track endpoint data:", {
             orientation: index,
             endpointA: "0x" + endpointA.toString(16),
             endpointB: "0x" + endpointB.toString(16),
-            topClosed: topClosed,
-            bottomClosed: bottomClosed
+            endpointAClosed: endpointAClosed,
+            endpointBClosed: endpointBClosed
         });
 
         // Shift tracks one tile right and one tile up.
@@ -811,19 +812,13 @@ class Draw {
             // Draw the existing rail artwork.
             this._drawRailSpriteSegment(x1, y1, x2, y2);
 
-            // Test closed endpoint rendering for orientation 2 only.
-            if (index === 2) {
-                const angle = Math.atan2(y2 - y1, x2 - x1);
+            // Draw upright endpoint caps for all straight tracks.
+            if (endpointAClosed) {
+                this._drawRailEndCap(x1, y1);
+            }
 
-                // First endpoint is the upper-left endpoint.
-                if (topClosed) {
-                    this._drawRailEndCap(x1, y1, angle + Math.PI);
-                }
-
-                // Second endpoint is the lower-right endpoint.
-                if (bottomClosed) {
-                    this._drawRailEndCap(x2, y2, angle);
-                }
+            if (endpointBClosed) {
+                this._drawRailEndCap(x2, y2);
             }
         } else {
             // Curved tracks are quarter circles with a two-tile radius.
