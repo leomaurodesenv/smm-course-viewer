@@ -108,6 +108,41 @@ class Draw {
     }
 
     /**
+     * Draw the Castle theme lava along the bottom of the course.
+     */
+    _drawLava() {
+        if (this._gameTheme !== "castle") {
+            return;
+        }
+
+        const tileset = this._monsters.getTheme();
+        const tileSize = this._monsters.getThemeSize();
+        const base = this._base;
+
+        // Lava surface sprite, zero-based coordinates.
+        const lavaX = 15;
+        const lavaY = 9;
+
+        // Bottom row of the course.
+        const canvasY = (this._heightBlock - 1) * base;
+
+        // Repeat the lava tile across the course width.
+        for (let x = 0; x < this._widthBlock; x++) {
+            this._context.drawImage(
+                tileset,
+                lavaX * tileSize,
+                lavaY * tileSize,
+                tileSize,
+                tileSize,
+                x * base,
+                canvasY,
+                base,
+                base
+            );
+        }
+    }
+
+    /**
      * @method module:Draw::_drawObjects
      * Draw the objects
      * @arg {Array[Object]} _objects    Array[CourseObject]
@@ -139,6 +174,9 @@ class Draw {
                         $this._drawText(courseObject.x, courseObject.y, type);
                     }
                 });
+
+                // Draw Castle lava in front of course objects.
+                $this._drawLava();
             }
         },
         /* onload event */
