@@ -461,30 +461,44 @@ class Draw {
             _base = $this._base;
         let x = courseObject.x, y = courseObject.y;
 
-        // Position skull coasters attached to curved tracks.
-        if (courseObject.type === 36 && courseObject.linkId !== -1) {
-
-            // Find the track associated with this skull coaster.
+        // Center objects attached to curved tracks at the arc midpoint.
+        if (courseObject.type !== 59 && courseObject.linkId !== -1) {
             const track = this._objects.find(obj =>
                 obj.type === 59 && obj.linkId === courseObject.linkId
             );
 
             if (track) {
-                const railIndex = (track.flags >>> 22) & 7;
+                const orientation = (track.flags >>> 22) & 7;
 
-                // Offsets based on curved-track orientation.
-                const offsets = {
-                    4: { x: -0.5, y: 2.5 }, // Upper-left
-                    5: { x: -0.5, y: -3.5 }, // Lower-right
-                    6: { x: -0.5, y: -3.5 }, // Lower-left
-                    7: { x: -0.5, y: 2.5 }  // Upper-right
+                const curves = {
+                    4: { cx: 2, cy: 2, angle: 3 * Math.PI / 4 },
+                    5: { cx: 0, cy: 0, angle: -Math.PI / 4 },
+                    6: { cx: 2, cy: 0, angle: 5 * Math.PI / 4 },
+                    7: { cx: 0, cy: 2, angle: Math.PI / 4 }
                 };
 
-                const offset = offsets[railIndex];
+                const curve = curves[orientation];
 
-                if (offset) {
-                    x += offset.x;
-                    y += offset.y;
+                if (curve) {
+                    const radius = 2;
+                    const targetX = track.x + curve.cx +
+                        radius * Math.cos(curve.angle);
+
+                    // Canvas angles use downward-positive Y.
+                    const targetY = track.y + curve.cy -
+                        radius * Math.sin(curve.angle);
+
+                    const size = courseObject.size;
+
+                    // Account for _paintObject's sprite origin.
+                    if (size === 1) {
+                        x = targetX - 0.5;
+                        y = targetY - 0.5;
+                    } else {
+                        x = targetX - size / 2 +
+                            (2 - Math.ceil(courseObject.width / 2));
+                        y = targetY - size / 2 + 0.5;
+                    }
                 }
             }
         }
