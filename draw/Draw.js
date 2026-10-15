@@ -182,6 +182,71 @@ class Draw {
             _ts = _theme.getThemeSize(),
             _base = $this._base;
         let x = courseObject.x, y = courseObject.y;
+        /* Draw cannons using the original sprite with correct aiming rotation. */
+        if (courseObject.type === 47) {
+
+            // Bits 25-26 identify the attached surface.
+            // Bits 22-24 identify the rotation index.
+            const surfaceIndex = (courseObject.flags >>> 25) & 3;
+            const rotationIndex = (courseObject.flags >>> 22) & 7;
+
+            // Absolute aiming angles, clockwise from upward.
+            // 0 deg = Up, 90 deg = Right, 180 deg = Down, 270 deg = Left.
+            //
+            // Surface indices:
+            // 0 = Left wall
+            // 1 = Right wall
+            // 2 = Ceiling
+            // 3 = Ground
+
+            const cannonAngles = {
+                0: [225, 270, 315, 0, 180],   // Left wall
+                1: [45, 90, 135, 180, 0],     // Right wall
+                2: [135, 180, 225, 270, 90], // Ceiling
+                3: [315, 0, 45, 90, 270]     // Ground
+            };
+
+            const angleDegrees = cannonAngles[surfaceIndex][rotationIndex];
+            if (angleDegrees === undefined) {
+                console.warn("Unsupported cannon rotation:", rotationIndex);
+                return;
+            }
+
+            const angle = angleDegrees * Math.PI / 180;
+
+            // Original cannon sprite coordinates.
+            // Black cannon: row 5
+            // Red cannon: row 6
+            const spriteX = 5;
+            const spriteY = courseObject.subType ? 6 : 5;
+
+            // Center of the cannon's course tile.
+            const centerX = (x + 0.5) * _base;
+            const centerY = $this._yFix - (y + 0.5) * _base;
+
+            // Rotate and draw the complete original cannon sprite.
+            $this._context.save();
+
+            $this._context.translate(centerX, centerY);
+            $this._context.rotate(angle);
+
+            $this._context.drawImage(
+                _titleset,
+                spriteX * _ts,
+                spriteY * _ts,
+                _ts,
+                _ts,
+                -_base / 2,
+                -_base / 2,
+                _base,
+                _base
+            );
+
+            $this._context.restore();
+
+            return;
+        }
+
         /* multiples cells */
         if(def.extend) {
             let ext = def.extend(courseObject);
