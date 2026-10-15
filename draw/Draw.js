@@ -41,7 +41,15 @@ class Draw {
         /*global MonsterDraw */
         /*eslint no-undef: "error"*/
         this._monsters = new MonsterDraw(this._gameMode, this._gameTheme);
-        this._images = [this._blocks.getTheme(), this._monsters.getTheme()];
+        // Original Super Mario Maker track artwork.
+        this._railSprite = new Image();
+        this._railSprite.src = "./layout/draw/format/59.png";
+
+        this._images = [
+            this._blocks.getTheme(),
+            this._monsters.getTheme(),
+            this._railSprite
+        ];
         /* draw configurations */
         let compare = function(a,b) {
             if (a.z < b.z) { return -1; }
@@ -128,7 +136,10 @@ class Draw {
             if(loadedCount === imageCount) {
                 _objects.forEach(function(courseObject) {
                     let type = courseObject.type;
-                    if($this._blocks.hasDraw(type)) {
+                    if (type === 59) {
+                        $this._drawRail(courseObject);
+                    }
+                    else if($this._blocks.hasDraw(type)) {
                         $this._drawObjectFromTheme($this._blocks, courseObject);
                     }
                     else if($this._monsters.hasDraw(type)) {
@@ -150,6 +161,273 @@ class Draw {
             img.onload = onload; 
             img.onerror = onerror;
         });
+    }
+
+    /**
+     * Draw a horizontal rail sprite section between two canvas points.
+     * Uses the original track artwork from format/59.png.
+     */
+    _drawRailSpriteSegment(x1, y1, x2, y2) {
+        const ctx = this._context;
+        const sprite = this._railSprite;
+
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+        const length = Math.hypot(dx, dy);
+        const angle = Math.atan2(dy, dx);
+
+        if (!length || !sprite.complete || !sprite.naturalWidth) {
+            return;
+        }
+
+        const scale = this._base / 16;
+
+        ctx.save();
+        ctx.translate(x1, y1);
+        ctx.rotate(angle);
+        ctx.imageSmoothingEnabled = false;
+
+        // Repeat the rail portion of the original sprite.
+        // Source columns 3-14 contain a repeatable rail section.
+        const sourceX = 3;
+        const sourceY = 6;
+        const sourceWidth = 12;
+        const sourceHeight = 4;
+
+        const segmentLength = sourceWidth * scale;
+        const railHeight = sourceHeight * scale;
+
+        for (let offset = 0; offset < length; offset += segmentLength) {
+            const drawWidth = Math.min(segmentLength, length - offset);
+
+            ctx.drawImage(
+                sprite,
+                sourceX,
+                sourceY,
+                sourceWidth * (drawWidth / segmentLength),
+                sourceHeight,
+                offset,
+                -railHeight / 2,
+                drawWidth,
+                railHeight
+            );
+        }
+
+        ctx.restore();
+    }
+
+    /**
+     * Draw a curved track using short sections of the original rail sprite.
+     */
+    _drawCurvedRail(cx, cy, radius, startAngle, endAngle) {
+        const segmentCount = 32;
+        const angleStep = (endAngle - startAngle) / segmentCount;
+
+        for (let i = 0; i < segmentCount; i++) {
+            const a1 = startAngle + i * angleStep;
+            const a2 = startAngle + (i + 1) * angleStep;
+
+            const x1 = cx + Math.cos(a1) * radius;
+            const y1 = cy + Math.sin(a1) * radius;
+
+            const x2 = cx + Math.cos(a2) * radius;
+            const y2 = cy + Math.sin(a2) * radius;
+
+            this._drawRailSpriteSegment(x1, y1, x2, y2);
+        }
+    }
+
+    /**
+     * Draw the original closed track endpoint.
+     * The square remains upright regardless of rail orientation.
+     */
+    _drawRailEndCap(x, y) {
+        const ctx = this._context;
+        const sprite = this._railSprite;
+
+        const scale = this._base / 16;
+
+        // Original square endpoint artwork.
+        const sourceX = 20;
+        const sourceY = 4;
+        const sourceWidth = 9;
+        const sourceHeight = 9;
+
+        const width = sourceWidth * scale;
+        const height = sourceHeight * scale;
+
+        ctx.save();
+
+        // Keep the sprite aligned with the level's horizontal
+        // and vertical axes, including its bottom-right shadow.
+        ctx.imageSmoothingEnabled = false;
+
+        ctx.drawImage(
+            sprite,
+            sourceX,
+            sourceY,
+            sourceWidth,
+            sourceHeight,
+            x - width / 2,
+            y - height / 2,
+            width,
+            height
+        );
+
+        ctx.restore();
+    }
+
+    /**
+    * Draw track geometry for object type 59.
+    * Temporary diagnostic renderer for straight tracks.
+    */
+    _drawRail(courseObject) {
+        const ctx = this._context;
+        const base = this._base;
+        const index = (courseObject.flags >>> 22) & 7;
+
+        // Decode the two endpoint values from extendedData.
+        const extended = courseObject.extendedData >>> 0;
+
+        const endpointA = (extended >>> 16) & 0xFFFF;
+        const endpointB = extended & 0xFFFF;
+
+        // Endpoint codes 0x70-0x77 are closed.
+        // Endpoint codes 0x80-0x87 are open.
+        const endpointAClosed = endpointA >= 0x70 && endpointA <= 0x77;
+        const endpointBClosed = endpointB >= 0x70 && endpointB <= 0x77;
+
+        // Shift tracks one tile right and one tile up.
+        const x = (courseObject.x + 1) * base;
+        const y = this._yFix - (courseObject.y + 1) * base;
+
+        // Endpoint offsets relative to the stored position.
+        const endpoints = {
+            0: [[-base, 0], [base, 0]],             // Horizontal
+            1: [[0, -base], [0, base]],             // Vertical
+            2: [[-base, -base], [base, base]],      // Descending diagonal
+            3: [[-base, base], [base, -base]]       // Ascending diagonal
+        };
+
+        ctx.save();
+
+        // Draw the track's dark outer rail.
+        ctx.strokeStyle = "#101820";
+        ctx.lineWidth = 8;
+        ctx.lineCap = "butt";
+
+        ctx.beginPath();
+
+        if (index in endpoints) {
+            const points = endpoints[index];
+
+            const x1 = x + points[0][0];
+            const y1 = y + points[0][1];
+
+            const x2 = x + points[1][0];
+            const y2 = y + points[1][1];
+
+            // Draw the existing rail artwork.
+            this._drawRailSpriteSegment(x1, y1, x2, y2);
+
+            // Draw upright endpoint caps for all straight tracks.
+            // Vertical tracks store their endpoint order in reverse.
+            const reverseEndpoints = index === 1;
+
+            if (endpointAClosed) {
+                this._drawRailEndCap(
+                    reverseEndpoints ? x2 : x1,
+                    reverseEndpoints ? y2 : y1
+                );
+            }
+
+            if (endpointBClosed) {
+                this._drawRailEndCap(
+                    reverseEndpoints ? x1 : x2,
+                    reverseEndpoints ? y1 : y2
+                );
+            }
+        } else {
+            // Curved tracks use the verified centers and radius.
+            const r = 2 * base;
+
+            let cx, cy, startAngle, endAngle;
+
+            switch (index) {
+                case 4:
+                    // Left-hand curve: upper-left to lower-right.
+                    cx = x + base;
+                    cy = y - base;
+                    startAngle = Math.PI / 2;
+                    endAngle = Math.PI;
+                    break;
+
+                case 5:
+                    // Right-hand curve: upper-right to lower-left.
+                    cx = x - base;
+                    cy = y + base;
+                    startAngle = -Math.PI / 2;
+                    endAngle = 0;
+                    break;
+
+                case 6:
+                    // Preserve the verified third curve.
+                    cx = x + base;
+                    cy = y + base;
+                    startAngle = Math.PI;
+                    endAngle = Math.PI * 1.5;
+                    break;
+
+                case 7:
+                    // Fourth curve: lower-left to upper-right.
+                    cx = x - base;
+                    cy = y - base;
+                    startAngle = 0;
+                    endAngle = Math.PI / 2;
+                    break;
+            }
+
+            // Draw the curved rail using the original track sprite.
+            this._drawCurvedRail(cx, cy, r, startAngle, endAngle);
+
+            // Calculate the two endpoints of the quarter-circle.
+            const x1 = cx + Math.cos(startAngle) * r;
+            const y1 = cy + Math.sin(startAngle) * r;
+
+            const x2 = cx + Math.cos(endAngle) * r;
+            const y2 = cy + Math.sin(endAngle) * r;
+
+            // Each orientation has a verified start/end ordering.
+            // Map CDT endpoint A and B independently to those positions.
+            const endpointMapping = {
+                4: { a: 0, b: 1 },
+                5: { a: 1, b: 0 },
+                6: { a: 1, b: 0 },
+                7: { a: 0, b: 1 }
+            };
+
+            const mapping = endpointMapping[index];
+
+            const positions = [
+                { x: x1, y: y1 },
+                { x: x2, y: y2 }
+            ];
+
+            const positionA = positions[mapping.a];
+            const positionB = positions[mapping.b];
+
+            // The physical A/B endpoint assignment is reversed
+            // relative to the current curved-track mapping.
+            if (endpointBClosed && positionA) {
+                this._drawRailEndCap(positionA.x, positionA.y);
+            }
+
+            if (endpointAClosed && positionB) {
+                this._drawRailEndCap(positionB.x, positionB.y);
+            }
+        }
+
+        ctx.restore();
     }
 
     /**
