@@ -644,12 +644,51 @@ class Draw {
                     }
                 });
 
-                // Pass 3: Draw all remaining objects in their original order.
+                // Pass 3: Draw pipe-attached objects behind their pipes.
+                const pipeLinkIds = new Set(
+                    _objects
+                        .filter(obj => obj.type === 9 && obj.linkId !== -1)
+                        .map(obj => obj.linkId)
+                );
+
+                _objects.forEach(function (courseObject) {
+                    const type = courseObject.type;
+
+                    if (
+                        type === 9 ||
+                        type === 59 ||
+                        type === 66 ||
+                        type === 38 ||
+                        courseObject.linkId === -1 ||
+                        !pipeLinkIds.has(courseObject.linkId)
+                    ) {
+                        return;
+                    }
+
+                    if ($this._blocks.hasDraw(type)) {
+                        $this._drawObjectFromTheme($this._blocks, courseObject);
+                    }
+                    else if ($this._monsters.hasDraw(type)) {
+                        $this._drawObjectFromTheme($this._monsters, courseObject);
+                    }
+                });
+
+                // Pass 4: Draw remaining objects, with pipes covering their attachments.
                 _objects.forEach(function (courseObject) {
                     let type = courseObject.type;
 
-                    // These objects were already drawn.
+                    // Skip objects already drawn in earlier passes.
                     if (type === 66 || type === 38) return;
+
+                    // Pipe-attached objects were drawn in Pass 3.
+                    if (
+                        type !== 9 &&
+                        type !== 59 &&
+                        courseObject.linkId !== -1 &&
+                        pipeLinkIds.has(courseObject.linkId)
+                    ) {
+                        return;
+                    }
 
                     if (type === 59) {
                         $this._drawRail(courseObject);
@@ -1011,6 +1050,234 @@ class Draw {
             _ts = _theme.getThemeSize(),
             _base = $this._base;
         let x = courseObject.x, y = courseObject.y;
+
+        // Determine rotation for objects attached to pipes.
+        let pipeRotation = 0;
+
+        if (courseObject.type !== 9 && courseObject.linkId !== -1) {
+            const pipe = this._objects.find(obj =>
+                obj.type === 9 && obj.linkId === courseObject.linkId
+            );
+
+            if (pipe) {
+                const direction = (pipe.flags & 0x60) / 0x20;
+
+                const rotations = {
+                    0: 90,   // Right
+                    1: -90,  // Left
+                    2: 0,    // Up
+                    3: 180   // Down
+                };
+
+                pipeRotation = rotations[direction] || 0;
+                // Fine-tune pipe attachment positions.
+                // CDT Y coordinates increase upward.
+                // Fine-tune pipe-attached object positions.
+                // Type 1 = Koopa Troopa; type 18 = P Switch.
+                // Positive Y moves upward in CDT coordinates.
+                const pipeOffsets = {
+                    1: { // Koopa Troopa
+                        0: { x: 1.0, y: -1.0 },   // Right
+                        1: { x: -1.0, y: -1.0 },  // Left
+                        2: { x: 0, y: 0 },        // Up
+                        3: { x: 0, y: -2.0 }      // Down
+                    },
+                    18: { // P Switch
+                        0: { x: 0.75, y: -0.5 },  // Right
+                        1: { x: -0.75, y: -0.5 }, // Left
+                        2: { x: 0, y: 0.25 },     // Up
+                        3: { x: 0, y: -1.25 }     // Down
+                    }
+                };
+
+                const offset = (
+                    courseObject.type === 1 && courseObject.size === 2
+                )
+                    ? undefined
+                    : pipeOffsets[courseObject.type]?.[direction];
+
+                if (offset) {
+                    x += offset.x;
+                    y += offset.y;
+                }
+
+                // General offsets for enlarged pipe-attached enemies.
+                if (
+                    courseObject.size === 2 &&
+                    courseObject.type !== 1 &&
+                    courseObject.type !== 18 &&
+                    courseObject.type !== 15 &&
+                    courseObject.type !== 41 &&
+                    courseObject.type !== 58 &&
+                    courseObject.type !== 46 &&
+                    courseObject.type !== 3 &&
+                    courseObject.type !== 61 &&
+                    courseObject.type !== 0 &&
+                    courseObject.type !== 2 &&
+                    courseObject.type !== 42 &&
+                    courseObject.type !== 60 &&
+                    courseObject.type !== 56 &&
+                    courseObject.type !== 57 &&
+                    courseObject.type !== 52 &&
+                    courseObject.type !== 48 &&
+                    courseObject.type !== 25 &&
+                    courseObject.type !== 28 &&
+                    courseObject.type !== 40 &&
+                    courseObject.type !== 39
+                ) {
+                    const largeEnemyOffsets = {
+                        0: { x: 0.5, y: -1.5 }, // Right
+                        1: { x: 0, y: -1.0 },   // Left
+                        2: { x: 0.5, y: 0 },    // Up
+                        3: { x: 0, y: -1.5 }    // Down
+                    };
+
+                    const largeOffset = largeEnemyOffsets[direction];
+
+                    if (largeOffset) {
+                        x += largeOffset.x;
+                        y += largeOffset.y;
+                    }
+                }
+
+                // Individually calibrated offsets for enlarged enemies and fixed-size special objects.
+                // Direction indicates the pipe's orientation: 0 = right, 1 = left, 2 = up, 3 = down.
+                // Hammer Bro uses width rather than size to identify its enlarged form.
+                if (
+                    courseObject.size === 2 ||
+                    (courseObject.type === 3 && courseObject.width > 1) ||
+                    courseObject.type === 42
+                ) {
+
+                    // Shared enlarged-enemy offsets.
+                    const tallEnemyOffsets = {
+                        0: { x: 0.5, y: -1.5 },  // Right
+                        1: { x: -0.5, y: -0.5 }, // Left
+                        2: { x: 0.5, y: -0.5 },  // Up
+                        3: { x: -0.5, y: -1.5 }  // Down
+                    };
+
+                    const centeredEnemyOffsets = {
+                        0: { x: 0, y: -1 },       // Right
+                        1: { x: 0, y: 0 },        // Left
+                        2: { x: 0.5, y: -0.5 },   // Up
+                        3: { x: -0.5, y: -0.5 }   // Down
+                    };
+
+                    const compactEnemyOffsets = {
+                        0: { x: 0.5, y: -1 },   // Right
+                        1: { x: -0.5, y: 0 },  // Left
+                        2: { x: 0.5, y: 0 },   // Up
+                        3: { x: -0.5, y: -1 }  // Down
+                    };
+
+                    const shellEnemyOffsets = {
+                        0: { x: 0.5, y: 0 },   // Right
+                        1: { x: -0.5, y: 0 },  // Left
+                        2: { x: 0, y: 0.5 },   // Up
+                        3: { x: 0, y: -0.5 }  // Down
+                    };
+
+                    // Enlarged pipe-enemy offsets by type and direction.
+                    const enlargedEnemyOffsets = {
+                        0: { // Goomba
+                            0: { x: 0.8, y: -1.5 },
+                            1: { x: -0.8, y: -0.5 },
+                            2: { x: 0.5, y: -0.2 },
+                            3: { x: -0.5, y: -1.8 }
+                        },
+
+                        1: tallEnemyOffsets, // Big Koopa Troopa
+
+                        2: tallEnemyOffsets, // Piranha Plant
+
+                        3: { // Hammer Bro
+                            0: { x: 1, y: -1 },
+                            1: { x: 0, y: -1 },
+                            2: { x: 0.5, y: -0.5 },
+                            3: { x: 0.5, y: -1.5 }
+                        },
+
+                        15: { // Bob-omb
+                            0: { x: 0.5, y: -1 },
+                            1: { x: -0.5, y: 0 },
+                            2: { x: 0.5, y: 0 },
+                            3: { x: -0.5, y: -1 }
+                        },
+
+                        25: shellEnemyOffsets, // Spiny
+
+                        28: shellEnemyOffsets, // Buzzy Beetle
+
+                        39: { // Magikoopa
+                            0: { x: 0, y: -1.5 },
+                            1: { x: 0, y: -0.5 },
+                            2: { x: 0.5, y: -1 },
+                            3: { x: -0.5, y: -1 }
+                        },
+
+                        40: shellEnemyOffsets, // Spike Top
+
+                        41: centeredEnemyOffsets, // Boo
+
+                        42: { // Koopa Clown Car
+                            0: { x: 1.2, y: -1 },
+                            1: { x: -0.2, y: -1 },
+                            2: { x: 0.5, y: -0.3 },
+                            3: { x: 0.5, y: -1.7 }
+                        },
+
+                        46: tallEnemyOffsets, // Dry Bones
+
+                        48: { // Blooper
+                            0: { x: -0.5, y: -1.5 },
+                            1: { x: 0.5, y: -0.5 },
+                            2: { x: 0.5, y: -1.5 },
+                            3: { x: -0.5, y: -0.5 }
+                        },
+
+                        52: { // Wiggler / Angry Wiggler
+                            0: { x: 0.5, y: -0.6 },
+                            1: { x: -0.7, y: 0 },
+                            2: { x: 0.2, y: 0 },
+                            3: { x: -0.5, y: -1 }
+                        },
+
+                        56: compactEnemyOffsets, // Cheep Cheep
+
+                        57: compactEnemyOffsets, // Muncher
+
+                        58: { // Rocky Wrench / Monty Mole
+                            0: tallEnemyOffsets,     // Rocky Wrench
+                            1: centeredEnemyOffsets  // Monty Mole
+                        },
+
+                        60: centeredEnemyOffsets, // Podoboo
+
+                        61: { // Chain Chomp
+                            0: { x: 0.5, y: -1.3 },
+                            1: { x: -0.7, y: 0 },
+                            2: { x: 0.5, y: 0 },
+                            3: { x: -0.7, y: -1.2 }
+                        }
+                    };
+
+                    const enemyOffsets = enlargedEnemyOffsets[courseObject.type];
+
+                    const enlargedOffset = courseObject.type === 58
+                        ? enemyOffsets?.[courseObject.subType]?.[direction]
+                        : enemyOffsets?.[direction];
+
+                    if (enlargedOffset) {
+                        x += enlargedOffset.x;
+                        y += enlargedOffset.y;
+                    }
+                }
+
+            } // End if (pipe)
+        } // End pipe-attachment check
+
+        // Position skull coasters attached to curved tracks.
 
         // Position skull coasters attached to curved tracks.
         if (courseObject.type === 36 && courseObject.linkId !== -1) {
@@ -1425,38 +1692,86 @@ class Draw {
                 spriteX = courseObject.subType ? 6 : 5;
             }
 
+            // Use pipe rotation for pipe-attached enemies.
+            // Otherwise, preserve their existing surface-orientation behavior.
+            const attachedToPipe = courseObject.linkId !== -1 &&
+                $this._objects.some(obj =>
+                    obj.type === 9 &&
+                    obj.linkId === courseObject.linkId
+                );
+
             // Map surface orientation to sprite rotation and flipping.
             let angle = 0;
             let flipX = false;
 
-            switch (orientation) {
-                case 0:
-                    // First vertical wall: rotate 90° counterclockwise and flip horizontally.
-                    angle = -Math.PI / 2;
-                    flipX = true;
-                    break;
+            if (attachedToPipe) {
+                // Pipe directions:
+                // 0 = Right, 1 = Left, 2 = Up, 3 = Down.
+                // pipeRotation was calculated earlier in this function.
+                angle = pipeRotation * Math.PI / 180;
+                flipX = false;
 
-                case 1:
-                    // Second vertical wall: rotate 180° from current orientation.
-                    angle = Math.PI / 2;
-                    break;
+            } else {
+                // Preserve existing surface-orientation behavior.
+                switch (orientation) {
+                    case 0:
+                        // First vertical wall.
+                        angle = -Math.PI / 2;
+                        flipX = true;
+                        break;
 
-                case 2:
-                    // Ceiling: upside down and horizontally flipped.
-                    angle = Math.PI;
-                    flipX = true;
-                    break;
+                    case 1:
+                        // Second vertical wall.
+                        angle = Math.PI / 2;
+                        break;
 
-                case 3:
-                default:
-                    // Floor: normal orientation.
-                    angle = 0;
-                    break;
+                    case 2:
+                        // Ceiling.
+                        angle = Math.PI;
+                        flipX = true;
+                        break;
+
+                    case 3:
+                    default:
+                        // Floor.
+                        angle = 0;
+                        break;
+                }
             }
 
-            // Center of the enemy's tile.
-            const centerX = (x + 0.5) * _base;
-            const centerY = $this._yFix - (y + 0.5) * _base;
+            // Scale enlarged enemies to 2x their normal size.
+            const spriteSize = _base * courseObject.size;
+
+            // Preserve the original anchor point for normal-sized enemies.
+            let centerX = (x + 0.5) * _base;
+            let centerY = $this._yFix - (y + 0.5) * _base;
+
+            // Surface-specific positioning for enlarged enemies.
+            // Pipe-attached enemies retain their independent offsets.
+            if (!attachedToPipe && courseObject.size === 2) {
+                switch (orientation) {
+                    case 0:
+                        // First vertical wall: move sprite left.
+                        centerX -= _base / 2;
+                        break;
+
+                    case 1:
+                        // Second vertical wall: move sprite left.
+                        centerX -= _base / 2;
+                        break;
+
+                    case 2:
+                        // Ceiling: move sprite upward.
+                        centerY -= _base / 2;
+                        break;
+
+                    case 3:
+                    default:
+                        // Floor: raise enlarged enemies to prevent ground overlap.
+                        centerY -= _base / 2;
+                        break;
+                }
+            }
 
             $this._context.save();
             $this._context.translate(centerX, centerY);
@@ -1467,12 +1782,13 @@ class Draw {
                 _titleset,
                 spriteX * _ts, spriteY * _ts,
                 _ts, _ts,
-                -_base / 2, -_base / 2,
-                _base, _base
+                -spriteSize / 2, -spriteSize / 2,
+                spriteSize, spriteSize
             );
 
             $this._context.restore();
             return;
+
         }
 
         /* Draw cannons using the original sprite with correct aiming rotation. */
@@ -1659,9 +1975,28 @@ class Draw {
         }
 
         /* multiples cells */
-        if(def.extend) {
+        if (def.extend) {
             let ext = def.extend(courseObject);
-            ext.forEach(function(drawExt) {
+
+            // Rotate all sprite tiles together for pipe-attached objects.
+            if (pipeRotation && ext.length > 0) {
+                const minX = Math.min(...ext.map(tile => tile.x));
+                const maxX = Math.max(...ext.map(tile => tile.x));
+                const minY = Math.min(...ext.map(tile => tile.y));
+                const maxY = Math.max(...ext.map(tile => tile.y));
+
+                // Center of the complete assembled sprite in canvas coordinates.
+                const centerX = (x + (minX + maxX + 1) / 2) * _base;
+                const centerY = this._yFix -
+                    (y + (minY + maxY + 2) / 2) * _base;
+
+                this._context.save();
+                this._context.translate(centerX, centerY);
+                this._context.rotate(pipeRotation * Math.PI / 180);
+                this._context.translate(-centerX, -centerY);
+            }
+
+            ext.forEach(function (drawExt) {
                 let opacity = (drawExt.opacity) ? drawExt.opacity : null,
                     rotation = (drawExt.rotation) ? drawExt.rotation : null;
                 var objectPaint = {
@@ -1671,6 +2006,10 @@ class Draw {
                     "opacity":opacity, "rotation":rotation};
                 $this._paintObject(objectPaint);
             });
+            // Restore the canvas after rotating the complete object.
+            if (pipeRotation && ext.length > 0) {
+                this._context.restore();
+            }
         }
         /* only one cell */
         else {
@@ -1680,9 +2019,11 @@ class Draw {
                 xT = nPos.xT; yT = nPos.yT;
             }
             var objectPaint = {
-                "titleset":_titleset, "xT":xT, "yT":yT, "xTs":_ts, "yTs":_ts,
-                "x":x, "y":y, "xExt":0, "yExt":0, "xBase":_base, "yBase":_base, 
-                "size":courseObject.size, "width":courseObject.width};
+                "titleset": _titleset, "xT": xT, "yT": yT, "xTs": _ts, "yTs": _ts,
+                "x": x, "y": y, "xExt": 0, "yExt": 0, "xBase": _base, "yBase": _base,
+                "size": courseObject.size, "width": courseObject.width,
+                "rotation": pipeRotation
+            };
             $this._paintObject(objectPaint);
         }
     }
