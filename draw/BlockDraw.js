@@ -323,8 +323,6 @@ BlockDraw._defitions = {
     49:{"extend":function(courseObject) {
         let width = courseObject.width;
         var extend = [];
-        if(this._gameTheme !== "castle") { return []; }
-        /* only in "castle" theme */
         for(let x=0; x<width; x++) {
             extend.push({"x":x, "y":0, "xT":15, "yT":15});
         }
