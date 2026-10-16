@@ -1150,41 +1150,45 @@ class Draw {
                 ) {
 
                     // Shared enlarged-enemy offsets.
+                    // Big Koopa Troopa, Piranha Plant, Dry Bones, and Rocky Wrench.
                     const tallEnemyOffsets = {
-                        0: { x: 0.5, y: -1.5 },  // Right
-                        1: { x: -0.5, y: -0.5 }, // Left
-                        2: { x: 0.5, y: -0.5 },  // Up
-                        3: { x: -0.5, y: -1.5 }  // Down
+                        0: { x: -0.5, y: -2 },  // Right
+                        1: { x: -0.5, y: -1 }, // Left
+                        2: { x: 0, y: -1.5 },  // Up
+                        3: { x: -1, y: -1.5 }  // Down
                     };
 
+                    // Shared offsets: Boo, Monty Mole, Podoboo (Lava Bubble).
                     const centeredEnemyOffsets = {
-                        0: { x: 0, y: -1 },       // Right
-                        1: { x: 0, y: 0 },        // Left
-                        2: { x: 0.5, y: -0.5 },   // Up
-                        3: { x: -0.5, y: -0.5 }   // Down
+                        0: { x: -0.5, y: -1.5 },  // Right
+                        1: { x: -0.5, y: -0.5 },   // Left
+                        2: { x: 0, y: -1 },  // Up
+                        3: { x: -1, y: -1 }  // Down
                     };
 
+                    // Shared offsets: Cheep Cheep, Muncher.
                     const compactEnemyOffsets = {
-                        0: { x: 0.5, y: -1 },   // Right
-                        1: { x: -0.5, y: 0 },  // Left
-                        2: { x: 0.5, y: 0 },   // Up
-                        3: { x: -0.5, y: -1 }  // Down
+                        0: { x: -0.5, y: -1.5 },   // Right
+                        1: { x: -0.5, y: -0.5 },  // Left
+                        2: { x: 0, y: -1 },   // Up
+                        3: { x: -1, y: -1 }  // Down
                     };
 
+                    // Shared offsets: Spiny, Buzzy Beetle, Spike Top.
                     const shellEnemyOffsets = {
-                        0: { x: 0.5, y: 0 },   // Right
-                        1: { x: -0.5, y: 0 },  // Left
-                        2: { x: 0, y: 0.5 },   // Up
-                        3: { x: 0, y: -0.5 }  // Down
+                        0: { x: -0.5, y: -0.5 },   // Right
+                        1: { x: -0.5, y: -0.5 },  // Left
+                        2: { x: -0.5, y: -0.5 },   // Up
+                        3: { x: -0.5, y: -0.5 }  // Down
                     };
 
                     // Enlarged pipe-enemy offsets by type and direction.
                     const enlargedEnemyOffsets = {
                         0: { // Goomba
-                            0: { x: 0.8, y: -1.5 },
-                            1: { x: -0.8, y: -0.5 },
-                            2: { x: 0.5, y: -0.2 },
-                            3: { x: -0.5, y: -1.8 }
+                            0: { x: 0, y: -2 },  // Right
+                            1: { x: -1, y: -1 },  // Left
+                            2: { x: 0, y: -1 },  // Up
+                            3: { x: -1, y: -2 } // Down
                         },
 
                         1: tallEnemyOffsets, // Big Koopa Troopa
@@ -1192,17 +1196,17 @@ class Draw {
                         2: tallEnemyOffsets, // Piranha Plant
 
                         3: { // Hammer Bro
-                            0: { x: 1, y: -1 },
-                            1: { x: 0, y: -1 },
-                            2: { x: 0.5, y: -0.5 },
-                            3: { x: 0.5, y: -1.5 }
+                            0: { x: 0.5, y: -1.5 },  // Right
+                            1: { x: -0.5, y: -1.5 },  // Left
+                            2: { x: 0, y: -1 },  // Up
+                            3: { x: 0, y: -2 } // Down
                         },
 
                         15: { // Bob-omb
-                            0: { x: 0.5, y: -1 },
-                            1: { x: -0.5, y: 0 },
-                            2: { x: 0.5, y: 0 },
-                            3: { x: -0.5, y: -1 }
+                            0: { x: -0.5, y: -1.5 },  // Right
+                            1: { x: -0.5, y: -0.5 },  // Left
+                            2: { x: 0, y: -1 },  // Up
+                            3: { x: -1, y: -1 } // Down
                         },
 
                         25: shellEnemyOffsets, // Spiny
@@ -1210,10 +1214,10 @@ class Draw {
                         28: shellEnemyOffsets, // Buzzy Beetle
 
                         39: { // Magikoopa
-                            0: { x: 0, y: -1.5 },
-                            1: { x: 0, y: -0.5 },
-                            2: { x: 0.5, y: -1 },
-                            3: { x: -0.5, y: -1 }
+                            0: { x: -0.5, y: -2 },  // Right
+                            1: { x: -0.5, y: -1 },  // Left
+                            2: { x: 0, y: -1.5 },  // Up
+                            3: { x: -1, y: -1.5 } // Down
                         },
 
                         40: shellEnemyOffsets, // Spike Top
@@ -1221,26 +1225,26 @@ class Draw {
                         41: centeredEnemyOffsets, // Boo
 
                         42: { // Koopa Clown Car
-                            0: { x: 1.2, y: -1 },
-                            1: { x: -0.2, y: -1 },
-                            2: { x: 0.5, y: -0.3 },
-                            3: { x: 0.5, y: -1.7 }
+                            0: { x: 1, y: -1.5 },  // Right
+                            1: { x: -1, y: -1.5 },  // Left
+                            2: { x: 0, y: -0.5 },  // Up
+                            3: { x: 0, y: -2.5 } // Down
                         },
 
                         46: tallEnemyOffsets, // Dry Bones
 
                         48: { // Blooper
-                            0: { x: -0.5, y: -1.5 },
-                            1: { x: 0.5, y: -0.5 },
-                            2: { x: 0.5, y: -1.5 },
-                            3: { x: -0.5, y: -0.5 }
+                            0: { x: -1, y: -2 },  // Right
+                            1: { x: 0, y: -1 },  // Left
+                            2: { x: 0, y: -2 },  // Up
+                            3: { x: -1, y: -1 } // Down
                         },
 
                         52: { // Wiggler / Angry Wiggler
-                            0: { x: 0.5, y: -0.6 },
-                            1: { x: -0.7, y: 0 },
-                            2: { x: 0.2, y: 0 },
-                            3: { x: -0.5, y: -1 }
+                            0: { x: 0, y: -2 },  // Right
+                            1: { x: -1, y: -1 },  // Left
+                            2: { x: 0, y: -1 },  // Up
+                            3: { x: -1, y: -2 } // Down
                         },
 
                         56: compactEnemyOffsets, // Cheep Cheep
@@ -1255,10 +1259,10 @@ class Draw {
                         60: centeredEnemyOffsets, // Podoboo
 
                         61: { // Chain Chomp
-                            0: { x: 0.5, y: -1.3 },
-                            1: { x: -0.7, y: 0 },
-                            2: { x: 0.5, y: 0 },
-                            3: { x: -0.7, y: -1.2 }
+                            0: { x: 0, y: -1.5 },  // Right
+                            1: { x: -1, y: -0.5 },  // Left
+                            2: { x: 0, y: -0.5 },  // Up
+                            3: { x: -1, y: -1.5 } // Down
                         }
                     };
 
@@ -1271,6 +1275,49 @@ class Draw {
                     if (enlargedOffset) {
                         x += enlargedOffset.x;
                         y += enlargedOffset.y;
+                    }
+                    // NSMBU-specific adjustments for enlarged pipe-attached enemies.
+                    // Koopa Troopa, Piranha Plant, Bob-omb, Spiny, Buzzy Beetle,
+                    // Spike Top, Dry Bones, Cheep Cheep, Muncher, and Rocky Wrench.
+                    const nsmbOffsetEnemies = [
+                        1,  // Koopa Troopa
+                        2,  // Piranha Plant
+                        15, // Bob-omb
+                        25, // Spiny
+                        28, // Buzzy Beetle
+                        40, // Spike Top
+                        46, // Dry Bones
+                        56, // Cheep Cheep
+                        57  // Muncher
+                    ];
+
+                    const needsNSMBOffset =
+                        $this._gameMode === "WU" &&
+                        (
+                            nsmbOffsetEnemies.includes(courseObject.type) ||
+                            (courseObject.type === 58 && courseObject.subType === 0) // Rocky Wrench
+                        );
+
+                    if (needsNSMBOffset) {
+                        const nsmbDirectionOffsets = {
+                            0: { x: 0.5, y: 0 },    // Right
+                            1: { x: -0.5, y: 0 },   // Left
+                            2: { x: 0, y: 0.5 },    // Up
+                            3: { x: 0, y: -0.5 }   // Down
+                        };
+
+                        const offset = nsmbDirectionOffsets[direction];
+
+                        if (offset) {
+                            x += offset.x;
+                            y += offset.y;
+                        }
+                    }
+
+                    // NSMBU: Move enlarged Wiggler / Angry Wiggler up by 0.5 tiles
+                    // for all four pipe directions.
+                    if ($this._gameMode === "WU" && courseObject.type === 52) {
+                        y += 0.5;
                     }
                 }
 
@@ -1977,6 +2024,22 @@ class Draw {
         /* multiples cells */
         if (def.extend) {
             let ext = def.extend(courseObject);
+
+            // Hide the wooden stake on pipe-attached Chain Chomps.
+            // Tile (12, 6) is the stake; tile (11, 7) is the Chain Chomp.
+            const chainChompPipeAttached =
+                courseObject.type === 61 &&
+                courseObject.linkId !== -1 &&
+                this._objects.some(obj =>
+                    obj.type === 9 &&
+                    obj.linkId === courseObject.linkId
+                );
+
+            if (chainChompPipeAttached) {
+                ext = ext.filter(tile =>
+                    !(tile.xT === 12 && tile.yT === 6)
+                );
+            }
 
             // Rotate all sprite tiles together for pipe-attached objects.
             if (pipeRotation && ext.length > 0) {
