@@ -1051,6 +1051,138 @@ class Draw {
             _base = $this._base;
         let x = courseObject.x, y = courseObject.y;
 
+        // Directional offsets for normal-sized pipe-attached enemies.
+        // Positive X moves right; positive Y moves up.
+
+        // Group 1: Rocky Wrench, Wiggler, Magikoopa,
+        // Dry Bones, Goomba, Hammer Bro, Piranha Plant.
+        const sharedNormalEnemyOffsets = {
+            0: { x: 0.5, y: -1.5 },  // Right
+            1: { x: -1.5, y: -1.5 }, // Left
+            2: { x: -0.5, y: -0.5 }, // Up
+            3: { x: -0.5, y: -2.5 }  // Down
+        };
+
+        // Group 2: Buzzy Beetle, Spiny, Spike Top, Koopa Troopa.
+        const shelledNormalEnemyOffsets = {
+            0: { x: -0.5, y: -0.5 }, // Right
+            1: { x: -0.5, y: -0.5 }, // Left
+            2: { x: -0.5, y: -0.5 }, // Up
+            3: { x: -0.5, y: -0.5 }  // Down
+        };
+
+        // Group 3: Bob-omb, Monty Mole, Muncher, Boo,
+        // Cheep Cheep, Chain Chomp, Podoboo.
+        const centeredNormalEnemyOffsets = {
+            0: { x: 0, y: -1 },       // Right
+            1: { x: -1, y: -1 },      // Left
+            2: { x: -0.5, y: -0.5 },  // Up
+            3: { x: -0.5, y: -1.5 }   // Down
+        };
+
+        // Blooper: Individual directional offsets.
+        const blooperNormalEnemyOffsets = {
+            0: { x: 0, y: -1.5 }, // Right
+            1: { x: -1, y: -1.5 }, // Left
+            2: { x: -0.5, y: -1 }, // Up
+            3: { x: -0.5, y: -2 }  // Down
+        };
+
+        // NSMBU-specific adjustments for normal-sized pipe-attached enemies.
+        // These adjustments are added to the existing calibrated offsets.
+
+        // Shared NSMBU group: Buzzy Beetle, Spike Top, Spiny,
+        // Muncher, Bob-omb, Boo.
+        const nsmbSharedNormalEnemyOffsets = {
+            0: { x: 0.2, y: 0 },  // Right
+            1: { x: -0.2, y: 0 }, // Left
+            2: { x: 0, y: 0.2 },  // Up
+            3: { x: 0, y: -0.2 }  // Down
+        };
+
+        // Wiggler / Angry Wiggler: Shared NSMBU adjustment for all pipe directions.
+        const nsmbWigglerNormalEnemyOffset = { x: 0, y: 0.5 };
+
+        const nsmbSharedNormalEnemyTypes = new Set([
+            15, 25, 28, 40, 41, 57
+        ]);
+
+        // Enemy type IDs for each shared group.
+        const sharedNormalEnemyTypes = new Set([
+            0, 2, 3, 39, 46, 52
+        ]);
+
+        const shelledNormalEnemyTypes = new Set([
+            1, 25, 28, 40
+        ]);
+
+        const centeredNormalEnemyTypes = new Set([
+            15, 41, 56, 57, 60, 61
+        ]);
+
+        // Find the pipe associated with this enemy.
+        const attachedPipe = courseObject.linkId !== -1
+            ? this._objects.find(obj =>
+                obj.type === 9 && obj.linkId === courseObject.linkId
+            )
+            : null;
+
+        // Apply directional offsets only to normal-sized,
+        // pipe-attached enemies.
+        if (
+            _theme === this._monsters &&
+            courseObject.size !== 2 &&
+            !(courseObject.type === 3 && courseObject.width > 1) &&
+            attachedPipe
+        ) {
+            const direction = (attachedPipe.flags & 0x60) / 0x20;
+            let offset;
+
+            if (courseObject.type === 58) {
+                // Type 58: Rocky Wrench (0), Monty Mole (1).
+                offset = courseObject.subType === 0
+                    ? sharedNormalEnemyOffsets[direction]
+                    : centeredNormalEnemyOffsets[direction];
+            }
+            else if (sharedNormalEnemyTypes.has(courseObject.type)) {
+                offset = sharedNormalEnemyOffsets[direction];
+            }
+            else if (shelledNormalEnemyTypes.has(courseObject.type)) {
+                offset = shelledNormalEnemyOffsets[direction];
+            }
+            else if (centeredNormalEnemyTypes.has(courseObject.type)) {
+                offset = centeredNormalEnemyOffsets[direction];
+            }
+            else if (courseObject.type === 48) {
+                // Blooper uses independent directional offsets.
+                offset = blooperNormalEnemyOffsets[direction];
+            }
+
+            // Apply the existing calibrated offsets.
+            if (offset) {
+                x += offset.x;
+                y += offset.y;
+            }
+
+            // Apply additional NSMBU-specific adjustments.
+            if ($this._gameMode === "WU") {
+                let nsmbOffset;
+
+                if (courseObject.type === 52) {
+                    // Wiggler / Angry Wiggler.
+                    nsmbOffset = nsmbWigglerNormalEnemyOffset;
+                }
+                else if (nsmbSharedNormalEnemyTypes.has(courseObject.type)) {
+                    nsmbOffset = nsmbSharedNormalEnemyOffsets[direction];
+                }
+
+                if (nsmbOffset) {
+                    x += nsmbOffset.x;
+                    y += nsmbOffset.y;
+                }
+            }
+        }
+
         // Determine rotation for objects attached to pipes.
         let pipeRotation = 0;
 
