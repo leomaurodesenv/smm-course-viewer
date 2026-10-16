@@ -342,18 +342,54 @@ MonsterDraw._defitions = {
         var extend = courseObject.extend;
         extend.push({"x":0, "y":0, "xT":15, "yT":0});
         return extend;
-    }},
-    52:{"extend":function(courseObject) {
-        var extend = courseObject.extend;
-        let add = 0.2,
-            subType = courseObject.subType;
-        extend.push({"x":add, "y":-add, "xT":9, "yT":4});
-        /* angry */
-        if(subType) { extend.push({"x":0, "y":0, "xT":9, "yT":5}); }
-        /* normal */
-        else { extend.push({"x":0, "y":0, "xT":8, "yT":5}); }
-        return extend;
-    }},    
+    }
+    },
+    52: {
+        "extend": function (courseObject, gameMode) {
+            const extend = [];
+            const isAngry = courseObject.subType !== 0;
+
+            // Shift NSMBU Wigglers slightly left.
+            const wigglerXOffset = gameMode === "WU" ? -0.25 : 0;
+
+            // Draw three overlapping body segments.
+            const bodyPositions = [
+                { x: 0.35, y: 0.20 }, // Rear segment
+                { x: 0.33, y: 0.10 }, // Middle segment
+                { x: 0.17, y: 0.05 }  // Front segment
+            ];
+
+            bodyPositions.forEach(position => {
+                extend.push({
+                    x: position.x + wigglerXOffset,
+                    y: position.y,
+                    xT: 9,
+                    yT: 4,
+                    customAngryBody: isAngry
+                });
+            });
+
+            // Draw the head after the body.
+            extend.push({
+                x: wigglerXOffset,
+                y: 0.10 + (gameMode === "WU" ? 0.25 : 0),
+                xT: isAngry ? 9 : 8,
+                yT: 5
+            });
+
+            // NSMBU already includes the flower in its head sprite.
+            if (!isAngry && gameMode !== "WU") {
+                extend.push({
+                    x: wigglerXOffset,
+                    y: 1,
+                    xT: 8,
+                    yT: 4
+                });
+            }
+
+            return extend;
+        }
+    },
     54:{"extend":function(courseObject) {
         var extend = [];
         extend.push({"x":0, "y":0, "xT":9, "yT":6});

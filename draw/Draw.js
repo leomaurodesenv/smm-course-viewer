@@ -41,7 +41,31 @@ class Draw {
         /*global MonsterDraw */
         /*eslint no-undef: "error"*/
         this._monsters = new MonsterDraw(this._gameMode, this._gameTheme);
-        this._images = [this._blocks.getTheme(), this._monsters.getTheme()];
+        // Load custom Angry Wiggler body artwork for each game style.
+        const wigglerFolders = {
+            M1: "smb1",
+            M3: "smb3",
+            MW: "smw",
+            WU: "nsmbu"
+        };
+
+        const angryWigglerFilenames = {
+            M1: "angry-wiggler-body-smb1.png",
+            M3: "angry-wiggler-body-smb3.png",
+            MW: "angry-wiggler-body-smw.png",
+            WU: "angry-wiggler-body-nsmb.png"
+        };
+
+        this._angryWigglerBody = new Image();
+        this._angryWigglerBody.src =
+            `./layout/draw/custom/${wigglerFolders[this._gameMode]}/${angryWigglerFilenames[this._gameMode]}`;
+
+        this._images = [
+            this._blocks.getTheme(),
+            this._monsters.getTheme(),
+            this._angryWigglerBody
+        ];
+
         /* draw configurations */
         let compare = function(a,b) {
             if (a.z < b.z) { return -1; }
@@ -145,10 +169,16 @@ class Draw {
         onload = function() {
             loadedCount++; allloaded();
         };
+
         /* loading all images */
-        $this._images.forEach(function(img) {
-            img.onload = onload; 
-            img.onerror = onerror;
+        $this._images.forEach(function (img) {
+            if (img.complete && img.naturalWidth > 0) {
+                // Already loaded, possibly from the browser cache.
+                onload();
+            } else {
+                img.onload = onload;
+                img.onerror = onerror;
+            }
         });
     }
 
@@ -184,15 +214,45 @@ class Draw {
         let x = courseObject.x, y = courseObject.y;
         /* multiples cells */
         if(def.extend) {
-            let ext = def.extend(courseObject);
+            let ext = def.extend(courseObject, $this._gameMode);
             ext.forEach(function(drawExt) {
                 let opacity = (drawExt.opacity) ? drawExt.opacity : null,
                     rotation = (drawExt.rotation) ? drawExt.rotation : null;
+                // Use custom artwork for Angry Wiggler body segments.
+                let spriteSheet = _titleset;
+                let spriteX = drawExt.xT;
+                let spriteY = drawExt.yT;
+                let spriteWidth = _ts;
+                let spriteHeight = _ts;
+
+                if (
+                    drawExt.customAngryBody &&
+                    $this._angryWigglerBody.complete &&
+                    $this._angryWigglerBody.naturalWidth > 0
+                ) {
+                    spriteSheet = $this._angryWigglerBody;
+                    spriteX = 0;
+                    spriteY = 0;
+                    spriteWidth = spriteSheet.naturalWidth;
+                    spriteHeight = spriteSheet.naturalHeight;
+                }
                 var objectPaint = {
-                    "titleset":_titleset, "xT":drawExt.xT, "yT":drawExt.yT, "xTs":_ts, "yTs":_ts,
-                    "x":x, "y":y, "xExt":drawExt.x, "yExt":drawExt.y, "xBase":_base, "yBase":_base, 
-                    "size":courseObject.size, "width":courseObject.width, 
-                    "opacity":opacity, "rotation":rotation};
+                    "titleset": spriteSheet,
+                    "xT": spriteX,
+                    "yT": spriteY,
+                    "xTs": spriteWidth,
+                    "yTs": spriteHeight,
+                    "x": x,
+                    "y": y,
+                    "xExt": drawExt.x,
+                    "yExt": drawExt.y,
+                    "xBase": _base,
+                    "yBase": _base,
+                    "size": courseObject.size,
+                    "width": courseObject.width,
+                    "opacity": opacity,
+                    "rotation": rotation
+                };
                 $this._paintObject(objectPaint);
             });
         }
