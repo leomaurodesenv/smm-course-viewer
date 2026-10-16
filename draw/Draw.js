@@ -41,7 +41,28 @@ class Draw {
         /*global MonsterDraw */
         /*eslint no-undef: "error"*/
         this._monsters = new MonsterDraw(this._gameMode, this._gameTheme);
-        this._images = [this._blocks.getTheme(), this._monsters.getTheme()];
+        // Load custom P Switch artwork for SMB1 and NSMBU.
+        const pSwitchFolders = {
+            M1: "smb1",
+            WU: "nsmbu"
+        };
+
+        this._customPSwitch = null;
+
+        if (pSwitchFolders[this._gameMode]) {
+            this._customPSwitch = new Image();
+            this._customPSwitch.src =
+                `./layout/draw/custom/${pSwitchFolders[this._gameMode]}/p-switch.png`;
+        }
+
+        this._images = [
+            this._blocks.getTheme(),
+            this._monsters.getTheme()
+        ];
+
+        if (this._customPSwitch) {
+            this._images.push(this._customPSwitch);
+        }
         /* draw configurations */
         let compare = function(a,b) {
             if (a.z < b.z) { return -1; }
@@ -146,9 +167,29 @@ class Draw {
             loadedCount++; allloaded();
         };
         /* loading all images */
-        $this._images.forEach(function(img) {
-            img.onload = onload; 
-            img.onerror = onerror;
+        $this._images.forEach(function (img) {
+            let handled = false;
+
+            img.onload = function () {
+                if (handled) return;
+                handled = true;
+                onload();
+            };
+
+            img.onerror = function (err) {
+                if (handled) return;
+                handled = true;
+                onerror(err);
+            };
+
+            // Handle images that finished loading before handlers were assigned.
+            if (img.complete) {
+                if (img.naturalWidth > 0) {
+                    img.onload();
+                } else {
+                    img.onerror({ target: img });
+                }
+            }
         });
     }
 
@@ -185,14 +226,35 @@ class Draw {
         /* multiples cells */
         if(def.extend) {
             let ext = def.extend(courseObject);
-            ext.forEach(function(drawExt) {
+
+            ext.forEach(function (drawExt) {
                 let opacity = (drawExt.opacity) ? drawExt.opacity : null,
                     rotation = (drawExt.rotation) ? drawExt.rotation : null;
+                // Replace only the P Switch, not the P Door.
+                const useCustomPSwitch =
+                    courseObject.type === 18 &&
+                    !courseObject.subType &&
+                    $this._customPSwitch !== null;
+
+                const sprite = useCustomPSwitch
+                    ? $this._customPSwitch
+                    : _titleset;
+
                 var objectPaint = {
-                    "titleset":_titleset, "xT":drawExt.xT, "yT":drawExt.yT, "xTs":_ts, "yTs":_ts,
-                    "x":x, "y":y, "xExt":drawExt.x, "yExt":drawExt.y, "xBase":_base, "yBase":_base, 
-                    "size":courseObject.size, "width":courseObject.width, 
-                    "opacity":opacity, "rotation":rotation};
+                    "titleset": sprite,
+                    "xT": useCustomPSwitch ? 0 : drawExt.xT,
+                    "yT": useCustomPSwitch ? 0 : drawExt.yT,
+                    "xTs": useCustomPSwitch ? sprite.naturalWidth : _ts,
+                    "yTs": useCustomPSwitch ? sprite.naturalHeight : _ts,
+                    "x": x, "y": y,
+                    "xExt": drawExt.x, "yExt": drawExt.y,
+                    "xBase": _base, "yBase": _base,
+                    "size": courseObject.size,
+                    "width": courseObject.width,
+                    "opacity": opacity,
+                    "rotation": rotation
+                };
+
                 $this._paintObject(objectPaint);
             });
         }
