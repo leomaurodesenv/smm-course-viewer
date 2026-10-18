@@ -282,8 +282,7 @@ class Draw {
         const enlarged = courseObject.size > 1 ||
             (courseObject.type === 3 && courseObject.width > 1);
 
-        // Calibrated offsets for normal-sized Buzzy Beetle,
-        // Spiny, and Spike Top.
+        // Calibrated offsets for normal-sized enemies
         const normalOneWingOverrides = [
             {
                 types: [25, 28, 40], // Spiny, Buzzy Beetle, Spike Top
@@ -343,8 +342,7 @@ class Draw {
                 offsets: { scale: 1, leftX: -1, rightX: 1, y: 0.2 }
             },
             {
-                // Piranha Plant
-                types: [2],
+                types: [2], // Piranha Plant
                 offsets: { scale: 1, leftX: -0.9, rightX: 0.9, y: 0.1 }
             },
             {
@@ -356,7 +354,7 @@ class Draw {
                 offsets: { scale: 1, leftX: -0.8, rightX: 0.8, y: -0.3 }
             },
             {
-                types: [0, 48], // Goomba, Blooper
+                types: [0], // Goomba
                 offsets: { scale: 1, leftX: -0.9, rightX: 0.9, y: 0.3 }
             },
             {
@@ -367,6 +365,10 @@ class Draw {
                 types: [57], // Muncher
                 offsets: { scale: 1, leftX: -0.9, rightX: 0.9, y: 0 }
             },
+            {
+                types: [48], // Blooper
+                offsets: { scale: 1, leftX: -0.9, rightX: 0.9, y: 0.7 }
+            }
         ];
         const sharedSettings = wingSettings[enlarged ? "enlarged" : "normal"][
             wingCount === 1 ? "one" : "two"
@@ -441,8 +443,12 @@ class Draw {
             // Calibrated enlarged two-wing objects here
         const enlargedTwoWingOverrides = [
             {
-                types: [0, 48], // Goomba, Blooper
+                types: [0], // Goomba
                 offsets: { scale: 2, leftX: -2.9, rightX: 0.9, y: 0.5 }
+            },
+            {
+                types: [48], // Blooper
+                offsets: { scale: 2, leftX: -2.6, rightX: 0.6, y: 1.3 }
             },
             {
                 types: [60], // Podoboo
@@ -480,6 +486,10 @@ class Draw {
                 {
                     types: [45], // Yoshi Egg
                     offsets: { scale: 1, leftX: -0.9, rightX: 0.9, y: 0.2 }
+                },
+                {
+                    types: [48], // Blooper
+                    offsets: { scale: 1, leftX: -0.8, rightX: 0.8, y: 1 }
                 }
             ];
 
@@ -533,6 +543,16 @@ class Draw {
                 {
                     types: [2], // Piranha Plant
                     offsets: { scale: 1, leftX: -0.9, rightX: 0.9, y: 0.1 }
+                },
+                {
+                    types: [48], // Blooper Nanny
+                    subType: 1,
+                    offsets: { scale: 1, leftX: -0.8, rightX: 0.6, y: 0.7 }
+                },
+                {
+                    types: [48], // Regular Blooper
+                    subType: 0,
+                    offsets: { scale: 1, leftX: -0.7, rightX: 0.7, y: 0.7 }
                 }
             ];
 
@@ -596,7 +616,7 @@ class Draw {
             },
             {
                 types: [48], // Blooper
-                offsets: { scale: 2, leftX: -2.8, rightX: 0.8, y: 1 }
+                offsets: { scale: 2, leftX: -2.6, rightX: 0.6, y: 2 }
             },
             {
                 types: [45], // Yoshi Egg (SMW)
@@ -669,6 +689,16 @@ class Draw {
             {
                 types: [57], // Muncher
                 offsets: { scale: 2, leftX: -2.5, rightX: 0.5, y: -0.5 }
+            },
+            {
+                types: [48], // Blooper Nanny (NSMBU)
+                subType: 1,
+                offsets: { scale: 2, leftX: -2.5, rightX: 0.2, y: 1.5 }
+            },
+            {
+                types: [48], // Regular Blooper (NSMBU)
+                subType: 0,
+                offsets: { scale: 2, leftX: -2.3, rightX: 0.3, y: 1.5 }
             }
         ];
 
