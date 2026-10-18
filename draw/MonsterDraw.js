@@ -175,13 +175,16 @@ MonsterDraw._defitions = {
         }
         return extend;
     }},
-    15:{"extend":function(courseObject) {
+    15:{"extend":function(courseObject, gameMode, gameTheme) {
         var extend = courseObject.extend;
         let subType = courseObject.subType;
-        /* active */
-        if(subType) { extend.push({"x":0, "y":0, "xT":13, "yT":1}); }
-        /* normal */
-        else { extend.push({"x":0, "y":0, "xT":13, "yT":0}); }
+
+        const useGreen = ["M1", "M3"].includes(gameMode) &&
+            ["underground", "ghostHouse", "castle"].includes(gameTheme);
+
+        let yT = useGreen ? 1 : (subType ? 1 : 0);
+
+        extend.push({"x":0, "y":0, "xT":13, "yT":yT});
         return extend;
     }},
     18:{"extend":function(courseObject) {
@@ -213,9 +216,18 @@ MonsterDraw._defitions = {
         return extend;
     }},
     27:{"xT":0, "yT":0},
-    28:{"extend":function(courseObject) {
+    28:{"extend":function(courseObject, gameMode, gameTheme) {
         var extend = courseObject.extend;
-        extend.push({"x":0, "y":0, "xT":4, "yT":4});
+
+        const useBlack = ["M1", "M3"].includes(gameMode) &&
+            ["overworld", "water", "airship"].includes(gameTheme);
+
+        extend.push({
+            "x":0,
+            "y":0,
+            "xT":useBlack ? 3 : 4,
+            "yT":4
+        });
         return extend;
     }},
     30:{"extend":function(courseObject) {
@@ -378,13 +390,16 @@ MonsterDraw._defitions = {
         else { extend.push({"x":0, "y":0, "xT":8, "yT":6}); }
         return extend;
     }},
-    57:{"extend":function(courseObject) {
+    57:{"extend":function(courseObject, gameMode, gameTheme) {
         var extend = courseObject.extend;
         let subType = courseObject.subType;
-        /* red */
-        if(subType) { extend.push({"x":0, "y":0, "xT":6, "yT":7}); }
-        /* normal */
-        else { extend.push({"x":0, "y":0, "xT":7, "yT":7}); }
+
+        const useGreen = ["M1", "M3"].includes(gameMode) &&
+            ["underground", "ghostHouse", "castle"].includes(gameTheme);
+
+        let xT = useGreen ? 6 : (subType ? 6 : 7);
+
+        extend.push({"x":0, "y":0, "xT":xT, "yT":7});
         return extend;
     }},
     58:{"extend":function(courseObject) {
@@ -401,12 +416,24 @@ MonsterDraw._defitions = {
         extend.push({"x":0, "y":0, "xT":1, "yT":7});
         return extend;
     }},
-    61:{"extend":function(courseObject) {
+    61:{"extend":function(courseObject, gameMode, gameTheme) {
         var extend = courseObject.extend;
         let subType = courseObject.subType;
+
+        const useGreen = ["M1", "M3"].includes(gameMode) &&
+            ["underground", "ghostHouse", "castle"].includes(gameTheme);
+
         /* + wood */
         if(subType) { extend.push({"x":0.3, "y":0.3, "xT":12, "yT":6}); }
-        extend.push({"x":0, "y":0, "xT":11, "yT":7});
+
+        /* body */
+        extend.push({
+            "x":0,
+            "y":0,
+            "xT":useGreen ? 12 : 11,
+            "yT":7
+        });
+
         return extend;
     }},
     62:{"extend":function(courseObject) {

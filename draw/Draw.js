@@ -184,7 +184,7 @@ class Draw {
         let x = courseObject.x, y = courseObject.y;
         /* multiples cells */
         if(def.extend) {
-            let ext = def.extend(courseObject);
+            let ext = def.extend(courseObject, this._gameMode, this._gameTheme);
             ext.forEach(function(drawExt) {
                 let opacity = (drawExt.opacity) ? drawExt.opacity : null,
                     rotation = (drawExt.rotation) ? drawExt.rotation : null;
