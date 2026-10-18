@@ -41,7 +41,20 @@ class Draw {
         /*global MonsterDraw */
         /*eslint no-undef: "error"*/
         this._monsters = new MonsterDraw(this._gameMode, this._gameTheme);
-        this._images = [this._blocks.getTheme(), this._monsters.getTheme()];
+        // Playing-card symbols for linked doors.
+        this._doorSymbols = {};
+
+        ["spade", "club", "heart", "diamond"].forEach(symbol => {
+            const image = new Image();
+            image.src = `./layout/draw/custom/symbols/${symbol}.png`;
+            this._doorSymbols[symbol] = image;
+        });
+
+        this._images = [
+            this._blocks.getTheme(),
+            this._monsters.getTheme(),
+            ...Object.values(this._doorSymbols)
+        ];
         /* draw configurations */
         let compare = function(a,b) {
             if (a.z < b.z) { return -1; }
@@ -195,6 +208,42 @@ class Draw {
                     "opacity":opacity, "rotation":rotation};
                 $this._paintObject(objectPaint);
             });
+
+            // Draw playing-card symbols on the lower tile of linked doors.
+            if (courseObject.type === 55) {
+                const symbols = ["spade", "club", "heart", "diamond"];
+                const doorIndex = (courseObject.flags >>> 20) & 7;
+                const pairIndex = doorIndex >> 1;
+                const symbol = this._doorSymbols[symbols[pairIndex]];
+
+                // Adjustable positioning in tile units.
+                const DOOR_SYMBOL_OFFSET_X = 0;
+                const DOOR_SYMBOL_OFFSET_Y = 0;
+                const DOOR_SYMBOL_SIZE = 0.8;
+
+                if (symbol && symbol.complete && symbol.naturalWidth > 0) {
+                    const symbolSize = DOOR_SYMBOL_SIZE * _base;
+
+                    const drawX =
+                        x * _base +
+                        (_base - symbolSize) / 2 +
+                        DOOR_SYMBOL_OFFSET_X * _base;
+
+                    const drawY =
+                        this._yFix -
+                        (y + 1) * _base +
+                        (_base - symbolSize) / 2 -
+                        DOOR_SYMBOL_OFFSET_Y * _base;
+
+                    this._context.drawImage(
+                        symbol,
+                        drawX,
+                        drawY,
+                        symbolSize,
+                        symbolSize
+                    );
+                }
+            }
         }
         /* only one cell */
         else {
