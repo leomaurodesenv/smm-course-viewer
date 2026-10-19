@@ -700,6 +700,20 @@ class Draw {
                     }
                 }
 
+                // Incremental calibration for enlarged Shoe/Stiletto/Yoshi eggs.
+                // Positive X moves right; positive Y moves up.
+                if (courseObject.type === 45 && courseObject.size === 2) {
+                    const enlargedType45Adjustments = {
+                        0: { x: -1, y: 1 },    // Right
+                        1: { x: 0.5, y: 1.5 }, // Left
+                        2: { x: 0, y: -0.5 },  // Up
+                        3: { x: -0.5, y: 2 }   // Down
+                    };
+                    const adjustment = enlargedType45Adjustments[direction];
+                    x += adjustment.x;
+                    y += adjustment.y;
+                }
+
             } // End if (pipe)
         } // End pipe-attachment check
 
