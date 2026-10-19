@@ -180,6 +180,7 @@ class Draw {
                 if (handled) return;
                 handled = true;
                 onerror(err);
+                onload();
             };
 
             // Handle images that finished loading before handlers were assigned.
@@ -234,7 +235,9 @@ class Draw {
                 const useCustomPSwitch =
                     courseObject.type === 18 &&
                     !courseObject.subType &&
-                    $this._customPSwitch !== null;
+                    $this._customPSwitch !== null &&
+                    $this._customPSwitch.complete &&
+                    $this._customPSwitch.naturalWidth > 0;
 
                 const sprite = useCustomPSwitch
                     ? $this._customPSwitch
