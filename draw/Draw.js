@@ -167,9 +167,32 @@ class Draw {
             loadedCount++; allloaded();
         };
         /* loading all images */
-        $this._images.forEach(function(img) {
-            img.onload = onload; 
-            img.onerror = onerror;
+        $this._images.forEach(function (img) {
+            let handled = false;
+
+            function finish(success, err) {
+                if (handled) return;
+                handled = true;
+
+                if (!success) {
+                    onerror(err || { target: img });
+                }
+
+                onload();
+            }
+
+            img.onload = function () {
+                finish(true);
+            };
+
+            img.onerror = function (err) {
+                finish(false, err);
+            };
+
+            // Handle images that finished before handlers were attached.
+            if (img.complete) {
+                finish(img.naturalWidth > 0, { target: img });
+            }
         });
     }
 
@@ -210,12 +233,15 @@ class Draw {
                 let opacity = (drawExt.opacity) ? drawExt.opacity : null,
                     rotation = (drawExt.rotation) ? drawExt.rotation : null;
 
-                const customShoe =
+                const requestedShoe =
                     courseObject.type === 45 && $this._shoeSprites
                         ? ((courseObject.flags & 0x04)
                             ? $this._shoeSprites.stiletto
                             : $this._shoeSprites.shoe)
                         : null;
+
+                const customShoe = requestedShoe && requestedShoe.complete &&
+                    requestedShoe.naturalWidth > 0 ? requestedShoe : null;
                 var objectPaint = {
                     "titleset":customShoe || _titleset,
                     "xT":customShoe ? 0 : drawExt.xT,
