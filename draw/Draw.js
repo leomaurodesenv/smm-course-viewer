@@ -157,9 +157,32 @@ class Draw {
             loadedCount++; allloaded();
         };
         /* loading all images */
-        $this._images.forEach(function(img) {
-            img.onload = onload; 
-            img.onerror = onerror;
+        $this._images.forEach(function (img) {
+            let handled = false;
+
+            function finish(success, err) {
+                if (handled) return;
+                handled = true;
+
+                if (!success) {
+                    onerror(err || { target: img });
+                }
+
+                onload();
+            }
+
+            img.onload = function () {
+                finish(true);
+            };
+
+            img.onerror = function (err) {
+                finish(false, err);
+            };
+
+            // Handle images that finished before handlers were attached.
+            if (img.complete) {
+                finish(img.naturalWidth > 0, { target: img });
+            }
         });
     }
 
@@ -244,6 +267,10 @@ class Draw {
     _drawRailEndCap(x, y) {
         const ctx = this._context;
         const sprite = this._railSprite;
+
+        if (!sprite.complete || !sprite.naturalWidth) {
+            return;
+        }
 
         const scale = this._base / 16;
 
@@ -460,6 +487,12 @@ class Draw {
             _ts = _theme.getThemeSize(),
             _base = $this._base;
         let x = courseObject.x, y = courseObject.y;
+
+        // Skip skull coasters when their tileset is unavailable.
+        if (courseObject.type === 36 &&
+            (!_titleset.complete || !_titleset.naturalWidth)) {
+            return;
+        }
 
         // Center objects attached to curved tracks at the arc midpoint.
         if (courseObject.type !== 59 && courseObject.linkId !== -1) {
