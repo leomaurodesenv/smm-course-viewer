@@ -146,9 +146,32 @@ class Draw {
             loadedCount++; allloaded();
         };
         /* loading all images */
-        $this._images.forEach(function(img) {
-            img.onload = onload; 
-            img.onerror = onerror;
+        $this._images.forEach(function (img) {
+            let handled = false;
+
+            function finish(success, err) {
+                if (handled) return;
+                handled = true;
+
+                if (!success) {
+                    onerror(err || { target: img });
+                }
+
+                onload();
+            }
+
+            img.onload = function () {
+                finish(true);
+            };
+
+            img.onerror = function (err) {
+                finish(false, err);
+            };
+
+            // Handle images that finished before handlers were attached.
+            if (img.complete) {
+                finish(img.naturalWidth > 0, { target: img });
+            }
         });
     }
 
@@ -182,6 +205,80 @@ class Draw {
             _ts = _theme.getThemeSize(),
             _base = $this._base;
         let x = courseObject.x, y = courseObject.y;
+
+        // Orient Spinies, Buzzy Beetles, and Spike Tops to their surfaces.
+        if (
+            courseObject.type === 25 ||
+            courseObject.type === 28 ||
+            courseObject.type === 40
+        ) {
+            if (!_titleset.complete || !_titleset.naturalWidth) {
+                return;
+            }
+
+            const orientation = (courseObject.flags >>> 25) & 3;
+            const sprite = def.extend(courseObject).find(
+                part => part.x === 0 && part.y === 0
+            );
+
+            if (sprite) {
+                let angle = 0;
+                let flipX = false;
+
+                switch (orientation) {
+                    case 0:
+                        angle = -Math.PI / 2;
+                        flipX = true;
+                        break;
+                    case 1:
+                        angle = Math.PI / 2;
+                        break;
+                    case 2:
+                        angle = Math.PI;
+                        flipX = true;
+                        break;
+                    case 3:
+                    default:
+                        break;
+                }
+
+                const size = courseObject.size;
+                const drawSize = _base * size;
+
+                // Match the existing renderer's position calculations.
+                const drawX = size === 1
+                    ? x * _base
+                    : (x - (2 - Math.ceil(courseObject.width / 2))) * _base;
+
+                const drawY = size === 1
+                    ? $this._yFix - (y + 1) * _base
+                    : $this._yFix - (y + 2) * _base;
+
+                const centerX = drawX + drawSize / 2;
+                const centerY = drawY + drawSize / 2;
+
+                $this._context.save();
+                $this._context.translate(centerX, centerY);
+                $this._context.rotate(angle);
+                $this._context.scale(flipX ? -1 : 1, 1);
+
+                $this._context.drawImage(
+                    _titleset,
+                    sprite.xT * _ts,
+                    sprite.yT * _ts,
+                    _ts,
+                    _ts,
+                    -drawSize / 2,
+                    -drawSize / 2,
+                    drawSize,
+                    drawSize
+                );
+
+                $this._context.restore();
+                return;
+            }
+        }
+
         /* multiples cells */
         if(def.extend) {
             let ext = def.extend(courseObject);
