@@ -146,9 +146,32 @@ class Draw {
             loadedCount++; allloaded();
         };
         /* loading all images */
-        $this._images.forEach(function(img) {
-            img.onload = onload; 
-            img.onerror = onerror;
+        $this._images.forEach(function (img) {
+            let handled = false;
+
+            function finish(success, err) {
+                if (handled) return;
+                handled = true;
+
+                if (!success) {
+                    onerror(err || { target: img });
+                }
+
+                onload();
+            }
+
+            img.onload = function () {
+                finish(true);
+            };
+
+            img.onerror = function (err) {
+                finish(false, err);
+            };
+
+            // Handle images that finished before handlers were attached.
+            if (img.complete) {
+                finish(img.naturalWidth > 0, { target: img });
+            }
         });
     }
 
@@ -189,6 +212,10 @@ class Draw {
             courseObject.type === 28 ||
             courseObject.type === 40
         ) {
+            if (!_titleset.complete || !_titleset.naturalWidth) {
+                return;
+            }
+
             const orientation = (courseObject.flags >>> 25) & 3;
             const sprite = def.extend(courseObject).find(
                 part => part.x === 0 && part.y === 0
