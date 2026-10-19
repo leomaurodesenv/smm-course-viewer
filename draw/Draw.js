@@ -146,9 +146,32 @@ class Draw {
             loadedCount++; allloaded();
         };
         /* loading all images */
-        $this._images.forEach(function(img) {
-            img.onload = onload; 
-            img.onerror = onerror;
+        $this._images.forEach(function (img) {
+            let handled = false;
+
+            function finish(success, err) {
+                if (handled) return;
+                handled = true;
+
+                if (!success) {
+                    onerror(err || { target: img });
+                }
+
+                onload();
+            }
+
+            img.onload = function () {
+                finish(true);
+            };
+
+            img.onerror = function (err) {
+                finish(false, err);
+            };
+
+            // Handle images that finished before handlers were attached.
+            if (img.complete) {
+                finish(img.naturalWidth > 0, { target: img });
+            }
         });
     }
 
@@ -185,6 +208,9 @@ class Draw {
 
         /* Draw fire bars with variable length and 64 rotation positions. */
         if (courseObject.type === 24) {
+            if (!_titleset.complete || !_titleset.naturalWidth) {
+                return;
+            }
             // Eight possible lengths: 4, 6, 8, 10, 12, 14, 16, 18.
             const lengthIndex = (courseObject.flags >>> 22) & 7;
             const fireballCount = 4 + lengthIndex * 2;
