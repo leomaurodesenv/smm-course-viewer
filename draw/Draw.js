@@ -172,12 +172,30 @@ class Draw {
 
         /* loading all images */
         $this._images.forEach(function (img) {
-            if (img.complete && img.naturalWidth > 0) {
-                // Already loaded, possibly from the browser cache.
+            let handled = false;
+
+            function finish(success, err) {
+                if (handled) return;
+                handled = true;
+
+                if (!success) {
+                    onerror(err || { target: img });
+                }
+
                 onload();
-            } else {
-                img.onload = onload;
-                img.onerror = onerror;
+            }
+
+            img.onload = function () {
+                finish(true);
+            };
+
+            img.onerror = function (err) {
+                finish(false, err);
+            };
+
+            // Handle images that finished before handlers were attached.
+            if (img.complete) {
+                finish(img.naturalWidth > 0, { target: img });
             }
         });
     }
