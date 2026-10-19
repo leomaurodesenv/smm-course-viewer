@@ -41,7 +41,43 @@ class Draw {
         /*global MonsterDraw */
         /*eslint no-undef: "error"*/
         this._monsters = new MonsterDraw(this._gameMode, this._gameTheme);
-        this._images = [this._blocks.getTheme(), this._monsters.getTheme()];
+        // Load Shelmet artwork for the current game style.
+        const shelmetFolders = {
+            M1: "smb1",
+            M3: "smb3",
+            MW: "smw",
+            WU: "nsmbu"
+        };
+
+        const shelmetFolder = shelmetFolders[this._gameMode];
+
+        // SMB1 and SMB3 Buzzy Shelmets use theme-dependent colors.
+        const greenBuzzyThemes = ["underground", "ghostHouse", "castle"];
+
+        let buzzyFilename = "buzzy-shelmet.png";
+
+        if (this._gameMode === "M1" || this._gameMode === "M3") {
+            const isGreen = greenBuzzyThemes.includes(this._gameTheme);
+
+            buzzyFilename = isGreen
+                ? "buzzy-shelmet-green.png"
+                : "buzzy-shelmet-black.png";
+        }
+
+        this._buzzyShelmet = new Image();
+        this._buzzyShelmet.src =
+            `./layout/draw/custom/${shelmetFolder}/${buzzyFilename}`;
+
+        this._spinyShelmet = new Image();
+        this._spinyShelmet.src =
+            `./layout/draw/custom/${shelmetFolder}/spiny-shelmet.png`;
+
+        this._images = [
+            this._blocks.getTheme(),
+            this._monsters.getTheme(),
+            this._buzzyShelmet,
+            this._spinyShelmet
+        ];
         /* draw configurations */
         let compare = function(a,b) {
             if (a.z < b.z) { return -1; }
@@ -146,9 +182,32 @@ class Draw {
             loadedCount++; allloaded();
         };
         /* loading all images */
-        $this._images.forEach(function(img) {
-            img.onload = onload; 
-            img.onerror = onerror;
+        $this._images.forEach(function (img) {
+            let handled = false;
+
+            function finish(success, err) {
+                if (handled) return;
+                handled = true;
+
+                if (!success) {
+                    onerror(err || { target: img });
+                }
+
+                onload();
+            }
+
+            img.onload = function () {
+                finish(true);
+            };
+
+            img.onerror = function (err) {
+                finish(false, err);
+            };
+
+            // Handle images that finished before handlers were attached.
+            if (img.complete) {
+                finish(img.naturalWidth > 0, { target: img });
+            }
         });
     }
 
@@ -182,6 +241,30 @@ class Draw {
             _ts = _theme.getThemeSize(),
             _base = $this._base;
         let x = courseObject.x, y = courseObject.y;
+
+        // Draw empty Buzzy and Spiny Shelmets using custom artwork.
+        if (
+            (courseObject.type === 25 || courseObject.type === 28) &&
+            (courseObject.flags & 0x4) !== 0
+        ) {
+            const shelmet = courseObject.type === 25
+                ? this._spinyShelmet
+                : this._buzzyShelmet;
+
+            if (shelmet && shelmet.complete && shelmet.naturalWidth > 0) {
+                this._context.drawImage(
+                    shelmet,
+                    0, 0,
+                    shelmet.naturalWidth, shelmet.naturalHeight,
+                    x * _base,
+                    this._yFix - (y + 1) * _base,
+                    _base, _base
+                );
+            }
+
+            return;
+        }
+
         /* multiples cells */
         if(def.extend) {
             let ext = def.extend(courseObject);
