@@ -146,9 +146,32 @@ class Draw {
             loadedCount++; allloaded();
         };
         /* loading all images */
-        $this._images.forEach(function(img) {
-            img.onload = onload; 
-            img.onerror = onerror;
+        $this._images.forEach(function (img) {
+            let handled = false;
+
+            function finish(success, err) {
+                if (handled) return;
+                handled = true;
+
+                if (!success) {
+                    onerror(err || { target: img });
+                }
+
+                onload();
+            }
+
+            img.onload = function () {
+                finish(true);
+            };
+
+            img.onerror = function (err) {
+                finish(false, err);
+            };
+
+            // Handle images that finished before handlers were attached.
+            if (img.complete) {
+                finish(img.naturalWidth > 0, { target: img });
+            }
         });
     }
 
@@ -182,6 +205,10 @@ class Draw {
             _ts = _theme.getThemeSize(),
             _base = $this._base;
         let x = courseObject.x, y = courseObject.y;
+
+        if (!_titleset.complete || !_titleset.naturalWidth) {
+            return;
+        }
         /* multiples cells */
         if(def.extend) {
             let ext = def.extend(courseObject);
@@ -205,10 +232,579 @@ class Draw {
             }
             var objectPaint = {
                 "titleset":_titleset, "xT":xT, "yT":yT, "xTs":_ts, "yTs":_ts,
-                "x":x, "y":y, "xExt":0, "yExt":0, "xBase":_base, "yBase":_base, 
+                "x":x, "y":y, "xExt":0, "yExt":0, "xBase":_base, "yBase":_base,
                 "size":courseObject.size, "width":courseObject.width};
             $this._paintObject(objectPaint);
         }
+
+        // Draw wings independently from the object's body sprite.
+        if ((courseObject.flags & 0x02) !== 0) {
+            $this._drawWings(courseObject, x, y);
+        }
+    }
+
+    /**
+     * Draw wings for supported winged objects.
+     * Wing offsets are measured in course grid tiles.
+     */
+    _drawWings(courseObject, x, y) {
+        const oneWingTypes = new Set([
+            1, 3, 15, 25, 28, 39, 40,
+            45, 46, 52, 56, 58, 61, 62
+        ]);
+
+        const twoWingTypes = new Set([
+            0, 2, 4, 5, 6, 8, 10, 11,
+            12, 18, 19, 20, 21, 22, 23,
+            29, 30, 33, 34, 35, 44, 48,
+            57, 60, 63
+        ]);
+
+        const wingCount =
+            ((this._gameMode === "MW" || this._gameMode === "WU") &&
+             courseObject.type === 45)
+                ? 2
+                : (this._gameMode === "WU" && courseObject.type === 0)
+                    ? 1
+                    : oneWingTypes.has(courseObject.type)
+                        ? 1
+                        : twoWingTypes.has(courseObject.type) ? 2 : 0;
+
+        if (!wingCount) {
+            return;
+        }
+
+        // Shared configurations. All measurements are in grid tiles.
+        // Wing scale and position can be adjusted independently.
+        const wingSettings = {
+            normal: {
+                one: {
+                    scale: 1,
+                    rightX: 1.3,
+                    y: 0.7
+                },
+                two: {
+                    scale: 1,
+                    leftX: -0.9,
+                    rightX: 0.9,
+                    y: 0
+                }
+            },
+            enlarged: {
+                one: {
+                    scale: 2,
+                    rightX: 0.6,
+                    y: 0.7
+                },
+                two: {
+                    scale: 2,
+                    leftX: -3.5,
+                    rightX: 1.5,
+                    y: 1.4
+                }
+            }
+        };
+
+        // Hammer Bro has special size handling in MonsterObject.js.
+        const enlarged = courseObject.size > 1 ||
+            (courseObject.type === 3 && courseObject.width > 1);
+
+        // Calibrated offsets for normal-sized enemies
+        const normalOneWingOverrides = [
+            {
+                types: [25, 28, 40], // Spiny, Buzzy Beetle, Spike Top
+                offsets: { scale: 1, rightX: 0.5, y: 0.2 }
+            },
+            {
+                types: [45], // Shoe Goomba only
+                subType: 0,
+                offsets: { scale: 1, rightX: 0.7, y: 0.1 }
+            },
+            {
+                types: [1], // Koopa Troopa
+                offsets: { scale: 1, rightX: 0.5, y: 0.8 }
+            },
+            {
+                types: [15, 39, 58, 61], // Bob-omb, Magikoopa, Rocky Wrench / Monty Mole, Chain Chomp
+                offsets: { scale: 1, rightX: 0.7, y: 0.5 }
+            },
+            {
+                types: [45], // Stiletto Goomba only
+                subType: 1,
+                offsets: { scale: 1, rightX: 0.7, y: 0.5 }
+            },
+            {
+                types: [52, 56], // Wiggler, Cheep Cheep
+                offsets: { scale: 1, rightX: 0.7, y: 0.3 }
+            },
+            {
+                types: [46], // Dry Bones
+                offsets: { scale: 1, rightX: 0.6, y: 0.8 }
+            },
+            {
+                types: [3], // Hammer Bro
+                offsets: { scale: 1, rightX: 0.8, y: 0.55 }
+            },
+            {
+                types: [62], // Bowser only
+                subType: 0,
+                offsets: { scale: 1, rightX: 0.1, y: 1.1 }
+            },
+            {
+                types: [62], // Bowser Jr.
+                subType: 1,
+                offsets: { scale: 1, rightX: 1.3, y: 0.7 }
+            }
+        ];
+
+        const normalTwoWingOverrides = [
+            {
+                // Springs, blocks, power-ups, Podoboo,
+                // POW, P Switch, and Coin
+                types: [
+                    4, 5, 6, 8, 10, 18, 19, 20,
+                    21, 22, 23, 29, 33, 34, 35,
+                    44, 60
+                ],
+                offsets: { scale: 1, leftX: -1, rightX: 1, y: 0.2 }
+            },
+            {
+                types: [2], // Piranha Plant
+                offsets: { scale: 1, leftX: -0.9, rightX: 0.9, y: 0.1 }
+            },
+            {
+                types: [12], // Thwomp
+                offsets: { scale: 1, leftX: -1.7, rightX: 0.7, y: 0.7 }
+            },
+            {
+                types: [30], // Lakitu
+                offsets: { scale: 1, leftX: -0.8, rightX: 0.8, y: -0.3 }
+            },
+            {
+                types: [0], // Goomba
+                offsets: { scale: 1, leftX: -0.9, rightX: 0.9, y: 0.3 }
+            },
+            {
+                types: [11], // Platforms / Lifts
+                offsets: { scale: 1, leftX: -3, rightX: 2, y: 0.3 }
+            },
+            {
+                types: [57], // Muncher
+                offsets: { scale: 1, leftX: -0.9, rightX: 0.9, y: 0 }
+            },
+            {
+                types: [48], // Blooper
+                offsets: { scale: 1, leftX: -0.9, rightX: 0.9, y: 0.7 }
+            }
+        ];
+        const sharedSettings = wingSettings[enlarged ? "enlarged" : "normal"][
+            wingCount === 1 ? "one" : "two"
+        ];
+
+        const enlargedOneWingOverrides = [
+            // Calibrated enlarged one-wing objects here
+            {
+                types: [25, 28, 40], // Spiny, Buzzy Beetle, Spike Top
+                offsets: { scale: 2, rightX: 0, y: 0.1 }
+            },
+            {
+                types: [15, 56], // Bob-omb, Cheep Cheep
+                offsets: { scale: 2, rightX: 0.1, y: 0.5 }
+            },
+            {
+                types: [52], // Regular Wiggler
+                subType: 0,
+                offsets: { scale: 2, rightX: 0.6, y: 0.7 }
+            },
+            {
+                types: [52], // Angry Wiggler
+                subType: 1,
+                offsets: { scale: 2, rightX: 0.4, y: 0.3 }
+            },
+            {
+                types: [61], // Chain Chomp
+                offsets: { scale: 2, rightX: 0.6, y: 0.7 }
+            },
+            {
+                types: [39], // Magikoopa
+                offsets: { scale: 2, rightX: 0.6, y: 1 }
+            },
+            {
+                types: [58], // Monty Mole / Rocky Wrench
+                offsets: { scale: 2, rightX: 0.7, y: 0.6 }
+            },
+            {
+                types: [45], // Shoe Goomba only
+                subType: 0,
+                offsets: { scale: 2, rightX: 0.5, y: 0.3 }
+            },
+            {
+                types: [45], // Stiletto only
+                subType: 1,
+                offsets: { scale: 2, rightX: 0.2, y: 0.8 }
+            },
+            {
+                types: [1], // Koopa Troopa
+                offsets: { scale: 2, rightX: 0, y: 1.5 }
+            },
+            {
+                types: [46], // Dry Bones
+                offsets: { scale: 2, rightX: 0.2, y: 1.5 }
+            },
+            {
+                types: [62], // Bowser Jr. only
+                subType: 1,
+                offsets: { scale: 2, rightX: 1.4, y: 1.3 }
+            },
+            {
+                types: [62], // Bowser only
+                subType: 0,
+                offsets: { scale: 2, rightX: 0.2, y: 2.2 }
+            },
+            {
+                types: [3], // Hammer Bro
+                offsets: { scale: 1, rightX: 0.5, y: 0.7 }
+            }
+        ];
+
+            // Calibrated enlarged two-wing objects here
+        const enlargedTwoWingOverrides = [
+            {
+                types: [0], // Goomba
+                offsets: { scale: 2, leftX: -2.9, rightX: 0.9, y: 0.5 }
+            },
+            {
+                types: [48], // Blooper
+                offsets: { scale: 2, leftX: -2.6, rightX: 0.6, y: 1.3 }
+            },
+            {
+                types: [60], // Podoboo
+                offsets: { scale: 2, leftX: -2.6, rightX: 0.6, y: 0.4 }
+            },
+            {
+                types: [57], // Muncher
+                offsets: { scale: 2, leftX: -2.8, rightX: 0.8, y: 0 }
+            },
+            {
+                types: [2], // Piranha Plant
+                offsets: { scale: 2, leftX: -2.9, rightX: 0.9, y: 0.2 }
+            },
+            {
+                types: [12], // Thwomp
+                offsets: { scale: 2, leftX: -3.5, rightX: 1.5, y: 1.4 }
+            }
+        ];
+
+            // SMW-specific normal-sized wing offsets.
+            const smwNormalOneWingOverrides = [
+                {
+                    types: [62], // Bowser
+                    subType: 0,
+                    offsets: { scale: 1, rightX: 0.2, y: 1.6 }
+                },
+                {
+                    types: [62], // Bowser Jr.
+                    subType: 1,
+                    offsets: { scale: 1, rightX: 1.5, y: 0.7 }
+                }
+            ];
+
+            const smwNormalTwoWingOverrides = [
+                {
+                    types: [45], // Yoshi Egg
+                    offsets: { scale: 1, leftX: -0.9, rightX: 0.9, y: 0.2 }
+                },
+                {
+                    types: [48], // Blooper
+                    offsets: { scale: 1, leftX: -0.8, rightX: 0.8, y: 1 }
+                }
+            ];
+
+            // NSMBU-specific normal-sized wing offsets.
+            const nsmbNormalOneWingOverrides = [
+                {
+                    types: [62], // Bowser
+                    subType: 0,
+                    offsets: { scale: 1.5, rightX: 0.1, y: 1.3 }
+                },
+                {
+                    types: [52], // Wiggler / Angry Wiggler
+                    offsets: { scale: 1, rightX: 0.6, y: 0.2 }
+                },
+                {
+                    types: [61, 15], // Chain Chomp, Bob-omb
+                    offsets: { scale: 1, rightX: 0.6, y: 0.1 }
+                },
+                {
+                    types: [46], // Dry Bones
+                    offsets: { scale: 1, rightX: 0.8, y: 0.4 }
+                },
+                {
+                    types: [58], // Monty Mole / Rocky Wrench
+                    offsets: { scale: 1, rightX: 0.6, y: 0.2 }
+                },
+                {
+                    types: [0], // Goomba (one wing in NSMBU)
+                    offsets: { scale: 1, rightX: 0.6, y: 0.2 }
+                },
+                {
+                    types: [1], // Koopa Troopa
+                    offsets: { scale: 1, rightX: 0.7, y: 0.4 }
+                },
+                {
+                    types: [25, 28, 40], // Spiny, Buzzy Beetle, Spike Top
+                    offsets: { scale: 1, rightX: 0.4, y: 0 }
+                }
+            ];
+
+            const nsmbNormalTwoWingOverrides = [
+                {
+                    // Power-ups, POW, P Switch, and related items
+                    types: [4, 5, 6, 10, 18, 19, 20, 21, 22, 23, 29, 33, 34, 35, 44, 60],
+                    offsets: { scale: 1, leftX: -0.9, rightX: 0.9, y: -0.1 }
+                },
+                {
+                    types: [8], // Coin
+                    offsets: { scale: 1, leftX: -0.9, rightX: 0.9, y: 0.1 }
+                },
+                {
+                    types: [2], // Piranha Plant
+                    offsets: { scale: 1, leftX: -0.9, rightX: 0.9, y: 0.1 }
+                },
+                {
+                    types: [48], // Blooper Nanny
+                    subType: 1,
+                    offsets: { scale: 1, leftX: -0.8, rightX: 0.6, y: 0.7 }
+                },
+                {
+                    types: [48], // Regular Blooper
+                    subType: 0,
+                    offsets: { scale: 1, leftX: -0.7, rightX: 0.7, y: 0.7 }
+                }
+            ];
+
+        // SMB1-specific enlarged wing offsets.
+        // All other SMB1 objects inherit their SMB3 offsets.
+        const smb1EnlargedOneWingOverrides = [
+            {
+                types: [62], // Bowser
+                subType: 0,
+                offsets: { scale: 2, rightX: 0.2, y: 2.5 }
+            },
+            {
+                types: [3], // Hammer Bro
+                offsets: { scale: 1, rightX: 0.5, y: 1 }
+            },
+            {
+                types: [39], // Magikoopa
+                offsets: { scale: 2, rightX: 0.7, y: 1.3 }
+            },
+            {
+                types: [56], // Cheep Cheep
+                offsets: { scale: 2, rightX: 0, y: 0.9 }
+            }
+        ];
+
+        const smb1EnlargedTwoWingOverrides = [
+            {
+                types: [12], // Thwomp
+                offsets: { scale: 2, leftX: -3.5, rightX: 1.5, y: 1.8 }
+            }
+        ];
+
+        // SMW-specific enlarged wing offsets.
+        // All other SMW objects inherit their SMB3 offsets.
+        const smwEnlargedOneWingOverrides = [
+            {
+                types: [62], // Bowser
+                subType: 0,
+                offsets: { scale: 2, rightX: 0.2, y: 3 }
+            },
+            {
+                types: [62], // Bowser Jr.
+                subType: 1,
+                offsets: { scale: 2, rightX: 1.7, y: 1.5 }
+            },
+            {
+                types: [52], // Angry Wiggler
+                subType: 1,
+                offsets: { scale: 2, rightX: 0.6, y: 0.7 }
+            },
+            {
+                types: [46], // Dry Bones
+                offsets: { scale: 2, rightX: 0.5, y: 1.4 }
+            }
+        ];
+
+        const smwEnlargedTwoWingOverrides = [
+            {
+                types: [60], // Podoboo
+                offsets: { scale: 2, leftX: -3.0, rightX: 1, y: 0.5 }
+            },
+            {
+                types: [48], // Blooper
+                offsets: { scale: 2, leftX: -2.6, rightX: 0.6, y: 2 }
+            },
+            {
+                types: [45], // Yoshi Egg (SMW)
+                offsets: { scale: 2, leftX: -2.8, rightX: 0.8, y: 0.5 }
+            }
+        ];
+
+        // NSMBU-specific enlarged wing offsets.
+        // Other NSMBU objects inherit their SMB3 offsets.
+        const nsmbEnlargedOneWingOverrides = [
+            {
+                types: [62], // Bowser
+                subType: 0,
+                offsets: { scale: 3, rightX: 0.2, y: 2.8 }
+            },
+            {
+                types: [62], // Bowser Jr.
+                subType: 1,
+                offsets: { scale: 2, rightX: 1.6, y: 1.3 }
+            },
+            {
+                types: [61], // Chain Chomp
+                offsets: { scale: 2.5, rightX: 0.5, y: 0.2 }
+            },
+            {
+                types: [15], // Bob-omb
+                offsets: { scale: 2.2, rightX: 0, y: -0.1 }
+            },
+            {
+                types: [46], // Dry Bones
+                offsets: { scale: 2.2, rightX: 0.4, y: 0.7 }
+            },
+            {
+                types: [58], // Monty Mole / Rocky Wrench
+                offsets: { scale: 2, rightX: 0.4, y: 0.3 }
+            },
+            {
+                types: [0], // Goomba (one wing in NSMBU)
+                offsets: { scale: 2.2, rightX: 0.2, y: 0.2 }
+            },
+            {
+                types: [56], // Cheep Cheep
+                offsets: { scale: 2.5, rightX: -0.2, y: -0.2 }
+            },
+            {
+                types: [52], // Regular Wiggler
+                subType: 0,
+                offsets: { scale: 1.5, rightX: 0.3, y: 0.3 }
+            },
+            {
+                types: [52], // Angry Wiggler
+                subType: 1,
+                offsets: { scale: 1.5, rightX: 0.3, y: 0.3 }
+            }
+        ];
+
+        const nsmbEnlargedTwoWingOverrides = [
+            {
+                types: [12], // Thwomp
+                offsets: { scale: 2, leftX: -3.2, rightX: 1.2, y: 1 }
+            },
+            {
+                types: [45], // Yoshi Egg
+                offsets: { scale: 2, leftX: -2.4, rightX: 0.4, y: -0.1 }
+            },
+            {
+                types: [2], // Piranha Plant
+                offsets: { scale: 2, leftX: -2.6, rightX: 0.6, y: -0.3 }
+            },
+            {
+                types: [57], // Muncher
+                offsets: { scale: 2, leftX: -2.5, rightX: 0.5, y: -0.5 }
+            },
+            {
+                types: [48], // Blooper Nanny (NSMBU)
+                subType: 1,
+                offsets: { scale: 2, leftX: -2.5, rightX: 0.2, y: 1.5 }
+            },
+            {
+                types: [48], // Regular Blooper (NSMBU)
+                subType: 0,
+                offsets: { scale: 2, leftX: -2.3, rightX: 0.3, y: 1.5 }
+            }
+        ];
+
+        // Default calibrated offsets (SMB3 baseline).
+        const overrideGroups = enlarged
+            ? (wingCount === 1
+                ? enlargedOneWingOverrides
+                : enlargedTwoWingOverrides)
+            : (wingCount === 1
+                ? normalOneWingOverrides
+                : normalTwoWingOverrides);
+
+        // Game-style-specific overrides take priority.
+        const modeOverrideGroups =
+            this._gameMode === "M1"
+                ? (enlarged
+                    ? (wingCount === 1
+                        ? smb1EnlargedOneWingOverrides
+                        : smb1EnlargedTwoWingOverrides)
+                    : [])
+                : this._gameMode === "MW"
+                    ? (enlarged
+                        ? (wingCount === 1
+                            ? smwEnlargedOneWingOverrides
+                            : smwEnlargedTwoWingOverrides)
+                        : (wingCount === 1
+                            ? smwNormalOneWingOverrides
+                            : smwNormalTwoWingOverrides))
+                    : this._gameMode === "WU"
+                        ? (enlarged
+                            ? (wingCount === 1
+                                ? nsmbEnlargedOneWingOverrides
+                                : nsmbEnlargedTwoWingOverrides)
+                            : (wingCount === 1
+                                ? nsmbNormalOneWingOverrides
+                                : nsmbNormalTwoWingOverrides))
+                        : [];
+
+        const matchesObject = group =>
+            group.types.includes(courseObject.type) &&
+            (group.subType === undefined ||
+             group.subType === courseObject.subType);
+
+        const override =
+            modeOverrideGroups.find(matchesObject) ||
+            overrideGroups.find(matchesObject);
+
+        const settings = override ? override.offsets : sharedSettings;
+        const wingSheet = this._monsters.getTheme();
+        if (!wingSheet.complete || !wingSheet.naturalWidth) {
+            return;
+        }
+        const tileSize = this._monsters.getThemeSize();
+        const wingSize = this._base * settings.scale;
+
+        const wings = wingCount === 1
+            ? [{ x: settings.rightX, xT: 1 }]
+            : [
+                { x: settings.leftX, xT: 0 },
+                { x: settings.rightX, xT: 1 }
+            ];
+
+        wings.forEach(wing => {
+            const drawX = (x + wing.x) * this._base;
+            const drawY = this._yFix -
+                (y + settings.y + settings.scale) * this._base;
+
+            this._context.drawImage(
+                wingSheet,
+                wing.xT * tileSize,
+                2 * tileSize,
+                tileSize,
+                tileSize,
+                drawX,
+                drawY,
+                wingSize,
+                wingSize
+            );
+        });
     }
 
     /**
