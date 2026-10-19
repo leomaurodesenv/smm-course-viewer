@@ -126,16 +126,36 @@ class Draw {
         /* allloaded images */
         allloaded = function() {
             if(loadedCount === imageCount) {
+
+                // Pass 1: Draw air signs behind starting arrows.
+                _objects.forEach(function(courseObject) {
+                    if(courseObject.type === 66) {
+                        $this._drawObjectFromTheme($this._monsters, courseObject);
+                    }
+                });
+
+                // Pass 2: Draw starting arrows behind semisolids,
+                // but in front of air signs.
+                _objects.forEach(function(courseObject) {
+                    if(courseObject.type === 38) {
+                        $this._drawObjectFromTheme($this._monsters, courseObject);
+                    }
+                });
+
+                // Pass 3: Draw all remaining objects.
                 _objects.forEach(function(courseObject) {
                     let type = courseObject.type;
-                    if($this._blocks.hasDraw(type)) {
+
+                    if (type === 66 || type === 38) return;
+
+                    if ($this._blocks.hasDraw(type)) {
                         $this._drawObjectFromTheme($this._blocks, courseObject);
                     }
-                    else if($this._monsters.hasDraw(type)) {
+                    else if ($this._monsters.hasDraw(type)) {
                         $this._drawObjectFromTheme($this._monsters, courseObject);
                     }
                     else {
-                        console.log("fault: "+type);
+                        console.log("fault: " + type);
                         $this._drawText(courseObject.x, courseObject.y, type);
                     }
                 });
@@ -182,6 +202,155 @@ class Draw {
             _ts = _theme.getThemeSize(),
             _base = $this._base;
         let x = courseObject.x, y = courseObject.y;
+
+        /* Draw skewers as one complete sprite so rotation works correctly. */
+        if (courseObject.type === 12 && courseObject.subType === 1) {
+            let spriteWidth = 4 * _base,
+                spriteHeight = 4 * _base,
+                xSprite = (x - 2) * _base,
+                ySprite = $this._yFix - (y + 4) * _base,
+                angle = (courseObject.direction + 2) * Math.PI / 2;
+
+            $this._context.save();
+            $this._context.translate(
+                xSprite + spriteWidth / 2,
+                ySprite + spriteHeight / 2
+            );
+            $this._context.rotate(angle);
+            $this._context.scale(1, -1);
+            $this._context.drawImage(
+                _titleset,
+                0, 16 * _ts, 4 * _ts, 4 * _ts,
+                -spriteWidth / 2, -spriteHeight / 2,
+                spriteWidth, spriteHeight
+            );
+            $this._context.restore();
+            return;
+        }
+
+        /* Draw burners with their flame rotated around the base tile. */
+        if (courseObject.type === 54) {
+            let angle = courseObject.direction * Math.PI / 2;
+            let tiles = def.extend(courseObject);
+
+            // SMB1 and SMB3 do not have dedicated inactive burner artwork.
+            // Use transparent tiles for the inactive flame.
+            if (
+                ($this._gameMode === "M1" || $this._gameMode === "M3") &&
+                courseObject.subType
+            ) {
+                tiles = tiles.map(function (tile, index) {
+                    if (index === 0) {
+                        return tile; // Preserve the burner base.
+                    }
+
+                    return {
+                        ...tile,
+                        xT: 15,
+                        yT: 19 - (index - 1)
+                    };
+                });
+            }
+
+            let baseX = x * _base;
+            let baseY = $this._yFix - (y + 1) * _base;
+
+            $this._context.save();
+            $this._context.translate(
+                baseX + _base / 2,
+                baseY + _base / 2
+            );
+            $this._context.rotate(angle);
+
+            tiles.forEach(function (tile) {
+                let tileX = tile.x * _base;
+                let tileY = -tile.y * _base;
+
+                $this._context.drawImage(
+                    _titleset,
+                    tile.xT * _ts, tile.yT * _ts, _ts, _ts,
+                    tileX - _base / 2,
+                    tileY - _base / 2,
+                    _base, _base
+                );
+            });
+
+            $this._context.restore();
+            return;
+        }
+
+        /* Draw one-way gates as one complete sprite with four orientations. */
+        if (courseObject.type === 67) {
+            let spriteWidth = 2 * _base,
+                spriteHeight = 2 * _base,
+                xSprite = (x - 1) * _base,
+                ySprite = $this._yFix - (y + 2) * _base,
+                angle = courseObject.direction * Math.PI / 2;
+
+            $this._context.save();
+            $this._context.translate(
+                xSprite + spriteWidth / 2,
+                ySprite + spriteHeight / 2
+            );
+            $this._context.rotate(angle);
+            $this._context.drawImage(
+                _titleset,
+                5 * _ts, 8 * _ts, 2 * _ts, 2 * _ts,
+                -spriteWidth / 2, -spriteHeight / 2,
+                spriteWidth, spriteHeight
+            );
+            $this._context.restore();
+            return;
+        }
+
+        /* Draw air signs as one complete sprite so rotation works correctly. */
+        if (courseObject.type === 66 && courseObject.subType === 0) {
+            let spriteWidth = 2 * _base,
+                spriteHeight = 2 * _base,
+                xSprite = (x - 1) * _base,
+                ySprite = $this._yFix - (y + 2) * _base,
+                angle = courseObject.direction * Math.PI / 4;
+
+            $this._context.save();
+            $this._context.translate(
+                xSprite + spriteWidth / 2,
+                ySprite + spriteHeight / 2
+            );
+            $this._context.rotate(angle);
+            $this._context.drawImage(
+                _titleset,
+                13 * _ts, 6 * _ts, 2 * _ts, 2 * _ts,
+                -spriteWidth / 2, -spriteHeight / 2,
+                spriteWidth, spriteHeight
+            );
+            $this._context.restore();
+            return;
+        }
+
+        /* Draw checkpoint flags as one complete sprite so rotation works correctly. */
+        if (courseObject.type === 66 && courseObject.subType === 1) {
+            let spriteWidth = 2 * _base,
+                spriteHeight = 2 * _base,
+                xSprite = (x - 1) * _base,
+                ySprite = $this._yFix - (y + 2) * _base,
+                angle = courseObject.direction * Math.PI / 4;
+
+            $this._context.save();
+            $this._context.translate(
+                xSprite + spriteWidth / 2,
+                ySprite + spriteHeight / 2
+            );
+            $this._context.rotate(angle);
+            $this._context.drawImage(
+                _titleset,
+                8 * _ts, 18 * _ts, 2 * _ts, 2 * _ts,
+                -spriteWidth / 2, -spriteHeight / 2,
+                spriteWidth, spriteHeight
+            );
+            $this._context.restore();
+            return;
+        }
+
         /* multiples cells */
         if(def.extend) {
             let ext = def.extend(courseObject);
