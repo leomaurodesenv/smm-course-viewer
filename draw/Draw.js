@@ -176,9 +176,32 @@ class Draw {
             loadedCount++; allloaded();
         };
         /* loading all images */
-        $this._images.forEach(function(img) {
-            img.onload = onload; 
-            img.onerror = onerror;
+        $this._images.forEach(function (img) {
+            let handled = false;
+
+            function finish(success, err) {
+                if (handled) return;
+                handled = true;
+
+                if (!success) {
+                    onerror(err || { target: img });
+                }
+
+                onload();
+            }
+
+            img.onload = function () {
+                finish(true);
+            };
+
+            img.onerror = function (err) {
+                finish(false, err);
+            };
+
+            // Handle images that finished before handlers were attached.
+            if (img.complete) {
+                finish(img.naturalWidth > 0, { target: img });
+            }
         });
     }
 
@@ -212,6 +235,12 @@ class Draw {
             _ts = _theme.getThemeSize(),
             _base = $this._base;
         let x = courseObject.x, y = courseObject.y;
+
+        // Skip pipes when their atlas artwork is unavailable.
+        if (courseObject.type === 9 &&
+            (!_titleset.complete || !_titleset.naturalWidth)) {
+            return;
+        }
 
         // Directional offsets for normal-sized pipe-attached enemies.
         // Positive X moves right; positive Y moves up.
@@ -597,7 +626,12 @@ class Draw {
                         57: compactEnemyOffsets, // Muncher
 
                         58: { // Rocky Wrench / Monty Mole
-                            0: tallEnemyOffsets,     // Rocky Wrench
+                            0: { // Rocky Wrench: preserve calibrated base offsets.
+                                0: { x: -0.5, y: -2 },
+                                1: { x: -0.5, y: -1 },
+                                2: { x: 0, y: -1.5 },
+                                3: { x: -1, y: -1.5 }
+                            },
                             1: centeredEnemyOffsets  // Monty Mole
                         },
 
@@ -668,6 +702,11 @@ class Draw {
 
             } // End if (pipe)
         } // End pipe-attachment check
+
+        if (pipeDirection !== null &&
+            (!_titleset.complete || !_titleset.naturalWidth)) {
+            return;
+        }
 
         if (
             pipeDirection !== null &&
@@ -788,6 +827,12 @@ class Draw {
             );
 
             $this._context.restore();
+
+            // Preserve wings when the wing renderer is also present.
+            if ((courseObject.flags & 0x02) !== 0 &&
+                typeof $this._drawWings === "function") {
+                $this._drawWings(courseObject, x, y);
+            }
             return;
 
         }
@@ -795,6 +840,17 @@ class Draw {
         /* multiples cells */
         if(def.extend) {
             let ext = def.extend(courseObject);
+
+            // Preserve the verified head/flower composition for pipe Wigglers.
+            if (courseObject.type === 52 && pipeDirection !== null) {
+                ext = [{
+                    x: 0, y: 0,
+                    xT: courseObject.subType ? 9 : 8, yT: 5
+                }];
+                if (!courseObject.subType && $this._gameMode !== "WU") {
+                    ext.push({ x: 0, y: 1, xT: 8, yT: 4 });
+                }
+            }
 
             // Pipe-attached Chain Chomps should not display their stake.
             if (courseObject.type === 61 && pipeDirection !== null) {
