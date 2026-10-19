@@ -157,9 +157,32 @@ class Draw {
             loadedCount++; allloaded();
         };
         /* loading all images */
-        $this._images.forEach(function(img) {
-            img.onload = onload; 
-            img.onerror = onerror;
+        $this._images.forEach(function (img) {
+            let handled = false;
+
+            function finish(success, err) {
+                if (handled) return;
+                handled = true;
+
+                if (!success) {
+                    onerror(err || { target: img });
+                }
+
+                onload();
+            }
+
+            img.onload = function () {
+                finish(true);
+            };
+
+            img.onerror = function (err) {
+                finish(false, err);
+            };
+
+            // Handle images that finished before handlers were attached.
+            if (img.complete) {
+                finish(img.naturalWidth > 0, { target: img });
+            }
         });
     }
 
@@ -244,6 +267,10 @@ class Draw {
     _drawRailEndCap(x, y) {
         const ctx = this._context;
         const sprite = this._railSprite;
+
+        if (!sprite.complete || !sprite.naturalWidth) {
+            return;
+        }
 
         const scale = this._base / 16;
 
